@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand */
+  --primary: #1E3A8A;
+  --primary-light: #3B82F6;
+  --primary-deeper: #0F1F5C;
+  --accent: #0D9488;
+  --gold: #F59E0B;
+  --flame: #EF4444;
+
+  /* Surfaces */
+  --bg: #F5F8FF;
+  --surface: #FFFFFF;
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.55);
+
+  /* Text */
+  --text-primary: #0F172A;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+
+  /* Lines, chips, status */
+  --divider: #E2E8F0;
+  --chip-bg: rgba(59, 130, 246, 0.10);
+  --chip-active: #1E3A8A;
+  --success-bg: #DCFCE7;
+  --danger: #DC2626;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #1E3A8A, #2563EB, #38BDF8);
+  --gradient-cta: linear-gradient(120deg, #1E3A8A, #2563EB, #38BDF8);
+  --gradient-text: linear-gradient(120deg, #1E3A8A, #2563EB 60%, #0D9488);
+  --gradient-soft: linear-gradient(180deg, #DBEAFE, #F5F8FF);
+  --gradient-gold: linear-gradient(135deg, #FBBF24, #F59E0B);
+  --gradient-avatar-blue: linear-gradient(135deg, #3B82F6, #1E3A8A);
+  --gradient-dark: linear-gradient(135deg, #0B1338, #1E3A8A);
+  --gradient-premium: linear-gradient(120deg, #0F172A, #1E3A8A 55%, #312E81);
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 10px 24px rgba(30, 58, 138, 0.08);
+  --shadow-strong: 0 12px 20px rgba(29, 78, 216, 0.35);
+  --shadow-cta: 0 10px 24px rgba(30, 58, 138, 0.28);
+  --shadow-hero: 0 20px 48px rgba(15, 23, 42, 0.10);
+
+  /* On-dark (call screen) */
+  --on-dark-fill: rgba(255, 255, 255, 0.12);
+  --on-dark-border: rgba(255, 255, 255, 0.25);
+  --on-dark-text: rgba(255, 255, 255, 0.7);
+  --on-dark-accent: #93C5FD;
+  --backdrop: rgba(15, 23, 42, 0.82);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-manrope), sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .brand {
+    font-family: var(--font-outfit), sans-serif;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.font-outfit {
+  font-family: var(--font-outfit), sans-serif;
+}
+
+.font-manrope {
+  font-family: var(--font-manrope), sans-serif;
+}

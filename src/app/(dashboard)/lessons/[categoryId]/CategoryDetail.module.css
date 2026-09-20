@@ -1,0 +1,102 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  position: relative;
+  min-height: 200px;
+  border-radius: var(--radius-xl);
+  padding: var(--space-l);
+  background: var(--gradient-dark);
+  overflow: hidden;
+  margin-top: var(--space-l);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.85));
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text-primary);
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  margin-bottom: var(--space-l);
+  align-self: flex-start;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.backLink:hover {
+  opacity: 0.9;
+  transform: translateX(-2px);
+}
+
+.backLink:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.backIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.title {
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.subline {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+}
+
+.lessonListSection {
+  margin-top: var(--space-l);
+  padding-bottom: var(--space-xxl);
+}
+
+.lessonGrid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 860px) {
+  .lessonGrid {
+    grid-template-columns: 1fr;
+  }
+}

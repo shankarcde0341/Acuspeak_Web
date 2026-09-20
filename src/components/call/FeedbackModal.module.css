@@ -1,0 +1,225 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--backdrop);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-l);
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--primary-deeper);
+  border: 1px solid var(--on-dark-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-l);
+  box-shadow: var(--shadow-strong);
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: modalScaleIn 300ms ease-out forwards;
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.title {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-dark-text);
+  margin-top: 6px;
+}
+
+.avatarRing {
+  margin: var(--space-m) auto;
+  padding: 4px;
+  border: 2px solid var(--primary-light);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.avatarCircle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--gradient-gold);
+  color: #ffffff;
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.starsGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: var(--space-m);
+}
+
+.starBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  color: var(--on-dark-border);
+  transition: color 0.15s, transform 0.15s;
+  border-radius: var(--radius-sm);
+}
+
+.starBtn:hover {
+  transform: scale(1.15);
+  color: var(--gold);
+}
+
+.starBtn:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.starBtnFilled {
+  color: var(--gold);
+}
+
+.starIcon {
+  width: 34px;
+  height: 34px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.textarea {
+  width: 100%;
+  height: 80px;
+  resize: none;
+  background: var(--on-dark-fill);
+  border: 1px solid var(--on-dark-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  color: #ffffff;
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  margin: var(--space-s) 0 var(--space-l);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.textarea::placeholder {
+  color: var(--on-dark-text);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px var(--chip-bg);
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.skipBtn {
+  flex: 1;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: var(--on-dark-fill);
+  border: 1px solid var(--on-dark-border);
+  color: #ffffff;
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.skipBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.skipBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.skipBtn:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.submitBtn {
+  flex: 2;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-cta);
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: var(--shadow-cta);
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  background: linear-gradient(120deg, #CBD5E1, #94A3B8);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.submitBtn:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}

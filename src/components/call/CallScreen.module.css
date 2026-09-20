@@ -1,0 +1,258 @@
+.root {
+  min-height: 100dvh;
+  background: var(--gradient-premium);
+  color: #ffffff;
+  width: 100%;
+}
+
+.inner {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-xl);
+}
+
+/* Top Row */
+.topRow {
+  padding: var(--space-l);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.timerGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusLabel {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--on-dark-accent);
+}
+
+.timer {
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--on-dark-fill);
+  border: 1px solid var(--on-dark-border);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.actionBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.actionBtn:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.actionIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Center Section */
+.centerSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-l) 0;
+}
+
+.avatarRing {
+  padding: 8px;
+  border: 2px solid var(--on-dark-border);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.avatarCircle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  background: var(--gradient-gold);
+  color: #ffffff;
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.2s, height 0.2s, font-size 0.2s;
+}
+
+.partnerName {
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  color: #ffffff;
+  margin-top: 22px;
+  text-align: center;
+}
+
+.partnerCountry {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--on-dark-text);
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* Waveform Bars */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 60px;
+  margin-top: 30px;
+}
+
+.waveBar {
+  width: 5px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+  transform-origin: center;
+  animation: waveAnim 1.2s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.15s);
+}
+
+@keyframes waveAnim {
+  from {
+    transform: scaleY(0.5);
+  }
+  to {
+    transform: scaleY(1.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waveBar {
+    animation: none;
+    transform: scaleY(1);
+  }
+}
+
+/* Controls Row */
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: auto;
+  margin-bottom: var(--space-l);
+}
+
+.controlBtn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--on-dark-fill);
+  border: 1px solid var(--on-dark-border);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.controlBtn:hover {
+  transform: scale(1.05);
+}
+
+.controlBtn:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.controlBtnActive {
+  background: var(--surface);
+  color: var(--primary);
+  border-color: var(--surface);
+}
+
+.endCallBtn {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--flame);
+  border: none;
+  color: #ffffff;
+  box-shadow: var(--shadow-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.endCallBtn:hover {
+  transform: scale(1.05);
+  opacity: 0.95;
+}
+
+.endCallBtn:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.endCallIcon {
+  width: 32px;
+  height: 32px;
+  transform: rotate(135deg);
+}
+
+.controlIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsive at <= 540px */
+@media (max-width: 540px) {
+  .avatarCircle {
+    width: 140px;
+    height: 140px;
+    font-size: 56px;
+  }
+  .partnerName {
+    font-size: 26px;
+  }
+}
