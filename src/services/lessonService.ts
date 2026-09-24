@@ -82,6 +82,72 @@ export const DIRECTIONS_SCRIPT: ScriptLine[] = [
   { line_id: 'd5-l9', speaker: 'Traveller', text: 'Straight, left at the traffic light, then next to the supermarket. Perfect! Thank you so much.' },
 ];
 
+export const RESTAURANT_SCRIPT: ScriptLine[] = [
+  { line_id: 'd6-l1', speaker: 'Waiter', text: 'Good afternoon! Welcome to Food Palace. A table for one?' },
+  { line_id: 'd6-l2', speaker: 'Customer', text: 'Yes, please. A table near the window would be great.' },
+  { line_id: 'd6-l3', speaker: 'Waiter', text: 'Sure, right this way, please. Here is the menu.' },
+  { line_id: 'd6-l4', speaker: 'Customer', text: 'Thank you. What do you recommend today?' },
+  { line_id: 'd6-l5', speaker: 'Waiter', text: 'Our Special Paneer Butter Masala with Butter Naan is very popular.' },
+  { line_id: 'd6-l6', speaker: 'Customer', text: 'That sounds delicious! I will have that, please.' },
+  { line_id: 'd6-l7', speaker: 'Waiter', text: 'Would you like anything to drink with your meal?' },
+  { line_id: 'd6-l8', speaker: 'Customer', text: 'Just a glass of fresh lime soda, please.' },
+  { line_id: 'd6-l9', speaker: 'Waiter', text: 'Perfect! Your order will be ready in 15 minutes.' },
+];
+
+export const WEEKENDS_SCRIPT: ScriptLine[] = [
+  { line_id: 'd7-l1', speaker: 'Pritam', text: 'Hi Priya! Good morning! How was your weekend?' },
+  { line_id: 'd7-l2', speaker: 'Priya', text: 'Good morning Pritam! It was great, thanks. What about yours?' },
+  { line_id: 'd7-l3', speaker: 'Pritam', text: 'Mine was good too! What did you do on Saturday?' },
+  { line_id: 'd7-l4', speaker: 'Priya', text: 'I stayed at home and watched a movie with my family.' },
+  { line_id: 'd7-l5', speaker: 'Pritam', text: 'That sounds relaxing! Did you go anywhere on Sunday?' },
+  { line_id: 'd7-l6', speaker: 'Priya', text: 'Yes, I went to the park in the evening. How did you spend your weekend?' },
+  { line_id: 'd7-l7', speaker: 'Pritam', text: 'I met my old school friends. We played cricket and had lunch together.' },
+  { line_id: 'd7-l8', speaker: 'Priya', text: 'Wow, that sounds like a lot of fun!' },
+  { line_id: 'd7-l9', speaker: 'Pritam', text: 'Yes, it was! Are you ready for the new week now?' },
+  { line_id: 'd7-l10', speaker: 'Priya', text: "Yes, completely! Let's get to work." },
+];
+
+export const DOCTOR_SCRIPT: ScriptLine[] = [
+  { line_id: 'd8-l1', speaker: 'Doctor', text: 'Good morning! Please take a seat. How are you feeling today?' },
+  { line_id: 'd8-l2', speaker: 'Patient', text: 'Good morning, Doctor. I am not feeling very well.' },
+  { line_id: 'd8-l3', speaker: 'Doctor', text: 'What seems to be the problem?' },
+  { line_id: 'd8-l4', speaker: 'Patient', text: 'I have a mild fever and a bad sore throat since yesterday.' },
+  { line_id: 'd8-l5', speaker: 'Doctor', text: 'I see. Let me check your temperature and throat first. Open your mouth, please.' },
+  { line_id: 'd8-l6', speaker: 'Patient', text: 'Ahhh... Is it something serious, Doctor?' },
+  { line_id: 'd8-l7', speaker: 'Doctor', text: "No, don't worry. It looks like a normal seasonal viral infection." },
+  { line_id: 'd8-l8', speaker: 'Patient', text: 'That’s a relief! Do I need to take any medicine?' },
+  { line_id: 'd8-l9', speaker: 'Doctor', text: 'Yes, I am writing some medicines. Take them twice a day after food.' },
+  { line_id: 'd8-l10', speaker: 'Patient', text: 'Okay, Doctor. Should I avoid any specific food?' },
+  { line_id: 'd8-l11', speaker: 'Doctor', text: 'Drink warm water and avoid cold drinks for two days. Take rest!' },
+  { line_id: 'd8-l12', speaker: 'Patient', text: 'Thank you so much, Doctor!' },
+];
+
+export const PHONE_SCRIPT: ScriptLine[] = [
+  { line_id: 'd9-l1', speaker: 'Rohan', text: 'Hello Amit! This is Rohan. Can you hear me clearly?' },
+  { line_id: 'd9-l2', speaker: 'Amit', text: 'Hi Rohan! Yes, I can hear you fine. How are you doing?' },
+  { line_id: 'd9-l3', speaker: 'Rohan', text: 'I am good, thanks! Are you busy right now or can you talk?' },
+  { line_id: 'd9-l4', speaker: 'Amit', text: "I am free right now. Tell me, what's up?" },
+  { line_id: 'd9-l5', speaker: 'Rohan', text: 'I was thinking of meeting up this evening. Are you free around 6 PM?' },
+  { line_id: 'd9-l6', speaker: 'Amit', text: 'Oh, sorry, I have some work at 6 PM. Can we meet at 7 PM instead?' },
+  { line_id: 'd9-l7', speaker: 'Rohan', text: "Sure, 7 PM works for me! Let's meet at the Central Park." },
+  { line_id: 'd9-l8', speaker: 'Amit', text: 'Sounds great! See you at 7 PM then.' },
+  { line_id: 'd9-l9', speaker: 'Rohan', text: 'Perfect! Take care, bye.' },
+  { line_id: 'd9-l10', speaker: 'Amit', text: 'Bye!' },
+];
+
+export const OPINIONS_SCRIPT: ScriptLine[] = [
+  { line_id: 'd10-l1', speaker: 'Priya', text: 'Hi Rohit! Did you watch the new action movie yesterday?' },
+  { line_id: 'd10-l2', speaker: 'Rohit', text: 'Yes, I watched it last night! What about you?' },
+  { line_id: 'd10-l3', speaker: 'Priya', text: 'I watched it too! In my opinion, the movie was really good.' },
+  { line_id: 'd10-l4', speaker: 'Rohit', text: 'Really? Personally, I found it a bit boring.' },
+  { line_id: 'd10-l5', speaker: 'Priya', text: 'Oh, why do you think so? I loved the action scenes!' },
+  { line_id: 'd10-l6', speaker: 'Rohit', text: 'The action was good, but I feel the story was very weak.' },
+  { line_id: 'd10-l7', speaker: 'Priya', text: 'I agree, the story was simple, but the acting was amazing!' },
+  { line_id: 'd10-l8', speaker: 'Rohit', text: 'That’s true. The main hero did a fantastic job.' },
+  { line_id: 'd10-l9', speaker: 'Priya', text: 'So, overall, would you recommend it to others?' },
+  { line_id: 'd10-l10', speaker: 'Rohit', text: 'Yes, it is worth watching at least once!' },
+];
+
 export const LESSON_SCRIPTS: Record<string, { script: ScriptLine[]; title: string; xp: number }> = {
   'daily-1': {
     script: DAILY_1_SCRIPT,
@@ -123,13 +189,63 @@ export const LESSON_SCRIPTS: Record<string, { script: ScriptLine[]; title: strin
     title: 'Lesson 5: Asking Directions',
     xp: 30,
   },
+  'daily-6': {
+    script: RESTAURANT_SCRIPT,
+    title: 'Lesson 6: At a Restaurant',
+    xp: 35,
+  },
+  'at-a-restaurant': {
+    script: RESTAURANT_SCRIPT,
+    title: 'Lesson 6: At a Restaurant',
+    xp: 35,
+  },
+  'daily-7': {
+    script: WEEKENDS_SCRIPT,
+    title: 'Lesson 7: Talking About Weekends',
+    xp: 30,
+  },
+  'talking-about-weekends': {
+    script: WEEKENDS_SCRIPT,
+    title: 'Lesson 7: Talking About Weekends',
+    xp: 30,
+  },
+  'daily-8': {
+    script: DOCTOR_SCRIPT,
+    title: 'Lesson 8: At the Doctor',
+    xp: 40,
+  },
+  'at-the-doctor': {
+    script: DOCTOR_SCRIPT,
+    title: 'Lesson 8: At the Doctor',
+    xp: 40,
+  },
+  'daily-9': {
+    script: PHONE_SCRIPT,
+    title: 'Lesson 9: Phone Calls',
+    xp: 45,
+  },
+  'phone-calls': {
+    script: PHONE_SCRIPT,
+    title: 'Lesson 9: Phone Calls',
+    xp: 45,
+  },
+  'daily-10': {
+    script: OPINIONS_SCRIPT,
+    title: 'Lesson 10: Sharing Opinions',
+    xp: 50,
+  },
+  'sharing-opinions': {
+    script: OPINIONS_SCRIPT,
+    title: 'Lesson 10: Sharing Opinions',
+    xp: 50,
+  },
 };
 
 export function getLessonData(lessonId: string) {
   return LESSON_SCRIPTS[lessonId] || {
-    script: DIRECTIONS_SCRIPT,
-    title: 'Lesson 5: Asking Directions',
-    xp: 30,
+    script: OPINIONS_SCRIPT,
+    title: 'Lesson 10: Sharing Opinions',
+    xp: 50,
   };
 }
 
