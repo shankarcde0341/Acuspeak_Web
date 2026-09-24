@@ -1,22 +1,17 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Outfit, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 
-
-const outfit = Outfit({
-  subsets: ["latin"],
+const outfit = localFont({
+  src: "../fonts/Outfit.woff2",
   variable: "--font-outfit",
-  weight: ["500", "600", "700", "800"],
   display: "swap",
-  preload: false,
 });
 
-const manrope = Manrope({
-  subsets: ["latin"],
+const manrope = localFont({
+  src: "../fonts/Manrope.woff2",
   variable: "--font-manrope",
-  weight: ["400", "500", "600", "700"],
   display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {

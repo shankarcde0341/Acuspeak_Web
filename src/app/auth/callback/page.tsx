@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { setAuthSession } from '@/services/authService';
 
 function CallbackContent() {
   const router = useRouter();
@@ -24,14 +25,12 @@ function CallbackContent() {
     }
 
     if (sessionToken && email) {
-      // Store non-sensitive user profile & session token securely on client
-      localStorage.setItem('session_token', sessionToken);
-      localStorage.setItem(
-        'acuspeak_user',
-        JSON.stringify({
+      setAuthSession(
+        {
           email: email,
           name: name || 'User',
-        })
+        },
+        sessionToken
       );
 
       // Redirect user to dashboard

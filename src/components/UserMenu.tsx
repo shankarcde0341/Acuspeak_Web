@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import type { User } from '@/lib/user';
+import { logoutUser, getStoredUser } from '@/services/authService';
 import styles from './UserMenu.module.css';
 
 interface UserMenuProps {
@@ -11,9 +12,20 @@ interface UserMenuProps {
 
 export default function UserMenu({ user }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [displayUser, setDisplayUser] = useState<User>(user);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const stored = getStoredUser();
+    if (stored && stored.name) {
+      setDisplayUser({
+        id: user.id,
+        name: stored.name,
+        email: stored.email,
+        avatarInitial: stored.name.charAt(0).toUpperCase(),
+      });
+    }
+
     function handlePointerDown(e: PointerEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
@@ -30,7 +42,13 @@ export default function UserMenu({ user }: UserMenuProps) {
       document.removeEventListener('pointerdown', handlePointerDown);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [user.id]);
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsOpen(false);
+    logoutUser();
+  };
 
   return (
     <div className={styles.menuContainer} ref={containerRef}>
@@ -41,8 +59,8 @@ export default function UserMenu({ user }: UserMenuProps) {
         aria-haspopup="menu"
         aria-expanded={isOpen}
       >
-        <span className={styles.avatar}>{user.avatarInitial}</span>
-        <span className={styles.userName}>{user.name}</span>
+        <span className={styles.avatar}>{displayUser.avatarInitial}</span>
+        <span className={styles.userName}>{displayUser.name}</span>
         <svg
           className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
           fill="none"
@@ -75,10 +93,10 @@ export default function UserMenu({ user }: UserMenuProps) {
           </Link>
           <div className={styles.dropdownDivider} />
           <Link
-            href="/login"
+            href="/"
             className={`${styles.dropdownItem} ${styles.logoutItem}`}
             role="menuitem"
-            onClick={() => setIsOpen(false)}
+            onClick={handleLogout}
           >
             Logout
           </Link>

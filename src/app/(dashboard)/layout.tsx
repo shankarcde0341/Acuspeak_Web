@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getCurrentUser } from '@/lib/user';
 import DashboardNav from '@/components/DashboardNav';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 export const metadata: Metadata = {
   robots: {
@@ -17,11 +18,13 @@ export default async function DashboardLayout({
   const user = await getCurrentUser();
 
   return (
-    <div>
-      <DashboardNav user={user} />
-      <main className="wrap" style={{ paddingTop: 'var(--space-xl)', paddingBottom: 'var(--space-xl)' }}>
-        {children}
-      </main>
-    </div>
+    <AuthGuard>
+      <div>
+        <DashboardNav user={user} />
+        <main className="wrap" style={{ paddingTop: 'var(--space-xl)', paddingBottom: 'var(--space-xl)' }}>
+          {children}
+        </main>
+      </div>
+    </AuthGuard>
   );
 }

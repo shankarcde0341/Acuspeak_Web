@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { loginUser, initiateGoogleLogin, sendPhoneOtp, verifyPhoneOtp } from '@/services/authService';
+import { loginUser, initiateGoogleLogin, sendPhoneOtp, verifyPhoneOtp, setAuthSession, isLoggedIn } from '@/services/authService';
 
 type Mode = 'picker' | 'phone-enter' | 'phone-otp';
 
@@ -28,6 +28,23 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [debugCode, setDebugCode] = useState<string | null>(null);
 
+  // Check URL search parameters and existing auth state
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlError = params.get('error');
+      if (urlError) {
+        setError(decodeURIComponent(urlError));
+      }
+
+      // If user is already logged in, redirect directly to dashboard or target URL
+      if (isLoggedIn()) {
+        const target = params.get('redirect') || '/dashboard';
+        router.replace(target);
+      }
+    }
+  }, [router]);
+
   // Email / Password Login Handler
   const handleEmailLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -51,14 +68,14 @@ export default function LoginPage() {
       if ('error' in response) {
         setError(response.error);
       } else {
-        localStorage.setItem(
-          'acuspeak_user',
-          JSON.stringify({
-            email: response.email,
-            name: response.name,
-          })
-        );
-        router.push('/dashboard');
+        setAuthSession({
+          email: response.email,
+          name: response.name,
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const target = params.get('redirect') || '/dashboard';
+        router.push(target);
       }
     } catch {
       setError('An unexpected error occurred. Please try again.');
@@ -121,17 +138,17 @@ export default function LoginPage() {
       if (data.error) {
         setError(data.error);
       } else {
-        if (data.session_token) {
-          localStorage.setItem('session_token', data.session_token);
-        }
-        localStorage.setItem(
-          'acuspeak_user',
-          JSON.stringify({
+        setAuthSession(
+          {
             email: data.email || `${clean}@phone.user`,
             name: data.name || name || 'Phone User',
-          })
+          },
+          data.session_token
         );
-        router.push('/dashboard');
+
+        const params = new URLSearchParams(window.location.search);
+        const target = params.get('redirect') || '/dashboard';
+        router.push(target);
       }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Verification failed');
@@ -388,8 +405,15 @@ export default function LoginPage() {
               </p>
 
               {debugCode && (
-                <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold px-3.5 py-2 rounded-xl mb-4 flex items-center gap-2">
-                  <span>💡 Debug code: {debugCode}</span>
+                <div className="bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold px-3.5 py-2.5 rounded-xl mb-4 flex items-center justify-between shadow-sm">
+                  <span>💡 Demo OTP Code: <strong className="font-mono text-sm">{debugCode}</strong></span>
+                  <button
+                    type="button"
+                    onClick={() => setOtp(debugCode)}
+                    className="bg-amber-200 hover:bg-amber-300 text-amber-950 text-[11px] px-2.5 py-1 rounded-lg font-bold cursor-pointer transition-colors"
+                  >
+                    Auto-fill
+                  </button>
                 </div>
               )}
 

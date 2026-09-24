@@ -22,6 +22,14 @@ GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/ap
 JWT_SECRET = os.getenv("JWT_SECRET", "acuspeak_default_secret_key_2026")
 
 
+def is_google_oauth_configured() -> bool:
+    """Check whether valid Google OAuth credentials have been set in environment variables."""
+    client_id = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+    client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
+    placeholders = {"YOUR_GOOGLE_CLIENT_ID", "YOUR_GOOGLE_CLIENT_SECRET", "your_google_client_id", "your_google_client_secret", ""}
+    return bool(client_id and client_secret and client_id not in placeholders and client_secret not in placeholders)
+
+
 # ==========================================
 # SETUP (Password Hashing Configuration)
 # ==========================================
@@ -52,9 +60,13 @@ def get_password_hash(password):
 # Reason: Google consent screen redirect URL generate karne ke liye backend par secret keys securely hold karte hue.
 # Working: Google Accounts OAuth 2.0 endpoint ke liye query params (client_id, redirect_uri, scope, state, response_type) construct karke URL return karta hai.
 def generate_google_auth_url(state: str) -> str:
+    client_id = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/auth/google/callback")
+    if not is_google_oauth_configured():
+        raise ValueError("Google OAuth credentials are not properly configured in backend/.env")
     params = {
-        "client_id": GOOGLE_CLIENT_ID,
-        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "client_id": client_id,
+        "redirect_uri": redirect_uri,
         "response_type": "code",
         "scope": "openid email profile",
         "state": state,
@@ -68,11 +80,14 @@ def generate_google_auth_url(state: str) -> str:
 # Reason: Google authorization code ko access token mein exchange karne ke liye server-to-server HTTP request se.
 # Working: Client Secret backend par rakhte hue Google token URL ('https://oauth2.googleapis.com/token') par async POST request bhejta hai.
 async def exchange_code_for_google_token(code: str) -> dict:
+    client_id = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+    client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
+    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/auth/google/callback")
     payload = {
         "code": code,
-        "client_id": GOOGLE_CLIENT_ID,
-        "client_secret": GOOGLE_CLIENT_SECRET,
-        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "redirect_uri": redirect_uri,
         "grant_type": "authorization_code",
     }
     async with httpx.AsyncClient(timeout=10.0) as client:

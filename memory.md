@@ -25,10 +25,17 @@
 - Added frontend callback route [`src/app/auth/callback/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/auth/callback/page.tsx) to store non-sensitive user state in `localStorage` and redirect to `/dashboard`.
 - Implemented modular, backend-authoritative Phone OTP System: created [`backend/otp_service.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/otp_service.py) with abstract `BaseOTPProvider` (`MockOTPProvider`, `TwilioOTPProvider` stub) and SHA-256 OTP hashing; added Pydantic models `PhoneSendOTPRequest` and `PhoneVerifyOTPRequest`, 5-minute TTL storage in MongoDB `db.otps`, max 3-attempt lockouts, phone/IP rate limiting, `/api/auth/phone/send-otp` and `/api/auth/phone/verify-otp` endpoints in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py), and service helpers in [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts).
 - Verified Python backend compilation and TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+- Resolved Google OAuth `Error 401: invalid_client` (`flowName=GeneralOAuthFlow`): Added `is_google_oauth_configured()` validation check in [`backend/auth.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/auth.py) and [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py) to prevent redirecting to Google's consent screen with placeholder/missing credentials; added URL error parameter handling in [`src/app/login/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/login/page.tsx) to display structured configuration guidance on the frontend login card.
 
 
-
-
-
+### [2026-09-23]
+- Resolved Next.js 16.3.5 Turbopack font compilation error (`Can't resolve '@vercel/turbopack-next/internal/font/google/font'` / `next/font/google queries have exactly one entry`) in [`src/app/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/layout.tsx).
+- Self-hosted the `Manrope` and `Outfit` WOFF2 fonts in `src/fonts/` and updated `layout.tsx` to use `next/font/local`, eliminating Turbopack network font compiler issues and ensuring reliable offline builds.
+- Implemented strict multi-layered direct URL route protection for `/dashboard`, `/lessons`, `/live`, `/practice`, `/profile`, and `/settings`.
+- Created Next.js 16 server proxy [`src/proxy.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/proxy.ts) to intercept unauthenticated direct URL requests at the edge/server layer and redirect to `/login?redirect=...`.
+- Created client-side [`AuthGuard`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/auth/AuthGuard.tsx) component and applied it to [`(dashboard)/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/layout.tsx) and [`(call)/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28call%29/layout.tsx) to prevent content flashing and validate client state.
+- Enhanced [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts) with `setAuthSession()`, `isLoggedIn()`, `getStoredUser()`, and cookie sync/cleanup on login and `logoutUser()`.
+- Updated [`src/app/login/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/login/page.tsx) and [`src/app/auth/callback/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/auth/callback/page.tsx) to set session cookies and automatically redirect logged-in users away from `/login`.
+- Verified TypeScript compilation and production build (`npm run build`) with 0 errors.
 
 

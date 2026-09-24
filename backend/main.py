@@ -12,6 +12,7 @@ from urllib.parse import quote
 # FastAPI: Python mein modern, fast aur async web APIs banane ke liye main framework hai.
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 # Pydantic BaseModel: Client se aane wale request data ko validate aur structure karne ke liye.
 from pydantic import BaseModel, EmailStr
@@ -29,6 +30,7 @@ from auth import (
     exchange_code_for_google_token,
     fetch_google_user_info,
     create_session_token,
+    is_google_oauth_configured,
 )
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
@@ -94,6 +96,25 @@ async def lifespan(app: FastAPI):
 # FastAPI app instance initialize karna custom lifespan context ke saath
 app = FastAPI(lifespan=lifespan)
 
+# CORS Middleware Configuration
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+if FRONTEND_URL and FRONTEND_URL not in origins:
+    origins.append(FRONTEND_URL)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 
 # Function: read_root
 # Reason: Root endpoint ("/") handle karne ke liye jo backend health check aur server status verify karta hai.
@@ -142,9 +163,17 @@ async def google_login(request: Request):
     client_ip = request.client.host if request.client else "unknown"
     apply_rate_limit(client_ip)
     
-    state = secrets.token_urlsafe(16)
-    auth_url = generate_google_auth_url(state)
-    return RedirectResponse(url=auth_url)
+    if not is_google_oauth_configured():
+        err_msg = quote("Google OAuth is not configured in backend/.env. Please update GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET with valid Google Cloud credentials.")
+        return RedirectResponse(url=f"{FRONTEND_URL}/login?error={err_msg}")
+
+    try:
+        state = secrets.token_urlsafe(16)
+        auth_url = generate_google_auth_url(state)
+        return RedirectResponse(url=auth_url)
+    except Exception as exc:
+        err_msg = quote(f"Google OAuth initialization failed: {str(exc)}")
+        return RedirectResponse(url=f"{FRONTEND_URL}/login?error={err_msg}")
 
 
 # Function: google_callback
