@@ -25,7 +25,7 @@ const DEFAULT_WAVEFORM_HEIGHTS = [
 
 export default function InteractiveLesson({
   script: propScript,
-  lessonId = 'interview-10',
+  lessonId = 'business-5',
   lessonTitle: propTitle,
   categoryTitle: propCategory,
   xpReward: propXp,
@@ -36,7 +36,7 @@ export default function InteractiveLesson({
   const script = propScript || lessonData.script;
   const lessonTitle = propTitle || lessonData.title;
   const categoryTitle =
-    propCategory || lessonData.categoryTitle || 'Interview Conversation';
+    propCategory || lessonData.categoryTitle || 'Business Conversation';
   const xpReward = propXp || lessonData.xp;
 
   const [activeLineIndex, setActiveLineIndex] = useState<number>(0);
@@ -148,7 +148,10 @@ export default function InteractiveLesson({
             targetLine.speaker === 'Priya' ||
             targetLine.speaker === 'Assistant' ||
             targetLine.speaker === 'Resident' ||
-            targetLine.speaker === 'Candidate'
+            targetLine.speaker === 'Candidate' ||
+            targetLine.speaker === 'Sneha' ||
+            targetLine.speaker === 'Anita' ||
+            targetLine.speaker === 'Meera'
           ) {
             const femaleVoice = voices.find(
               (v) =>
@@ -408,7 +411,7 @@ export default function InteractiveLesson({
         <section className={styles.completionCard} aria-live="polite">
           <h2 className={styles.completionTitle}>🎉 Lesson Complete!</h2>
           <p className={styles.completionSubtext}>
-            Great job! You completed all 10 conversation lines and earned +{xpReward} XP.
+            Great job! You completed all {script.length} conversation lines and earned +{xpReward} XP.
           </p>
           <button
             type="button"

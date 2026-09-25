@@ -26,6 +26,73 @@ export const DAILY_1_SCRIPT: ScriptLine[] = [
   { line_id: 'd1-l10', speaker: 'Priya', text: 'That is great! It was nice talking to you. Have a good day!' },
 ];
 
+export const BUSINESS_MEETING_SCRIPT: ScriptLine[] = [
+  { line_id: 'b1-l1', speaker: 'Manager', text: "Good morning, everyone. Thank you for joining today's meeting." },
+  { line_id: 'b1-l2', speaker: 'Ravi', text: 'Good morning! Are we discussing the quarterly targets today?' },
+  { line_id: 'b1-l3', speaker: 'Manager', text: "Yes, that's right. Let me share the agenda on the screen." },
+  { line_id: 'b1-l4', speaker: 'Sneha', text: 'I have the sales report ready. Shall I present it first?' },
+  { line_id: 'b1-l5', speaker: 'Manager', text: 'Please go ahead, Sneha. The floor is yours.' },
+  { line_id: 'b1-l6', speaker: 'Sneha', text: 'Our revenue grew by 15% compared to the last quarter.' },
+  { line_id: 'b1-l7', speaker: 'Ravi', text: "That's impressive! Which product line contributed the most?" },
+  { line_id: 'b1-l8', speaker: 'Sneha', text: 'The premium subscription plan drove most of the growth.' },
+  { line_id: 'b1-l9', speaker: 'Manager', text: "Excellent work, team. Let's set our goals for the next quarter." },
+  { line_id: 'b1-l10', speaker: 'Ravi', text: 'I suggest we target a 20% increase. I will draft a plan by Friday.' },
+];
+
+export const PROFESSIONAL_EMAIL_SCRIPT: ScriptLine[] = [
+  { line_id: 'b2-l1', speaker: 'Anita', text: 'Vikram, I need to send an email to our client about the project delay. Can you help me?' },
+  { line_id: 'b2-l2', speaker: 'Vikram', text: "Sure! First, start with a professional greeting like 'Dear Mr. Sharma'." },
+  { line_id: 'b2-l3', speaker: 'Anita', text: 'Okay. And how should I explain the delay without sounding unprofessional?' },
+  { line_id: 'b2-l4', speaker: 'Vikram', text: "Say something like 'We regret to inform you that the delivery timeline has been revised.'" },
+  { line_id: 'b2-l5', speaker: 'Anita', text: 'That sounds good. Should I mention the new deadline?' },
+  { line_id: 'b2-l6', speaker: 'Vikram', text: "Absolutely. Be specific. Write 'The revised delivery date is March 15th.'" },
+  { line_id: 'b2-l7', speaker: 'Anita', text: 'Should I apologize in the email?' },
+  { line_id: 'b2-l8', speaker: 'Vikram', text: "Yes, add 'We sincerely apologize for any inconvenience caused.'" },
+  { line_id: 'b2-l9', speaker: 'Anita', text: 'How should I close the email?' },
+  { line_id: 'b2-l10', speaker: 'Vikram', text: "End with 'Please do not hesitate to reach out if you have any questions." },
+  { line_id: 'b2-l11', speaker: 'Anita', text: 'Thank you so much Vikram!' },
+  { line_id: 'b2-l12', speaker: 'Vikram', text: "You're welcome! I'm sure the client will understand." },
+];
+
+export const NEGOTIATION_SCRIPT: ScriptLine[] = [
+  { line_id: 'b3-l1', speaker: 'Buyer', text: 'Thank you for meeting with us today. We are interested in your software package.' },
+  { line_id: 'b3-l2', speaker: 'Seller', text: 'We appreciate your interest. Our standard package is priced at 5 lakh rupees per year.' },
+  { line_id: 'b3-l3', speaker: 'Buyer', text: 'That is a bit above our budget. Is there any room for negotiation?' },
+  { line_id: 'b3-l4', speaker: 'Seller', text: 'We can discuss flexible options. What budget range are you working with?' },
+  { line_id: 'b3-l5', speaker: 'Buyer', text: 'We were hoping to keep it around 3.5 lakh rupees.' },
+  { line_id: 'b3-l6', speaker: 'Seller', text: 'For that price, we could offer the basic tier with fewer features. Would that work?' },
+  { line_id: 'b3-l7', speaker: 'Buyer', text: 'We really need the analytics module included. Can you meet us at 4 lakh?' },
+  { line_id: 'b3-l8', speaker: 'Seller', text: 'If you commit to a two-year contract, we can offer the full package at 4 lakh per year.' },
+  { line_id: 'b3-l9', speaker: 'Buyer', text: 'That sounds like a fair deal. Let me discuss this with my team and get back to you.' },
+  { line_id: 'b3-l10', speaker: 'Seller', text: 'Absolutely. Take your time. We look forward to a great partnership.' },
+];
+
+export const PRESENTATION_SCRIPT: ScriptLine[] = [
+  { line_id: 'b4-l1', speaker: 'Presenter', text: 'Good afternoon, everyone. Today I will be presenting our marketing strategy for Q3.' },
+  { line_id: 'b4-l2', speaker: 'Presenter', text: "Let me start by sharing the key highlights from last quarter's performance." },
+  { line_id: 'b4-l3', speaker: 'Presenter', text: 'As you can see on this slide, our social media engagement increased by 40%.' },
+  { line_id: 'b4-l4', speaker: 'Audience', text: 'That is quite impressive. What do you attribute the growth to?' },
+  { line_id: 'b4-l5', speaker: 'Presenter', text: 'We focused on video content and influencer collaborations, which really resonated with our audience.' },
+  { line_id: 'b4-l6', speaker: 'Presenter', text: 'Moving forward, our strategy includes three main pillars. Let me walk you through each one.' },
+  { line_id: 'b4-l7', speaker: 'Audience', text: 'Could you elaborate on the budget allocation for digital advertising?' },
+  { line_id: 'b4-l8', speaker: 'Presenter', text: 'Of course. We plan to allocate 60% of the budget to digital channels and 40% to offline events.' },
+  { line_id: 'b4-l9', speaker: 'Audience', text: 'Thank you. This looks like a solid plan.' },
+  { line_id: 'b4-l10', speaker: 'Presenter', text: 'Thank you for your feedback. I am happy to answer any more questions after the session.' },
+];
+
+export const NETWORKING_SCRIPT: ScriptLine[] = [
+  { line_id: 'b5-l1', speaker: 'Meera', text: "Hi! I don't think we have met before. I am Meera from the marketing team." },
+  { line_id: 'b5-l2', speaker: 'Arjun', text: 'Hello Meera! I am Arjun. I work in the product development department.' },
+  { line_id: 'b5-l3', speaker: 'Meera', text: 'Nice to meet you, Arjun! How long have you been with the company?' },
+  { line_id: 'b5-l4', speaker: 'Arjun', text: 'About three years now. I joined right after the company expanded to Bangalore.' },
+  { line_id: 'b5-l5', speaker: 'Meera', text: "That's wonderful! I just joined two months ago. I am still getting to know everyone." },
+  { line_id: 'b5-l6', speaker: 'Arjun', text: 'Welcome aboard! If you ever need help navigating things, feel free to reach out.' },
+  { line_id: 'b5-l7', speaker: 'Meera', text: 'That is very kind of you. Actually, I would love to learn more about how your team works.' },
+  { line_id: 'b5-l8', speaker: 'Arjun', text: "Sure, let's grab coffee sometime this week and I will tell you all about it." },
+  { line_id: 'b5-l9', speaker: 'Meera', text: 'That sounds great! How about Wednesday afternoon?' },
+  { line_id: 'b5-l10', speaker: 'Arjun', text: 'Wednesday works perfectly. See you then, Meera!' },
+];
+
 export const ORDERING_AT_CAFE_SCRIPT: ScriptLine[] = [
   {
     line_id: 'd2-l1',
@@ -682,6 +749,90 @@ export const LESSON_SCRIPTS: Record<
   string,
   { script: ScriptLine[]; title: string; categoryTitle?: string; xp: number }
 > = {
+  'business-5': {
+    script: NETWORKING_SCRIPT,
+    title: 'Lesson 5: Networking',
+    categoryTitle: 'Business Conversation',
+    xp: 35,
+  },
+  'networking': {
+    script: NETWORKING_SCRIPT,
+    title: 'Lesson 5: Networking',
+    categoryTitle: 'Business Conversation',
+    xp: 35,
+  },
+  'business-4': {
+    script: PRESENTATION_SCRIPT,
+    title: 'Lesson 4: Presentation',
+    categoryTitle: 'Business Conversation',
+    xp: 45,
+  },
+  'presentation': {
+    script: PRESENTATION_SCRIPT,
+    title: 'Lesson 4: Presentation',
+    categoryTitle: 'Business Conversation',
+    xp: 45,
+  },
+  'presentations': {
+    script: PRESENTATION_SCRIPT,
+    title: 'Lesson 4: Presentation',
+    categoryTitle: 'Business Conversation',
+    xp: 45,
+  },
+  'business-3': {
+    script: NEGOTIATION_SCRIPT,
+    title: 'Lesson 3: Negotiation',
+    categoryTitle: 'Business Conversation',
+    xp: 50,
+  },
+  'negotiation': {
+    script: NEGOTIATION_SCRIPT,
+    title: 'Lesson 3: Negotiation',
+    categoryTitle: 'Business Conversation',
+    xp: 50,
+  },
+  'negotiations': {
+    script: NEGOTIATION_SCRIPT,
+    title: 'Lesson 3: Negotiation',
+    categoryTitle: 'Business Conversation',
+    xp: 50,
+  },
+  'business-2': {
+    script: PROFESSIONAL_EMAIL_SCRIPT,
+    title: 'Lesson 2: Professional Email',
+    categoryTitle: 'Business Conversation',
+    xp: 25,
+  },
+  'professional-email': {
+    script: PROFESSIONAL_EMAIL_SCRIPT,
+    title: 'Lesson 2: Professional Email',
+    categoryTitle: 'Business Conversation',
+    xp: 25,
+  },
+  'professional-emails': {
+    script: PROFESSIONAL_EMAIL_SCRIPT,
+    title: 'Lesson 2: Professional Email',
+    categoryTitle: 'Business Conversation',
+    xp: 25,
+  },
+  'business-1': {
+    script: BUSINESS_MEETING_SCRIPT,
+    title: 'Lesson 1: Business Meetings',
+    categoryTitle: 'Business Conversation',
+    xp: 40,
+  },
+  'business-meetings': {
+    script: BUSINESS_MEETING_SCRIPT,
+    title: 'Lesson 1: Business Meetings',
+    categoryTitle: 'Business Conversation',
+    xp: 40,
+  },
+  'business-meeting': {
+    script: BUSINESS_MEETING_SCRIPT,
+    title: 'Lesson 1: Business Meetings',
+    categoryTitle: 'Business Conversation',
+    xp: 40,
+  },
   'interview-10': {
     script: INTERVIEW_CLOSING_SCRIPT,
     title: 'Lesson 10: Closing the Interview',
@@ -914,10 +1065,10 @@ export const LESSON_SCRIPTS: Record<
 
 export function getLessonData(lessonId: string) {
   return LESSON_SCRIPTS[lessonId] || {
-    script: INTERVIEW_CLOSING_SCRIPT,
-    title: 'Lesson 10: Closing the Interview',
-    categoryTitle: 'Interview Conversation',
-    xp: 25,
+    script: NETWORKING_SCRIPT,
+    title: 'Lesson 5: Networking',
+    categoryTitle: 'Business Conversation',
+    xp: 35,
   };
 }
 
