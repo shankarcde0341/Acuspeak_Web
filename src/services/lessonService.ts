@@ -148,104 +148,776 @@ export const OPINIONS_SCRIPT: ScriptLine[] = [
   { line_id: 'd10-l10', speaker: 'Rohit', text: 'Yes, it is worth watching at least once!' },
 ];
 
-export const LESSON_SCRIPTS: Record<string, { script: ScriptLine[]; title: string; xp: number }> = {
+export const INTERVIEW_INTRO_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i1-l1',
+    speaker: 'Interviewer',
+    text: 'Good morning! Please have a seat. Can you start by telling me a little about yourself?',
+  },
+  {
+    line_id: 'i1-l2',
+    speaker: 'Candidate',
+    text: 'Good morning! Of course. My name is Aarav Sharma. I am a software engineer with five years of experience.',
+  },
+  {
+    line_id: 'i1-l3',
+    speaker: 'Candidate',
+    text: 'I started my career at a startup, where I built full-stack web applications from scratch.',
+  },
+  {
+    line_id: 'i1-l4',
+    speaker: 'Interviewer',
+    text: 'That sounds great. What kind of projects did you work on there?',
+  },
+  {
+    line_id: 'i1-l5',
+    speaker: 'Candidate',
+    text: 'I developed an e-commerce platform that scaled to over 100,000 users within its first year.',
+  },
+  {
+    line_id: 'i1-l6',
+    speaker: 'Interviewer',
+    text: 'Impressive! What brought you to apply for this position?',
+  },
+  {
+    line_id: 'i1-l7',
+    speaker: 'Candidate',
+    text: 'I am looking for a role where I can work on complex challenges and grow as an engineer.',
+  },
+  {
+    line_id: 'i1-l8',
+    speaker: 'Candidate',
+    text: 'Your company\'s focus on innovative products really aligns with my career goals.',
+  },
+  {
+    line_id: 'i1-l9',
+    speaker: 'Interviewer',
+    text: 'That is great to hear. What would you say is your greatest professional achievement so far?',
+  },
+  {
+    line_id: 'i1-l10',
+    speaker: 'Candidate',
+    text: 'Leading a team that delivered a critical feature two weeks ahead of schedule, saving the company significant costs.',
+  },
+];
+
+export const INTERVIEW_BEHAVIORAL_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i2-l1',
+    speaker: 'Interviewer',
+    text: 'Can you tell me about a time you faced a major challenge at work?',
+  },
+  {
+    line_id: 'i2-l2',
+    speaker: 'Candidate',
+    text: 'Certainly. In my previous role, our main server went down two hours before a product launch.',
+  },
+  {
+    line_id: 'i2-l3',
+    speaker: 'Interviewer',
+    text: 'What did you do to handle the situation?',
+  },
+  {
+    line_id: 'i2-l4',
+    speaker: 'Candidate',
+    text: 'I immediately assembled the team, identified the root cause as a database misconfiguration, and rolled back the changes.',
+  },
+  {
+    line_id: 'i2-l5',
+    speaker: 'Candidate',
+    text: 'We restored the service within 45 minutes and the launch proceeded successfully.',
+  },
+  {
+    line_id: 'i2-l6',
+    speaker: 'Interviewer',
+    text: 'Excellent! What did you learn from that experience?',
+  },
+  {
+    line_id: 'i2-l7',
+    speaker: 'Candidate',
+    text: 'I learned the importance of having a rollback plan before any major deployment.',
+  },
+  {
+    line_id: 'i2-l8',
+    speaker: 'Candidate',
+    text: 'I also improved our team\'s incident response checklist to prevent similar issues.',
+  },
+  {
+    line_id: 'i2-l9',
+    speaker: 'Interviewer',
+    text: 'That shows great leadership. How did the team respond to your direction?',
+  },
+  {
+    line_id: 'i2-l10',
+    speaker: 'Candidate',
+    text: 'The team was calm and focused. Clear communication made all the difference under pressure.',
+  },
+];
+
+export const INTERVIEW_MOTIVATION_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i3-l1',
+    speaker: 'Interviewer',
+    text: 'Why do you want to work for our company specifically?',
+  },
+  {
+    line_id: 'i3-l2',
+    speaker: 'Candidate',
+    text: 'I have been following your company\'s journey for the past two years and I am genuinely inspired by your mission.',
+  },
+  {
+    line_id: 'i3-l3',
+    speaker: 'Interviewer',
+    text: 'What specifically about our mission resonates with you?',
+  },
+  {
+    line_id: 'i3-l4',
+    speaker: 'Candidate',
+    text: 'Your commitment to making technology accessible to rural communities aligns deeply with my personal values.',
+  },
+  {
+    line_id: 'i3-l5',
+    speaker: 'Interviewer',
+    text: 'That is wonderful. Have you had any experience working on similar social impact projects?',
+  },
+  {
+    line_id: 'i3-l6',
+    speaker: 'Candidate',
+    text: 'Yes, I volunteered with an NGO to build a digital literacy platform for underprivileged students.',
+  },
+  {
+    line_id: 'i3-l7',
+    speaker: 'Interviewer',
+    text: 'How did that experience shape your professional goals?',
+  },
+  {
+    line_id: 'i3-l8',
+    speaker: 'Candidate',
+    text: 'It showed me that technology can genuinely transform lives. That is the kind of work I want to dedicate my career to.',
+  },
+  {
+    line_id: 'i3-l9',
+    speaker: 'Interviewer',
+    text: 'And what role do you see yourself playing in our team?',
+  },
+  {
+    line_id: 'i3-l10',
+    speaker: 'Candidate',
+    text: 'I would love to contribute both technically and as a mentor, helping junior developers grow within your team.',
+  },
+];
+
+export const INTERVIEW_STRENGTHS_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i4-l1',
+    speaker: 'Interviewer',
+    text: 'What would you consider to be your greatest professional strength?',
+  },
+  {
+    line_id: 'i4-l2',
+    speaker: 'Candidate',
+    text: 'My strongest skill is problem-solving under pressure. I stay calm and analytical even in stressful situations.',
+  },
+  {
+    line_id: 'i4-l3',
+    speaker: 'Interviewer',
+    text: 'Can you give me a specific example of that?',
+  },
+  {
+    line_id: 'i4-l4',
+    speaker: 'Candidate',
+    text: 'During a critical product demo, our integration with a third-party API broke unexpectedly.',
+  },
+  {
+    line_id: 'i4-l5',
+    speaker: 'Candidate',
+    text: 'I quickly built a mock API in under an hour so the demo could proceed without any issues.',
+  },
+  {
+    line_id: 'i4-l6',
+    speaker: 'Interviewer',
+    text: 'That is very resourceful! What other strengths do you bring to the table?',
+  },
+  {
+    line_id: 'i4-l7',
+    speaker: 'Candidate',
+    text: 'I am also a strong communicator. I make it a point to keep all stakeholders informed throughout a project.',
+  },
+  {
+    line_id: 'i4-l8',
+    speaker: 'Interviewer',
+    text: 'How do you ensure clear communication in a fast-moving environment?',
+  },
+  {
+    line_id: 'i4-l9',
+    speaker: 'Candidate',
+    text: 'I hold brief daily stand-ups and send concise written summaries at the end of each sprint.',
+  },
+  {
+    line_id: 'i4-l10',
+    speaker: 'Interviewer',
+    text: 'That is a great habit. Those are exactly the qualities we look for in candidates.',
+  },
+];
+
+export const INTERVIEW_WEAKNESSES_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i5-l1',
+    speaker: 'Interviewer',
+    text: 'Everyone has areas to improve. What would you say is your greatest weakness?',
+  },
+  {
+    line_id: 'i5-l2',
+    speaker: 'Candidate',
+    text: 'I used to struggle with delegating tasks. I often tried to handle everything myself.',
+  },
+  {
+    line_id: 'i5-l3',
+    speaker: 'Interviewer',
+    text: 'That is quite common. How did that affect your work?',
+  },
+  {
+    line_id: 'i5-l4',
+    speaker: 'Candidate',
+    text: 'There were times I became a bottleneck, which slowed down the overall team\'s progress.',
+  },
+  {
+    line_id: 'i5-l5',
+    speaker: 'Interviewer',
+    text: 'How have you worked to address this?',
+  },
+  {
+    line_id: 'i5-l6',
+    speaker: 'Candidate',
+    text: 'I actively worked on trusting my teammates more and clearly defining ownership for each task.',
+  },
+  {
+    line_id: 'i5-l7',
+    speaker: 'Candidate',
+    text: 'I also took a course on team leadership to improve my delegation and management skills.',
+  },
+  {
+    line_id: 'i5-l8',
+    speaker: 'Interviewer',
+    text: 'That shows strong self-awareness. Have you seen improvements since then?',
+  },
+  {
+    line_id: 'i5-l9',
+    speaker: 'Candidate',
+    text: 'Absolutely. My last project was delivered ahead of schedule because the team was more empowered and efficient.',
+  },
+  {
+    line_id: 'i5-l10',
+    speaker: 'Interviewer',
+    text: 'That is a great example of turning a weakness into a strength. Well done.',
+  },
+];
+
+export const INTERVIEW_TECHNICAL_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i6-l1',
+    speaker: 'Interviewer',
+    text: 'Let\'s talk about your technical background. How would you explain REST APIs to a non-technical stakeholder?',
+  },
+  {
+    line_id: 'i6-l2',
+    speaker: 'Candidate',
+    text: 'I would compare a REST API to a waiter in a restaurant. You place your order, the kitchen prepares it, and the waiter brings it back.',
+  },
+  {
+    line_id: 'i6-l3',
+    speaker: 'Interviewer',
+    text: 'That is a great analogy! What about database design? Walk me through your approach.',
+  },
+  {
+    line_id: 'i6-l4',
+    speaker: 'Candidate',
+    text: 'I start by identifying the entities and their relationships, then normalize the schema to eliminate redundancy.',
+  },
+  {
+    line_id: 'i6-l5',
+    speaker: 'Interviewer',
+    text: 'How do you handle performance issues in large databases?',
+  },
+  {
+    line_id: 'i6-l6',
+    speaker: 'Candidate',
+    text: 'I use indexing on frequently queried columns and analyze slow query logs to optimize bottlenecks.',
+  },
+  {
+    line_id: 'i6-l7',
+    speaker: 'Interviewer',
+    text: 'Good. Tell me about a technically challenging problem you solved recently.',
+  },
+  {
+    line_id: 'i6-l8',
+    speaker: 'Candidate',
+    text: 'I redesigned a legacy monolith into microservices, which reduced deployment time by 60%.',
+  },
+  {
+    line_id: 'i6-l9',
+    speaker: 'Interviewer',
+    text: 'Impressive. What was the biggest risk you encountered during that process?',
+  },
+  {
+    line_id: 'i6-l10',
+    speaker: 'Candidate',
+    text: 'Data consistency across services was the biggest risk. I solved it using an event-driven architecture with message queues.',
+  },
+];
+
+export const INTERVIEW_SALARY_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i7-l1',
+    speaker: 'Interviewer',
+    text: 'We are very impressed with your profile. Let\'s talk about compensation. What are your salary expectations?',
+  },
+  {
+    line_id: 'i7-l2',
+    speaker: 'Candidate',
+    text: 'Based on my experience and market research, I am expecting a package in the range of 18 to 22 lakhs per annum.',
+  },
+  {
+    line_id: 'i7-l3',
+    speaker: 'Interviewer',
+    text: 'That is somewhat above our initial budget for this role. Is there flexibility on your end?',
+  },
+  {
+    line_id: 'i7-l4',
+    speaker: 'Candidate',
+    text: 'I am open to discussing the full compensation package including benefits, bonuses, and growth opportunities.',
+  },
+  {
+    line_id: 'i7-l5',
+    speaker: 'Interviewer',
+    text: 'We can offer 17 lakhs along with performance bonuses and an annual review cycle.',
+  },
+  {
+    line_id: 'i7-l6',
+    speaker: 'Candidate',
+    text: 'Could you tell me more about the bonus structure? That would help me evaluate the total offer.',
+  },
+  {
+    line_id: 'i7-l7',
+    speaker: 'Interviewer',
+    text: 'Typically, bonuses range from 10 to 20 percent based on performance and company targets.',
+  },
+  {
+    line_id: 'i7-l8',
+    speaker: 'Candidate',
+    text: 'That is very helpful. Considering the bonus potential, I think we can make it work.',
+  },
+  {
+    line_id: 'i7-l9',
+    speaker: 'Interviewer',
+    text: 'Excellent! We also offer flexible work hours and a generous learning and development budget.',
+  },
+  {
+    line_id: 'i7-l10',
+    speaker: 'Candidate',
+    text: 'That sounds like a great package overall. I am excited about the opportunity to join the team.',
+  },
+];
+
+export const INTERVIEW_QUESTIONS_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i8-l1',
+    speaker: 'Interviewer',
+    text: 'We are nearing the end of our interview. Do you have any questions for us?',
+  },
+  {
+    line_id: 'i8-l2',
+    speaker: 'Candidate',
+    text: 'Yes, I do! Could you describe what a typical day looks like for someone in this role?',
+  },
+  {
+    line_id: 'i8-l3',
+    speaker: 'Interviewer',
+    text: 'You would typically start with a team stand-up, then work on feature development or bug fixes for the day.',
+  },
+  {
+    line_id: 'i8-l4',
+    speaker: 'Candidate',
+    text: 'That sounds great. How does the team handle knowledge sharing and continuous learning?',
+  },
+  {
+    line_id: 'i8-l5',
+    speaker: 'Interviewer',
+    text: 'We have weekly tech talks and a dedicated budget for online courses and conferences.',
+  },
+  {
+    line_id: 'i8-l6',
+    speaker: 'Candidate',
+    text: 'I love that. What does success look like for someone in this position after six months?',
+  },
+  {
+    line_id: 'i8-l7',
+    speaker: 'Interviewer',
+    text: 'We would expect you to be independently delivering features and beginning to mentor junior team members.',
+  },
+  {
+    line_id: 'i8-l8',
+    speaker: 'Candidate',
+    text: 'That aligns perfectly with my goals. One last question — what is the biggest challenge the team is currently facing?',
+  },
+  {
+    line_id: 'i8-l9',
+    speaker: 'Interviewer',
+    text: 'Scaling our infrastructure to handle rapid user growth is our primary focus right now.',
+  },
+  {
+    line_id: 'i8-l10',
+    speaker: 'Candidate',
+    text: 'That is exactly the kind of challenge I enjoy solving. I look forward to contributing to it.',
+  },
+];
+
+export const INTERVIEW_DIFFICULT_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i9-l1',
+    speaker: 'Interviewer',
+    text: 'Tell me about a time you disagreed with your manager. How did you handle it?',
+  },
+  {
+    line_id: 'i9-l2',
+    speaker: 'Candidate',
+    text: 'There was a time my manager wanted to release a feature without proper testing to meet a deadline.',
+  },
+  {
+    line_id: 'i9-l3',
+    speaker: 'Interviewer',
+    text: 'That is a sensitive situation. What did you do?',
+  },
+  {
+    line_id: 'i9-l4',
+    speaker: 'Candidate',
+    text: 'I requested a private conversation and presented data showing the risk of releasing untested code to production.',
+  },
+  {
+    line_id: 'i9-l5',
+    speaker: 'Candidate',
+    text: 'I proposed a compromise — release a limited beta version while the full feature continued testing.',
+  },
+  {
+    line_id: 'i9-l6',
+    speaker: 'Interviewer',
+    text: 'How did your manager respond to that?',
+  },
+  {
+    line_id: 'i9-l7',
+    speaker: 'Candidate',
+    text: 'He appreciated the data-driven approach and agreed to the beta release plan.',
+  },
+  {
+    line_id: 'i9-l8',
+    speaker: 'Interviewer',
+    text: 'What was the outcome?',
+  },
+  {
+    line_id: 'i9-l9',
+    speaker: 'Candidate',
+    text: 'The beta helped us identify three critical bugs that would have affected thousands of users.',
+  },
+  {
+    line_id: 'i9-l10',
+    speaker: 'Interviewer',
+    text: 'That is a textbook example of constructive disagreement. Excellent communication skills.',
+  },
+];
+
+export const INTERVIEW_CLOSING_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'i10-l1',
+    speaker: 'Interviewer',
+    text: 'We have covered everything on our list today. Thank you for your time, Priya.',
+  },
+  {
+    line_id: 'i10-l2',
+    speaker: 'Candidate',
+    text: 'Thank you so much! I really enjoyed our conversation and learning more about the role.',
+  },
+  {
+    line_id: 'i10-l3',
+    speaker: 'Interviewer',
+    text: 'Is there anything you would like to add before we wrap up?',
+  },
+  {
+    line_id: 'i10-l4',
+    speaker: 'Candidate',
+    text: 'I just want to reiterate how excited I am about this opportunity. I believe I can make a strong contribution.',
+  },
+  {
+    line_id: 'i10-l5',
+    speaker: 'Interviewer',
+    text: 'We appreciate your enthusiasm. We will be in touch within the next three business days.',
+  },
+  {
+    line_id: 'i10-l6',
+    speaker: 'Candidate',
+    text: 'That is great to hear. Would it be appropriate for me to send a follow-up email after this?',
+  },
+  {
+    line_id: 'i10-l7',
+    speaker: 'Interviewer',
+    text: 'Absolutely. A brief thank-you email is always appreciated and shows professionalism.',
+  },
+  {
+    line_id: 'i10-l8',
+    speaker: 'Candidate',
+    text: 'Perfect. I will send that over today. Is there anything else you need from me right now?',
+  },
+  {
+    line_id: 'i10-l9',
+    speaker: 'Interviewer',
+    text: 'No, we have everything. It was a pleasure meeting you today, Priya.',
+  },
+  {
+    line_id: 'i10-l10',
+    speaker: 'Candidate',
+    text: 'The pleasure was entirely mine. Thank you for the wonderful experience. Have a great day!',
+  },
+];
+
+export const LESSON_SCRIPTS: Record<
+  string,
+  { script: ScriptLine[]; title: string; categoryTitle?: string; xp: number }
+> = {
+  'interview-10': {
+    script: INTERVIEW_CLOSING_SCRIPT,
+    title: 'Lesson 10: Closing the Interview',
+    categoryTitle: 'Interview Conversation',
+    xp: 25,
+  },
+  'closing-the-interview': {
+    script: INTERVIEW_CLOSING_SCRIPT,
+    title: 'Lesson 10: Closing the Interview',
+    categoryTitle: 'Interview Conversation',
+    xp: 25,
+  },
+  'interview-9': {
+    script: INTERVIEW_DIFFICULT_SCRIPT,
+    title: 'Lesson 9: Difficult Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 50,
+  },
+  'difficult-questions': {
+    script: INTERVIEW_DIFFICULT_SCRIPT,
+    title: 'Lesson 9: Difficult Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 50,
+  },
+  'interview-8': {
+    script: INTERVIEW_QUESTIONS_SCRIPT,
+    title: 'Lesson 8: Asking Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 30,
+  },
+  'asking-questions': {
+    script: INTERVIEW_QUESTIONS_SCRIPT,
+    title: 'Lesson 8: Asking Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 30,
+  },
+  'interview-7': {
+    script: INTERVIEW_SALARY_SCRIPT,
+    title: 'Lesson 7: Salary Discussion',
+    categoryTitle: 'Interview Conversation',
+    xp: 40,
+  },
+  'salary-discussion': {
+    script: INTERVIEW_SALARY_SCRIPT,
+    title: 'Lesson 7: Salary Discussion',
+    categoryTitle: 'Interview Conversation',
+    xp: 40,
+  },
+  'interview-6': {
+    script: INTERVIEW_TECHNICAL_SCRIPT,
+    title: 'Lesson 6: Technical Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 45,
+  },
+  'technical-questions': {
+    script: INTERVIEW_TECHNICAL_SCRIPT,
+    title: 'Lesson 6: Technical Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 45,
+  },
+  'interview-5': {
+    script: INTERVIEW_WEAKNESSES_SCRIPT,
+    title: 'Lesson 5: Weaknesses',
+    categoryTitle: 'Interview Conversation',
+    xp: 35,
+  },
+  'weaknesses': {
+    script: INTERVIEW_WEAKNESSES_SCRIPT,
+    title: 'Lesson 5: Weaknesses',
+    categoryTitle: 'Interview Conversation',
+    xp: 35,
+  },
+  'interview-4': {
+    script: INTERVIEW_STRENGTHS_SCRIPT,
+    title: 'Lesson 4: Strengths',
+    categoryTitle: 'Interview Conversation',
+    xp: 30,
+  },
+  'strengths': {
+    script: INTERVIEW_STRENGTHS_SCRIPT,
+    title: 'Lesson 4: Strengths',
+    categoryTitle: 'Interview Conversation',
+    xp: 30,
+  },
+  'interview-3': {
+    script: INTERVIEW_MOTIVATION_SCRIPT,
+    title: 'Lesson 3: Motivation',
+    categoryTitle: 'Interview Conversation',
+    xp: 35,
+  },
+  'motivation': {
+    script: INTERVIEW_MOTIVATION_SCRIPT,
+    title: 'Lesson 3: Motivation',
+    categoryTitle: 'Interview Conversation',
+    xp: 35,
+  },
+  'interview-2': {
+    script: INTERVIEW_BEHAVIORAL_SCRIPT,
+    title: 'Lesson 2: Behavioral Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 40,
+  },
+  'behavioral-questions': {
+    script: INTERVIEW_BEHAVIORAL_SCRIPT,
+    title: 'Lesson 2: Behavioral Questions',
+    categoryTitle: 'Interview Conversation',
+    xp: 40,
+  },
+  'interview-1': {
+    script: INTERVIEW_INTRO_SCRIPT,
+    title: 'Lesson 1: Self Introduction',
+    categoryTitle: 'Interview Conversation',
+    xp: 25,
+  },
+  'self-introduction': {
+    script: INTERVIEW_INTRO_SCRIPT,
+    title: 'Lesson 1: Self Introduction',
+    categoryTitle: 'Interview Conversation',
+    xp: 25,
+  },
   'daily-1': {
     script: DAILY_1_SCRIPT,
     title: 'Lesson 1: Greetings & Introductions',
+    categoryTitle: 'Daily Conversation',
     xp: 20,
   },
   'daily-2': {
     script: ORDERING_AT_CAFE_SCRIPT,
     title: 'Lesson 2: Ordering at a Cafe',
+    categoryTitle: 'Daily Conversation',
     xp: 25,
   },
   'daily-3': {
     script: CASUAL_CONVERSATION_SCRIPT,
     title: 'Lesson 3: Casual Conversation',
+    categoryTitle: 'Daily Conversation',
     xp: 30,
   },
   'casual-conversation': {
     script: CASUAL_CONVERSATION_SCRIPT,
     title: 'Lesson 3: Casual Conversation',
+    categoryTitle: 'Daily Conversation',
     xp: 30,
   },
   'daily-4': {
     script: SHOPPING_CONVERSATION_SCRIPT,
     title: 'Lesson 4: Shopping Conversation',
+    categoryTitle: 'Daily Conversation',
     xp: 25,
   },
   'shopping-conversation': {
     script: SHOPPING_CONVERSATION_SCRIPT,
     title: 'Lesson 4: Shopping Conversation',
+    categoryTitle: 'Daily Conversation',
     xp: 25,
   },
   'daily-5': {
     script: DIRECTIONS_SCRIPT,
     title: 'Lesson 5: Asking Directions',
+    categoryTitle: 'Daily Conversation',
     xp: 30,
   },
   'asking-directions': {
     script: DIRECTIONS_SCRIPT,
     title: 'Lesson 5: Asking Directions',
+    categoryTitle: 'Daily Conversation',
     xp: 30,
   },
   'daily-6': {
     script: RESTAURANT_SCRIPT,
     title: 'Lesson 6: At a Restaurant',
+    categoryTitle: 'Daily Conversation',
     xp: 35,
   },
   'at-a-restaurant': {
     script: RESTAURANT_SCRIPT,
     title: 'Lesson 6: At a Restaurant',
+    categoryTitle: 'Daily Conversation',
     xp: 35,
   },
   'daily-7': {
     script: WEEKENDS_SCRIPT,
     title: 'Lesson 7: Talking About Weekends',
+    categoryTitle: 'Daily Conversation',
     xp: 30,
   },
   'talking-about-weekends': {
     script: WEEKENDS_SCRIPT,
     title: 'Lesson 7: Talking About Weekends',
+    categoryTitle: 'Daily Conversation',
     xp: 30,
   },
   'daily-8': {
     script: DOCTOR_SCRIPT,
     title: 'Lesson 8: At the Doctor',
+    categoryTitle: 'Daily Conversation',
     xp: 40,
   },
   'at-the-doctor': {
     script: DOCTOR_SCRIPT,
     title: 'Lesson 8: At the Doctor',
+    categoryTitle: 'Daily Conversation',
     xp: 40,
   },
   'daily-9': {
     script: PHONE_SCRIPT,
     title: 'Lesson 9: Phone Calls',
+    categoryTitle: 'Daily Conversation',
     xp: 45,
   },
   'phone-calls': {
     script: PHONE_SCRIPT,
     title: 'Lesson 9: Phone Calls',
+    categoryTitle: 'Daily Conversation',
     xp: 45,
   },
   'daily-10': {
     script: OPINIONS_SCRIPT,
     title: 'Lesson 10: Sharing Opinions',
+    categoryTitle: 'Daily Conversation',
     xp: 50,
   },
   'sharing-opinions': {
     script: OPINIONS_SCRIPT,
     title: 'Lesson 10: Sharing Opinions',
+    categoryTitle: 'Daily Conversation',
     xp: 50,
   },
 };
 
 export function getLessonData(lessonId: string) {
   return LESSON_SCRIPTS[lessonId] || {
-    script: OPINIONS_SCRIPT,
-    title: 'Lesson 10: Sharing Opinions',
-    xp: 50,
+    script: INTERVIEW_CLOSING_SCRIPT,
+    title: 'Lesson 10: Closing the Interview',
+    categoryTitle: 'Interview Conversation',
+    xp: 25,
   };
 }
 

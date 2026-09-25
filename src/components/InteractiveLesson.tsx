@@ -13,6 +13,7 @@ export interface InteractiveLessonProps {
   script?: ScriptLine[];
   lessonId?: string;
   lessonTitle?: string;
+  categoryTitle?: string;
   xpReward?: number;
   onComplete?: () => void;
 }
@@ -24,8 +25,9 @@ const DEFAULT_WAVEFORM_HEIGHTS = [
 
 export default function InteractiveLesson({
   script: propScript,
-  lessonId = 'daily-10',
+  lessonId = 'interview-10',
   lessonTitle: propTitle,
+  categoryTitle: propCategory,
   xpReward: propXp,
   onComplete,
 }: InteractiveLessonProps) {
@@ -33,6 +35,8 @@ export default function InteractiveLesson({
   const lessonData = getLessonData(lessonId);
   const script = propScript || lessonData.script;
   const lessonTitle = propTitle || lessonData.title;
+  const categoryTitle =
+    propCategory || lessonData.categoryTitle || 'Interview Conversation';
   const xpReward = propXp || lessonData.xp;
 
   const [activeLineIndex, setActiveLineIndex] = useState<number>(0);
@@ -139,7 +143,13 @@ export default function InteractiveLesson({
 
         const voices = synthRef.current.getVoices();
         if (voices.length > 0) {
-          if (targetLine.speaker === 'Waitress' || targetLine.speaker === 'Priya' || targetLine.speaker === 'Assistant' || targetLine.speaker === 'Resident') {
+          if (
+            targetLine.speaker === 'Waitress' ||
+            targetLine.speaker === 'Priya' ||
+            targetLine.speaker === 'Assistant' ||
+            targetLine.speaker === 'Resident' ||
+            targetLine.speaker === 'Candidate'
+          ) {
             const femaleVoice = voices.find(
               (v) =>
                 v.lang.startsWith('en') &&
@@ -317,7 +327,7 @@ export default function InteractiveLesson({
   const totalCount = script.length;
   const progressPercent = Math.round((completedCount / totalCount) * 100);
 
-  const firstSpeaker = script[0]?.speaker || 'Waitress';
+  const firstSpeaker = script[0]?.speaker || 'Interviewer';
 
   return (
     <main className={styles.lessonContainer}>
@@ -338,7 +348,7 @@ export default function InteractiveLesson({
             >
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
-            Daily Conversation
+            {categoryTitle}
           </span>
 
           <span className={styles.liveBadge}>
