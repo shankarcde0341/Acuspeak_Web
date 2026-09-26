@@ -25,7 +25,7 @@ const DEFAULT_WAVEFORM_HEIGHTS = [
 
 export default function InteractiveLesson({
   script: propScript,
-  lessonId = 'business-9',
+  lessonId = 'travel-5',
   lessonTitle: propTitle,
   categoryTitle: propCategory,
   xpReward: propXp,

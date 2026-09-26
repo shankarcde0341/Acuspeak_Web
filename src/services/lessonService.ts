@@ -1000,10 +1000,365 @@ export const SALES_SCRIPT: ScriptLine[] = [
   },
 ];
 
+export const TRAVEL_AIRPORT_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't1-l1',
+    speaker: 'Passenger',
+    text: 'Excuse me, where do I check in for the flight to Dubai?',
+  },
+  {
+    line_id: 't1-l2',
+    speaker: 'Staff',
+    text: 'Good morning! Please head to counter number 12. Do you have your passport and ticket ready?',
+  },
+  {
+    line_id: 't1-l3',
+    speaker: 'Passenger',
+    text: 'Yes, I have both. I also have one checked bag and a carry-on.',
+  },
+  {
+    line_id: 't1-l4',
+    speaker: 'Staff',
+    text: 'Perfect. Please place your bag on the scale. It weighs 22 kilograms, which is within the limit.',
+  },
+  {
+    line_id: 't1-l5',
+    speaker: 'Passenger',
+    text: 'Great. Could I please get a window seat?',
+  },
+  {
+    line_id: 't1-l6',
+    speaker: 'Staff',
+    text: 'Let me check availability. Yes, seat 14A is available. Would that work for you?',
+  },
+  {
+    line_id: 't1-l7',
+    speaker: 'Passenger',
+    text: 'That is perfect, thank you! How early should I be at the boarding gate?',
+  },
+  {
+    line_id: 't1-l8',
+    speaker: 'Staff',
+    text: 'Please be at gate B7 at least 45 minutes before departure.',
+  },
+  {
+    line_id: 't1-l9',
+    speaker: 'Passenger',
+    text: 'Understood. Is there anything else I need to know?',
+  },
+  {
+    line_id: 't1-l10',
+    speaker: 'Staff',
+    text: 'You will need to pass through security first. Enjoy your flight!',
+  },
+];
+
+export const TRAVEL_HOTEL_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't2-l1',
+    speaker: 'Receptionist',
+    text: 'Good evening! Welcome to the Grand Palace Hotel. Do you have a reservation?',
+  },
+  {
+    line_id: 't2-l2',
+    speaker: 'Guest',
+    text: 'Yes, I made a booking online. The name is Kavya Reddy.',
+  },
+  {
+    line_id: 't2-l3',
+    speaker: 'Receptionist',
+    text: 'Let me pull that up. Yes, I have a deluxe room booked for three nights. Is that correct?',
+  },
+  {
+    line_id: 't2-l4',
+    speaker: 'Guest',
+    text: 'That is right. Could you tell me if breakfast is included?',
+  },
+  {
+    line_id: 't2-l5',
+    speaker: 'Receptionist',
+    text: 'Yes, complimentary breakfast is served daily from 7 to 10 AM in the dining area.',
+  },
+  {
+    line_id: 't2-l6',
+    speaker: 'Guest',
+    text: 'Wonderful! Does the room have a good city view?',
+  },
+  {
+    line_id: 't2-l7',
+    speaker: 'Receptionist',
+    text: 'Absolutely. Your room on the 8th floor has a beautiful view of the main square.',
+  },
+  {
+    line_id: 't2-l8',
+    speaker: 'Guest',
+    text: 'That sounds lovely. What time is the check-out?',
+  },
+  {
+    line_id: 't2-l9',
+    speaker: 'Receptionist',
+    text: 'Check-out is at noon. If you need a late check-out, please let us know in advance.',
+  },
+  {
+    line_id: 't2-l10',
+    speaker: 'Guest',
+    text: 'I will keep that in mind. Thank you so much!',
+  },
+];
+
+export const TRAVEL_RESTAURANT_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't3-l1',
+    speaker: 'Waiter',
+    text: 'Good evening! Welcome. Do you have a reservation or would you like a table for two?',
+  },
+  {
+    line_id: 't3-l2',
+    speaker: 'Traveler',
+    text: 'No reservation, just the two of us. A table by the window would be lovely if possible.',
+  },
+  {
+    line_id: 't3-l3',
+    speaker: 'Waiter',
+    text: 'Of course! Right this way. Here are your menus. Can I start you with some drinks?',
+  },
+  {
+    line_id: 't3-l4',
+    speaker: 'Traveler',
+    text: 'Yes, two glasses of still water please. What is your dish of the day?',
+  },
+  {
+    line_id: 't3-l5',
+    speaker: 'Waiter',
+    text: "Today's special is grilled sea bass with lemon butter sauce. It is very popular.",
+  },
+  {
+    line_id: 't3-l6',
+    speaker: 'Traveler',
+    text: 'That sounds delicious! I will have that. Does it come with any sides?',
+  },
+  {
+    line_id: 't3-l7',
+    speaker: 'Waiter',
+    text: 'It comes with roasted vegetables and garlic bread.',
+  },
+  {
+    line_id: 't3-l8',
+    speaker: 'Traveler',
+    text: 'Perfect. My companion is vegetarian. What would you recommend for them?',
+  },
+  {
+    line_id: 't3-l9',
+    speaker: 'Waiter',
+    text: 'Our mushroom risotto is excellent and fully vegetarian. It is a guest favourite.',
+  },
+  {
+    line_id: 't3-l10',
+    speaker: 'Traveler',
+    text: 'Great, we will have that as well. Thank you for your help!',
+  },
+];
+
+export const TRAVEL_TRANSPORT_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't4-l1',
+    speaker: 'Traveler',
+    text: 'Excuse me, does this bus go to the city centre?',
+  },
+  {
+    line_id: 't4-l2',
+    speaker: 'Local',
+    text: 'Yes, it does! Take bus number 42 and get off at Market Square.',
+  },
+  {
+    line_id: 't4-l3',
+    speaker: 'Traveler',
+    text: 'How long does the journey take from here?',
+  },
+  {
+    line_id: 't4-l4',
+    speaker: 'Local',
+    text: 'About 20 minutes. The bus comes every 10 minutes.',
+  },
+  {
+    line_id: 't4-l5',
+    speaker: 'Traveler',
+    text: 'Do I need to buy a ticket before boarding or can I pay on the bus?',
+  },
+  {
+    line_id: 't4-l6',
+    speaker: 'Local',
+    text: 'You can pay directly to the driver. Exact change is preferred.',
+  },
+  {
+    line_id: 't4-l7',
+    speaker: 'Traveler',
+    text: 'Is there a metro or subway I could take instead?',
+  },
+  {
+    line_id: 't4-l8',
+    speaker: 'Local',
+    text: 'Yes, the nearest metro station is just a 5-minute walk. Take the red line to Central.',
+  },
+  {
+    line_id: 't4-l9',
+    speaker: 'Traveler',
+    text: 'Which option would you recommend for a first-time visitor?',
+  },
+  {
+    line_id: 't4-l10',
+    speaker: 'Local',
+    text: 'The metro is faster and easier to navigate. You can also use your contactless card to pay.',
+  },
+];
+
+export const TRAVEL_DIRECTIONS_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't5-l1',
+    speaker: 'Traveler',
+    text: 'Excuse me, I am a bit lost. Could you help me find the National Museum?',
+  },
+  {
+    line_id: 't5-l2',
+    speaker: 'Local',
+    text: 'Of course! You are actually quite close. Head straight down this road for about 200 metres.',
+  },
+  {
+    line_id: 't5-l3',
+    speaker: 'Traveler',
+    text: 'And then?',
+  },
+  {
+    line_id: 't5-l4',
+    speaker: 'Local',
+    text: 'Turn left at the traffic lights. You will see a large fountain. The museum is right behind it.',
+  },
+  {
+    line_id: 't5-l5',
+    speaker: 'Traveler',
+    text: 'Is there a landmark I can look out for so I know I am going the right way?',
+  },
+  {
+    line_id: 't5-l6',
+    speaker: 'Local',
+    text: 'Yes! Look for the blue clock tower. Once you see that, the museum is just across the street.',
+  },
+  {
+    line_id: 't5-l7',
+    speaker: 'Traveler',
+    text: 'How long will it take to walk there?',
+  },
+  {
+    line_id: 't5-l8',
+    speaker: 'Local',
+    text: 'About 10 minutes on foot. It is a pleasant walk.',
+  },
+  {
+    line_id: 't5-l9',
+    speaker: 'Traveler',
+    text: 'Thank you so much. Is it open on Sundays?',
+  },
+  {
+    line_id: 't5-l10',
+    speaker: 'Local',
+    text: 'Yes, it is open from 10 AM to 6 PM on Sundays. Enjoy your visit!',
+  },
+];
+
 export const LESSON_SCRIPTS: Record<
   string,
   { script: ScriptLine[]; title: string; categoryTitle?: string; xp: number }
 > = {
+  'travel-5': {
+    script: TRAVEL_DIRECTIONS_SCRIPT,
+    title: 'Lesson 5: Directions',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'directions': {
+    script: TRAVEL_DIRECTIONS_SCRIPT,
+    title: 'Lesson 5: Directions',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'travel-directions': {
+    script: TRAVEL_DIRECTIONS_SCRIPT,
+    title: 'Lesson 5: Directions',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'travel-4': {
+    script: TRAVEL_TRANSPORT_SCRIPT,
+    title: 'Lesson 4: Transport',
+    categoryTitle: 'Travel Conversation',
+    xp: 20,
+  },
+  'transport': {
+    script: TRAVEL_TRANSPORT_SCRIPT,
+    title: 'Lesson 4: Transport',
+    categoryTitle: 'Travel Conversation',
+    xp: 20,
+  },
+  'travel-transport': {
+    script: TRAVEL_TRANSPORT_SCRIPT,
+    title: 'Lesson 4: Transport',
+    categoryTitle: 'Travel Conversation',
+    xp: 20,
+  },
+  'travel-3': {
+    script: TRAVEL_RESTAURANT_SCRIPT,
+    title: 'Lesson 3: Restaurant',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'restaurant': {
+    script: TRAVEL_RESTAURANT_SCRIPT,
+    title: 'Lesson 3: Restaurant',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'travel-restaurant': {
+    script: TRAVEL_RESTAURANT_SCRIPT,
+    title: 'Lesson 3: Restaurant',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'travel-2': {
+    script: TRAVEL_HOTEL_SCRIPT,
+    title: 'Lesson 2: Hotel Check-in',
+    categoryTitle: 'Travel Conversation',
+    xp: 25,
+  },
+  'hotel-check-in': {
+    script: TRAVEL_HOTEL_SCRIPT,
+    title: 'Lesson 2: Hotel Check-in',
+    categoryTitle: 'Travel Conversation',
+    xp: 25,
+  },
+  'travel-hotel': {
+    script: TRAVEL_HOTEL_SCRIPT,
+    title: 'Lesson 2: Hotel Check-in',
+    categoryTitle: 'Travel Conversation',
+    xp: 25,
+  },
+  'travel-1': {
+    script: TRAVEL_AIRPORT_SCRIPT,
+    title: 'Lesson 1: At the Airport',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'at-the-airport': {
+    script: TRAVEL_AIRPORT_SCRIPT,
+    title: 'Lesson 1: At the Airport',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
+  'travel-airport': {
+    script: TRAVEL_AIRPORT_SCRIPT,
+    title: 'Lesson 1: At the Airport',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
+  },
   'business-9': {
     script: SALES_SCRIPT,
     title: 'Lesson 9: Sales',
@@ -1404,10 +1759,10 @@ export const LESSON_SCRIPTS: Record<
 
 export function getLessonData(lessonId: string) {
   return LESSON_SCRIPTS[lessonId] || {
-    script: SALES_SCRIPT,
-    title: 'Lesson 9: Sales',
-    categoryTitle: 'Business Conversation',
-    xp: 40,
+    script: TRAVEL_DIRECTIONS_SCRIPT,
+    title: 'Lesson 5: Directions',
+    categoryTitle: 'Travel Conversation',
+    xp: 30,
   };
 }
 
