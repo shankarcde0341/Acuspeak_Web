@@ -14,16 +14,66 @@ export interface LessonProgressPayload {
 }
 
 export const DAILY_1_SCRIPT: ScriptLine[] = [
-  { line_id: 'd1-l1', speaker: 'Alex', text: 'Hello Good morning!' },
-  { line_id: 'd1-l2', speaker: 'Priya', text: 'Good morning, My name is Priya. What is your name?' },
-  { line_id: 'd1-l3', speaker: 'Alex', text: 'I am Alex. Nice to meet you, Priya.' },
-  { line_id: 'd1-l4', speaker: 'Priya', text: 'Nice to meet you too, Alex. Where are you from?' },
-  { line_id: 'd1-l5', speaker: 'Alex', text: 'I am from Delhi. And you?' },
-  { line_id: 'd1-l6', speaker: 'Priya', text: 'I am from Mumbai. What do you do?' },
-  { line_id: 'd1-l7', speaker: 'Alex', text: 'I am a student. What about you?' },
-  { line_id: 'd1-l8', speaker: 'Priya', text: 'I work in an office. What are your hobbies?' },
-  { line_id: 'd1-l9', speaker: 'Alex', text: 'I like playing cricket and reading books.' },
-  { line_id: 'd1-l10', speaker: 'Priya', text: 'That is great! It was nice talking to you. Have a good day!' },
+  {
+    line_id: 'd1-l1',
+    speaker: 'Alex',
+    text: 'Hello Good morning!',
+    audio_url: '/assets/audio/daily_english/intro/alex_L1.mp3',
+  },
+  {
+    line_id: 'd1-l2',
+    speaker: 'Priya',
+    text: 'Good morning, My name is Priya. What is your name?',
+    audio_url: '/assets/audio/daily_english/intro/priya_L1.mp3',
+  },
+  {
+    line_id: 'd1-l3',
+    speaker: 'Alex',
+    text: 'I am Alex. Nice to meet you, Priya.',
+    audio_url: '/assets/audio/daily_english/intro/alex_L2.mp3',
+  },
+  {
+    line_id: 'd1-l4',
+    speaker: 'Priya',
+    text: 'Nice to meet you too, Alex. Where are you from?',
+    audio_url: '/assets/audio/daily_english/intro/priya_L2.mp3',
+  },
+  {
+    line_id: 'd1-l5',
+    speaker: 'Alex',
+    text: 'I am from Delhi. And you?',
+    audio_url: '/assets/audio/daily_english/intro/alex_L3.mp3',
+  },
+  {
+    line_id: 'd1-l6',
+    speaker: 'Priya',
+    text: 'I am from Mumbai. What do you do?',
+    audio_url: '/assets/audio/daily_english/intro/priya_L3.mp3',
+  },
+  {
+    line_id: 'd1-l7',
+    speaker: 'Alex',
+    text: 'I am a student. What about you?',
+    audio_url: '/assets/audio/daily_english/intro/alex_L4.mp3',
+  },
+  {
+    line_id: 'd1-l8',
+    speaker: 'Priya',
+    text: 'I work in an office. What are your hobbies?',
+    audio_url: '/assets/audio/daily_english/intro/priya_L4.mp3',
+  },
+  {
+    line_id: 'd1-l9',
+    speaker: 'Alex',
+    text: 'I like playing cricket and reading books.',
+    audio_url: '/assets/audio/daily_english/intro/alex_L5.mp3',
+  },
+  {
+    line_id: 'd1-l10',
+    speaker: 'Priya',
+    text: 'That is great! It was nice talking to you. Have a good day!',
+    audio_url: '/assets/audio/daily_english/intro/priya_L5.mp3',
+  },
 ];
 
 export const BUSINESS_MEETING_SCRIPT: ScriptLine[] = [
@@ -100,15 +150,60 @@ export const ORDERING_AT_CAFE_SCRIPT: ScriptLine[] = [
     text: 'Hello! Welcome to Cafe Coffee. How can I help you today?',
     audio_url: '/assets/audio/daily_english/ordering_at_cafe/Barista_L1.mp3',
   },
-  { line_id: 'd2-l2', speaker: 'Customer', text: 'Hi! Can I see the menu, please?' },
-  { line_id: 'd2-l3', speaker: 'Waitress', text: 'Sure! Here is the menu. What would you like to have?' },
-  { line_id: 'd2-l4', speaker: 'Customer', text: 'I would like to order one Hot Coffee and a Sandwich.' },
-  { line_id: 'd2-l5', speaker: 'Waitress', text: 'Small, medium, or large coffee?' },
-  { line_id: 'd2-l6', speaker: 'Customer', text: 'A medium coffee, please.' },
-  { line_id: 'd2-l7', speaker: 'Waitress', text: 'Would you like anything else with your order?' },
-  { line_id: 'd2-l8', speaker: 'Customer', text: 'No, that’s all. How much is the total?' },
-  { line_id: 'd2-l9', speaker: 'Waitress', text: 'That will be 200 rupees, please.' },
-  { line_id: 'd2-l10', speaker: 'Customer', text: 'Here is the money. Thank you!' },
+  {
+    line_id: 'd2-l2',
+    speaker: 'Customer',
+    text: 'Hi! Can I see the menu, please?',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Customer_L1.mp3',
+  },
+  {
+    line_id: 'd2-l3',
+    speaker: 'Waitress',
+    text: 'Sure! Here is the menu. What would you like to have?',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Barista_L2.mp3',
+  },
+  {
+    line_id: 'd2-l4',
+    speaker: 'Customer',
+    text: 'I would like to order one Hot Coffee and a Sandwich.',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Customer_L2.mp3',
+  },
+  {
+    line_id: 'd2-l5',
+    speaker: 'Waitress',
+    text: 'Small, medium, or large coffee?',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Barista_L3.mp3',
+  },
+  {
+    line_id: 'd2-l6',
+    speaker: 'Customer',
+    text: 'A medium coffee, please.',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Customer_L3.mp3',
+  },
+  {
+    line_id: 'd2-l7',
+    speaker: 'Waitress',
+    text: 'Would you like anything else with your order?',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Barista_L4.mp3',
+  },
+  {
+    line_id: 'd2-l8',
+    speaker: 'Customer',
+    text: "No, that's all. How much is the total?",
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Customer_L4.mp3',
+  },
+  {
+    line_id: 'd2-l9',
+    speaker: 'Waitress',
+    text: 'That will be 200 rupees, please.',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Barista_L5.mp3',
+  },
+  {
+    line_id: 'd2-l10',
+    speaker: 'Customer',
+    text: 'Here is the money. Thank you!',
+    audio_url: '/assets/audio/daily_english/ordering_at_cafe/Customer_L5.mp3',
+  },
 ];
 
 export const CASUAL_CONVERSATION_SCRIPT: ScriptLine[] = [
@@ -2021,6 +2116,24 @@ export const LESSON_SCRIPTS: Record<
     xp: 25,
   },
   'daily-1': {
+    script: DAILY_1_SCRIPT,
+    title: 'Lesson 1: Greetings & Introductions',
+    categoryTitle: 'Daily Conversation',
+    xp: 20,
+  },
+  'introduction': {
+    script: DAILY_1_SCRIPT,
+    title: 'Lesson 1: Greetings & Introductions',
+    categoryTitle: 'Daily Conversation',
+    xp: 20,
+  },
+  'intro': {
+    script: DAILY_1_SCRIPT,
+    title: 'Lesson 1: Greetings & Introductions',
+    categoryTitle: 'Daily Conversation',
+    xp: 20,
+  },
+  'daily-introduction': {
     script: DAILY_1_SCRIPT,
     title: 'Lesson 1: Greetings & Introductions',
     categoryTitle: 'Daily Conversation',

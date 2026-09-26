@@ -131,6 +131,17 @@
 - Updated `InteractiveLesson` component [`src/components/InteractiveLesson.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/InteractiveLesson.tsx) to default to `travel-10` ("Lesson 10: Solving Problems"), supporting `categoryTitle` ("Travel Conversation"), eyebrow pill and live badge, dynamic speaker positioning (Traveler left/blue, Staff right/gold), SpeechSynthesis voice matching, sentence selection highlight, animated audio visualizer waveform controls, completion progress ratio, and completion celebration banner.
 - Verified CSS Module styling in [`src/components/InteractiveLesson.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/InteractiveLesson.module.css) strictly adhering to `design.md` token specifications and camelCase class selectors.
 - Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+- Updated audio mapping in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts) for "Daily English Category > Introduction script" (`DAILY_1_SCRIPT`) mapping dialogue lines `d1-l1` through `d1-l10` to `/assets/audio/daily_english/intro/alex_L1.mp3` through `/assets/audio/daily_english/intro/priya_L5.mp3`.
+- Synced audio assets from `src/assets/audio/daily_english/intro` to `public/assets/audio/daily_english/intro` for Next.js static asset routing.
+- Added `introduction`, `intro`, and `daily-introduction` aliases to `LESSON_SCRIPTS` map in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Moved Audio Controller (Play/Pause, Previous, Next, ⚡ Speed Toggle, Animated Waveform Visualizer) to the top of the script dialogue section in [`src/components/InteractiveLesson.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/InteractiveLesson.tsx).
+- Implemented **Script Roleplayer Mode** in [`src/components/InteractiveLesson.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/InteractiveLesson.tsx): Users can select a character (e.g. `Practice as Alex`, `Practice as Priya`) or listen to `Full Dialogue`.
+- In Script Roleplayer Mode, AI automatically plays partner dialogue lines and pauses on the user's selected role lines with a prominent "🎤 Your Turn to Speak" alert banner, "(YOU)" / "(AI Partner)" badges, and "Done Speaking → Next" action buttons.
+- Enhanced [`src/components/InteractiveLesson.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/InteractiveLesson.module.css) with scoped CSS classes (`roleplayerSection`, `rolePillActiveRole`, `yourTurnBanner`, `userRoleBubbleCard`, `speakActionBtn`) adhering to `design.md` design tokens.
+- Replaced inline completion card in [`src/components/InteractiveLesson.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/InteractiveLesson.tsx) with a compact centered modal popup overlay (`modalOverlay`, `completionModalCard` max-width 360px) featuring backdrop blur, close icon (`✕`), celebration badge (`🎉`), XP summary, `Practice Again`, and `Close` buttons.
+- Resolved Turbopack module evaluation `ReferenceError: a is not defined` by cleaning up `ORDERING_AT_CAFE_SCRIPT` formatting and replacing curly apostrophes with standard straight apostrophes in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+
 
 
 

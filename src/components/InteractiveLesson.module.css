@@ -105,6 +105,71 @@
   border-top: 1px solid var(--divider);
 }
 
+/* Script Roleplayer Mode Selector */
+.roleplayerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--divider);
+}
+
+.roleplayerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.roleplayerLabel {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rolePickerList {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rolePill {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg);
+  color: var(--text-secondary);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rolePill:hover {
+  background: var(--surface);
+  color: var(--primary);
+  border-color: var(--divider);
+}
+
+.rolePillActive {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  border-color: var(--primary-light) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+.rolePillActiveRole {
+  background: var(--gradient-cta) !important;
+  color: #ffffff !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+}
+
 .progressMeta {
   display: flex;
   align-items: center;
@@ -450,62 +515,244 @@
   box-shadow: 0 12px 28px rgba(30, 58, 138, 0.35);
 }
 
-/* Completion Banner Modal */
-.completionCard {
-  background: var(--gradient-soft);
+/* Your Turn Alert Banner in Controller */
+.yourTurnBanner {
+  margin-top: 6px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius-lg);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  animation: slideUp 0.25s ease;
+}
+
+.yourTurnInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.yourTurnPulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+  animation: pulseDot 1.5s infinite;
+}
+
+.doneSpeakingBtn {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--gold);
+  color: #0f172a;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.doneSpeakingBtn:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+/* Roleplay Tag & User Bubble Styling */
+.roleTag {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-left: 4px;
+}
+
+.yourTurnTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #d97706;
+  background: rgba(245, 158, 11, 0.18);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  animation: pulseDot 1.5s infinite;
+}
+
+.userRoleBubbleCard {
+  border-color: var(--gold) !important;
+}
+
+.speakActionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--gold);
+  color: #0f172a;
+  border: none;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.speakActionBtn:hover {
+  background: #f59e0b;
+  transform: scale(1.02);
+}
+
+/* Completion Modal Popup Overlay & Card */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-m);
+  animation: fadeIn 0.25s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.completionModalCard {
+  background: var(--surface);
   border: 1.5px solid var(--primary-light);
   border-radius: var(--radius-xl);
-  padding: var(--space-l);
+  padding: 22px 24px;
+  width: 100%;
+  max-width: 360px; /* 50% compact popup size */
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--space-s);
-  box-shadow: var(--shadow-card);
-  animation: slideUp 0.3s ease;
+  gap: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  position: relative;
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes slideUp {
+@keyframes scaleUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: scale(0.88) translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
+}
+
+.closeModalBtn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.closeModalBtn:hover {
+  background: var(--chip-bg);
+  color: var(--text-primary);
+}
+
+.modalIconBadge {
+  font-size: 36px;
+  line-height: 1;
+  margin-top: 4px;
 }
 
 .completionTitle {
   font-family: var(--font-outfit), sans-serif;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 700;
   color: var(--primary);
+  line-height: 1.2;
 }
 
 .completionSubtext {
   font-family: var(--font-manrope), sans-serif;
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.modalActionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
 }
 
 .restartBtn {
-  margin-top: var(--space-xs);
+  flex: 1;
   font-family: var(--font-outfit), sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 16px;
   border-radius: var(--radius-pill);
-  background: var(--surface);
-  color: var(--primary);
-  border: 1px solid var(--primary-light);
+  background: var(--gradient-cta);
+  color: #ffffff;
+  border: none;
+  box-shadow: var(--shadow-cta);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .restartBtn:hover {
-  background: var(--primary);
-  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+}
+
+.closeSecondaryBtn {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--divider);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeSecondaryBtn:hover {
+  background: var(--surface);
+  color: var(--text-primary);
 }
 
 @media (max-width: 540px) {
