@@ -25,7 +25,7 @@ const DEFAULT_WAVEFORM_HEIGHTS = [
 
 export default function InteractiveLesson({
   script: propScript,
-  lessonId = 'business-5',
+  lessonId = 'business-9',
   lessonTitle: propTitle,
   categoryTitle: propCategory,
   xpReward: propXp,
@@ -151,7 +151,10 @@ export default function InteractiveLesson({
             targetLine.speaker === 'Candidate' ||
             targetLine.speaker === 'Sneha' ||
             targetLine.speaker === 'Anita' ||
-            targetLine.speaker === 'Meera'
+            targetLine.speaker === 'Meera' ||
+            targetLine.speaker === 'Divya' ||
+            targetLine.speaker === 'Pooja' ||
+            targetLine.speaker === 'Nisha'
           ) {
             const femaleVoice = voices.find(
               (v) =>

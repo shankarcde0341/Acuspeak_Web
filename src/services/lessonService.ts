@@ -745,10 +745,349 @@ export const INTERVIEW_CLOSING_SCRIPT: ScriptLine[] = [
   },
 ];
 
+export const DIFFICULT_CONVERSATION_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'b6-l1',
+    speaker: 'Manager',
+    text: 'Rahul, do you have a moment? I would like to discuss your recent project deliverables.',
+  },
+  {
+    line_id: 'b6-l2',
+    speaker: 'Rahul',
+    text: 'Of course. Is there something specific you would like to talk about?',
+  },
+  {
+    line_id: 'b6-l3',
+    speaker: 'Manager',
+    text: 'I noticed the last two reports were submitted after the deadline. Can you help me understand what happened?',
+  },
+  {
+    line_id: 'b6-l4',
+    speaker: 'Rahul',
+    text: 'I apologize for that. I have been managing multiple tasks and it has been difficult to prioritize.',
+  },
+  {
+    line_id: 'b6-l5',
+    speaker: 'Manager',
+    text: 'I understand. Workload management can be challenging. Have you considered delegating some tasks?',
+  },
+  {
+    line_id: 'b6-l6',
+    speaker: 'Rahul',
+    text: 'I have thought about it, but I was not sure who to assign them to.',
+  },
+  {
+    line_id: 'b6-l7',
+    speaker: 'Manager',
+    text: "Let's work together on a plan. I can help you identify team members who can support you.",
+  },
+  {
+    line_id: 'b6-l8',
+    speaker: 'Rahul',
+    text: 'That would be really helpful. I want to make sure I meet all deadlines going forward.',
+  },
+  {
+    line_id: 'b6-l9',
+    speaker: 'Manager',
+    text: "I appreciate your honesty, Rahul. Let's schedule a follow-up meeting next week to review progress.",
+  },
+  {
+    line_id: 'b6-l10',
+    speaker: 'Rahul',
+    text: 'Thank you for understanding. I will prepare a revised timeline by then.',
+  },
+];
+
+export const REMOTE_WORK_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'b8-l1',
+    speaker: 'Team Lead',
+    text: 'Good morning, team! Can everyone hear me clearly on the video call?',
+  },
+  {
+    line_id: 'b8-l2',
+    speaker: 'Divya',
+    text: 'Yes, loud and clear! Good morning.',
+  },
+  {
+    line_id: 'b8-l3',
+    speaker: 'Sameer',
+    text: 'I can hear you, but my camera seems to be having issues. Let me fix it.',
+  },
+  {
+    line_id: 'b8-l4',
+    speaker: 'Team Lead',
+    text: "No problem, Sameer. Let's start with a quick status update from everyone.",
+  },
+  {
+    line_id: 'b8-l5',
+    speaker: 'Divya',
+    text: 'I completed the design mockups yesterday. I will share the link in the chat.',
+  },
+  {
+    line_id: 'b8-l6',
+    speaker: 'Team Lead',
+    text: 'Great work, Divya! Sameer, how is the backend development progressing?',
+  },
+  {
+    line_id: 'b8-l7',
+    speaker: 'Sameer',
+    text: 'The API is almost done. I need one more day to finish testing.',
+  },
+  {
+    line_id: 'b8-l8',
+    speaker: 'Team Lead',
+    text: "Perfect. Let's aim to integrate everything by Thursday. Any blockers from anyone?",
+  },
+  {
+    line_id: 'b8-l9',
+    speaker: 'Divya',
+    text: 'I need access to the staging server. Could you grant me permissions?',
+  },
+  {
+    line_id: 'b8-l10',
+    speaker: 'Team Lead',
+    text: "I will set that up right after this call. Anything else? Great, let's wrap up then.",
+  },
+];
+
+export const LEADERSHIP_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'b10-l1',
+    speaker: 'Leader',
+    text: 'Team, I want to take a moment to acknowledge the hard work everyone has put in this month.',
+  },
+  {
+    line_id: 'b10-l2',
+    speaker: 'Pooja',
+    text: 'Thank you! It has been a challenging month, but very rewarding.',
+  },
+  {
+    line_id: 'b10-l3',
+    speaker: 'Leader',
+    text: 'I know the deadline pressure was tough. How is everyone feeling about the workload?',
+  },
+  {
+    line_id: 'b10-l4',
+    speaker: 'Suresh',
+    text: 'Honestly, it was intense, but having clear goals really helped us stay focused.',
+  },
+  {
+    line_id: 'b10-l5',
+    speaker: 'Leader',
+    text: 'That is great to hear. I believe in setting clear expectations so everyone knows their role.',
+  },
+  {
+    line_id: 'b10-l6',
+    speaker: 'Pooja',
+    text: 'I also appreciate that you were available whenever we needed guidance.',
+  },
+  {
+    line_id: 'b10-l7',
+    speaker: 'Leader',
+    text: 'Open communication is key. My door is always open for ideas, feedback, or concerns.',
+  },
+  {
+    line_id: 'b10-l8',
+    speaker: 'Suresh',
+    text: 'What are our priorities for the next month?',
+  },
+  {
+    line_id: 'b10-l9',
+    speaker: 'Leader',
+    text: 'We will focus on improving customer satisfaction scores and launching the new feature update.',
+  },
+  {
+    line_id: 'b10-l10',
+    speaker: 'Pooja',
+    text: 'Sounds exciting! We are ready for the challenge.',
+  },
+];
+
+export const CORPORATE_ETIQUETTE_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'b7-l1',
+    speaker: 'Nisha',
+    text: 'Karan, I have a question. What is the dress code for the client visit tomorrow?',
+  },
+  {
+    line_id: 'b7-l2',
+    speaker: 'Karan',
+    text: 'It is business formal. A suit or formal shirt with trousers would be appropriate.',
+  },
+  {
+    line_id: 'b7-l3',
+    speaker: 'Nisha',
+    text: 'Got it. Should I prepare anything specific for the meeting?',
+  },
+  {
+    line_id: 'b7-l4',
+    speaker: 'Karan',
+    text: 'Yes, bring printed copies of the proposal and your business cards.',
+  },
+  {
+    line_id: 'b7-l5',
+    speaker: 'Nisha',
+    text: 'What about greeting the clients? Is there a specific protocol?',
+  },
+  {
+    line_id: 'b7-l6',
+    speaker: 'Karan',
+    text: 'A firm handshake and a warm smile work best. Address them by their last name unless they say otherwise.',
+  },
+  {
+    line_id: 'b7-l7',
+    speaker: 'Nisha',
+    text: 'Should I start with small talk or get straight to business?',
+  },
+  {
+    line_id: 'b7-l8',
+    speaker: 'Karan',
+    text: 'Start with a few minutes of small talk. Ask about their journey or comment on something positive.',
+  },
+];
+
+export const SALES_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 'b9-l1',
+    speaker: 'Sales Rep',
+    text: 'Good afternoon! Thank you for taking the time to speak with me today.',
+  },
+  {
+    line_id: 'b9-l2',
+    speaker: 'Client',
+    text: "Of course. I am curious to hear about your company's services.",
+  },
+  {
+    line_id: 'b9-l3',
+    speaker: 'Sales Rep',
+    text: 'Before I begin, may I ask what challenges your team is currently facing?',
+  },
+  {
+    line_id: 'b9-l4',
+    speaker: 'Client',
+    text: 'Our biggest challenge is managing customer data efficiently. We need a better CRM solution.',
+  },
+  {
+    line_id: 'b9-l5',
+    speaker: 'Sales Rep',
+    text: 'That is exactly what we specialize in. Our CRM platform automates data management and boosts productivity.',
+  },
+  {
+    line_id: 'b9-l6',
+    speaker: 'Client',
+    text: 'How is your solution different from others in the market?',
+  },
+  {
+    line_id: 'b9-l7',
+    speaker: 'Sales Rep',
+    text: 'We offer AI-powered analytics and 24/7 customer support, which most competitors do not include.',
+  },
+  {
+    line_id: 'b9-l8',
+    speaker: 'Client',
+    text: 'That sounds promising. Do you offer a free trial period?',
+  },
+  {
+    line_id: 'b9-l9',
+    speaker: 'Sales Rep',
+    text: 'Yes, we offer a 30-day free trial with full access to all features. No commitment required.',
+  },
+  {
+    line_id: 'b9-l10',
+    speaker: 'Client',
+    text: "Excellent! Let's set up a demo for my team next week.",
+  },
+];
+
 export const LESSON_SCRIPTS: Record<
   string,
   { script: ScriptLine[]; title: string; categoryTitle?: string; xp: number }
 > = {
+  'business-9': {
+    script: SALES_SCRIPT,
+    title: 'Lesson 9: Sales',
+    categoryTitle: 'Business Conversation',
+    xp: 40,
+  },
+  'sales': {
+    script: SALES_SCRIPT,
+    title: 'Lesson 9: Sales',
+    categoryTitle: 'Business Conversation',
+    xp: 40,
+  },
+  'sales-pitch': {
+    script: SALES_SCRIPT,
+    title: 'Lesson 9: Sales',
+    categoryTitle: 'Business Conversation',
+    xp: 40,
+  },
+  'business-7': {
+    script: CORPORATE_ETIQUETTE_SCRIPT,
+    title: 'Lesson 7: Corporate Etiquette',
+    categoryTitle: 'Business Conversation',
+    xp: 30,
+  },
+  'corporate-etiquette': {
+    script: CORPORATE_ETIQUETTE_SCRIPT,
+    title: 'Lesson 7: Corporate Etiquette',
+    categoryTitle: 'Business Conversation',
+    xp: 30,
+  },
+  'business-10': {
+    script: LEADERSHIP_SCRIPT,
+    title: 'Lesson 10: Leadership',
+    categoryTitle: 'Business Conversation',
+    xp: 50,
+  },
+  'leadership': {
+    script: LEADERSHIP_SCRIPT,
+    title: 'Lesson 10: Leadership',
+    categoryTitle: 'Business Conversation',
+    xp: 50,
+  },
+  'leaderships': {
+    script: LEADERSHIP_SCRIPT,
+    title: 'Lesson 10: Leadership',
+    categoryTitle: 'Business Conversation',
+    xp: 50,
+  },
+  'business-8': {
+    script: REMOTE_WORK_SCRIPT,
+    title: 'Lesson 8: Remote Work',
+    categoryTitle: 'Business Conversation',
+    xp: 25,
+  },
+  'remote-work': {
+    script: REMOTE_WORK_SCRIPT,
+    title: 'Lesson 8: Remote Work',
+    categoryTitle: 'Business Conversation',
+    xp: 25,
+  },
+  'remote-works': {
+    script: REMOTE_WORK_SCRIPT,
+    title: 'Lesson 8: Remote Work',
+    categoryTitle: 'Business Conversation',
+    xp: 25,
+  },
+  'business-6': {
+    script: DIFFICULT_CONVERSATION_SCRIPT,
+    title: 'Lesson 6: Difficult Conversation',
+    categoryTitle: 'Business Conversation',
+    xp: 45,
+  },
+  'difficult-conversation': {
+    script: DIFFICULT_CONVERSATION_SCRIPT,
+    title: 'Lesson 6: Difficult Conversation',
+    categoryTitle: 'Business Conversation',
+    xp: 45,
+  },
+  'difficult-conversations': {
+    script: DIFFICULT_CONVERSATION_SCRIPT,
+    title: 'Lesson 6: Difficult Conversation',
+    categoryTitle: 'Business Conversation',
+    xp: 45,
+  },
   'business-5': {
     script: NETWORKING_SCRIPT,
     title: 'Lesson 5: Networking',
@@ -1065,10 +1404,10 @@ export const LESSON_SCRIPTS: Record<
 
 export function getLessonData(lessonId: string) {
   return LESSON_SCRIPTS[lessonId] || {
-    script: NETWORKING_SCRIPT,
-    title: 'Lesson 5: Networking',
+    script: SALES_SCRIPT,
+    title: 'Lesson 9: Sales',
     categoryTitle: 'Business Conversation',
-    xp: 35,
+    xp: 40,
   };
 }
 
