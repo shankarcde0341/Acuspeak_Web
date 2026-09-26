@@ -1265,10 +1265,383 @@ export const TRAVEL_DIRECTIONS_SCRIPT: ScriptLine[] = [
   },
 ];
 
+export const TRAVEL_SHOPPING_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't6-l1',
+    speaker: 'Traveler',
+    text: 'How much is this handmade scarf? It is beautiful.',
+  },
+  {
+    line_id: 't6-l2',
+    speaker: 'Vendor',
+    text: 'For you, special price! Only 800 rupees.',
+  },
+  {
+    line_id: 't6-l3',
+    speaker: 'Traveler',
+    text: 'That seems a bit high. I saw a similar one at another stall for 500 rupees.',
+  },
+  {
+    line_id: 't6-l4',
+    speaker: 'Vendor',
+    text: 'This one is pure wool, handwoven. Much better quality. I can do 700.',
+  },
+  {
+    line_id: 't6-l5',
+    speaker: 'Traveler',
+    text: 'What if I buy two? Can you give me a better deal?',
+  },
+  {
+    line_id: 't6-l6',
+    speaker: 'Vendor',
+    text: 'For two scarves, I will do 1200 rupees. That is a very good price.',
+  },
+  {
+    line_id: 't6-l7',
+    speaker: 'Traveler',
+    text: 'Make it 1100 and I will take both right now.',
+  },
+  {
+    line_id: 't6-l8',
+    speaker: 'Vendor',
+    text: 'Okay, okay! 1100. Deal! You are a tough negotiator!',
+  },
+  {
+    line_id: 't6-l9',
+    speaker: 'Traveler',
+    text: 'Thank you! Do you have a bag to pack them in?',
+  },
+  {
+    line_id: 't6-l10',
+    speaker: 'Vendor',
+    text: 'Of course! I will wrap them nicely for you. Come back again!',
+  },
+];
+
+export const TRAVEL_EMERGENCY_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't7-l1',
+    speaker: 'Traveler',
+    text: 'Help! I think my friend has been hurt. We need a doctor immediately.',
+  },
+  {
+    line_id: 't7-l2',
+    speaker: 'Bystander',
+    text: 'Oh no! I will call an ambulance right now. What happened?',
+  },
+  {
+    line_id: 't7-l3',
+    speaker: 'Traveler',
+    text: 'He slipped on the stairs and hurt his ankle badly. He cannot stand.',
+  },
+  {
+    line_id: 't7-l4',
+    speaker: 'Bystander',
+    text: 'Okay, do not move him. The ambulance should arrive in about 10 minutes.',
+  },
+  {
+    line_id: 't7-l5',
+    speaker: 'Traveler',
+    text: 'Is there a pharmacy nearby? I need some ice or a bandage.',
+  },
+  {
+    line_id: 't7-l6',
+    speaker: 'Bystander',
+    text: 'There is a pharmacy just two doors down. I can get something for you.',
+  },
+  {
+    line_id: 't7-l7',
+    speaker: 'Traveler',
+    text: 'We are tourists. Will the hospital accept our travel insurance?',
+  },
+  {
+    line_id: 't7-l8',
+    speaker: 'Bystander',
+    text: 'Yes, most hospitals here accept international travel insurance. Keep your documents ready.',
+  },
+  {
+    line_id: 't7-l9',
+    speaker: 'Traveler',
+    text: 'Thank you so much for your help. We really appreciate it.',
+  },
+  {
+    line_id: 't7-l10',
+    speaker: 'Bystander',
+    text: 'Do not worry. The ambulance is on its way. Your friend is in good hands.',
+  },
+];
+
+export const TRAVEL_ETIQUETTE_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't8-l1',
+    speaker: 'Guide',
+    text: 'Welcome to Japan! Before we visit the temple, let me share a few important customs.',
+  },
+  {
+    line_id: 't8-l2',
+    speaker: 'Traveler',
+    text: 'That is very helpful. Should I remove my shoes before entering?',
+  },
+  {
+    line_id: 't8-l3',
+    speaker: 'Guide',
+    text: 'Yes, absolutely. Always remove shoes at the entrance and place them neatly in the provided area.',
+  },
+  {
+    line_id: 't8-l4',
+    speaker: 'Traveler',
+    text: 'Is photography allowed inside the temple?',
+  },
+  {
+    line_id: 't8-l5',
+    speaker: 'Guide',
+    text: 'Photography is not permitted inside. Please respect the sacred space and keep your phone away.',
+  },
+  {
+    line_id: 't8-l6',
+    speaker: 'Traveler',
+    text: 'What about tipping? Is it expected here?',
+  },
+  {
+    line_id: 't8-l7',
+    speaker: 'Guide',
+    text: 'In Japan, tipping is actually considered rude. Good service is simply a standard expectation.',
+  },
+  {
+    line_id: 't8-l8',
+    speaker: 'Traveler',
+    text: 'That is quite different from my home country! Are there other customs I should be aware of?',
+  },
+  {
+    line_id: 't8-l9',
+    speaker: 'Guide',
+    text: 'Yes. Speak softly in public places, queue patiently, and always bow slightly when greeting someone.',
+  },
+  {
+    line_id: 't8-l10',
+    speaker: 'Traveler',
+    text: 'Thank you for these tips. I want to be respectful of the local culture during my visit.',
+  },
+];
+
+export const TRAVEL_PLANNING_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't9-l1',
+    speaker: 'Traveler',
+    text: 'Hi! I would like to book a train from Paris to Amsterdam for next Friday.',
+  },
+  {
+    line_id: 't9-l2',
+    speaker: 'Agent',
+    text: 'Of course! The fastest option is the Thalys train, which takes about three and a half hours.',
+  },
+  {
+    line_id: 't9-l3',
+    speaker: 'Traveler',
+    text: 'That is perfect. Are there any morning departures available?',
+  },
+  {
+    line_id: 't9-l4',
+    speaker: 'Agent',
+    text: 'Yes, there are departures at 8:15 AM and 10:30 AM. Which would you prefer?',
+  },
+  {
+    line_id: 't9-l5',
+    speaker: 'Traveler',
+    text: 'The 8:15 departure sounds ideal. How much would a standard ticket cost?',
+  },
+  {
+    line_id: 't9-l6',
+    speaker: 'Agent',
+    text: 'Standard class is 89 euros per person. First class is 135 euros with a complimentary meal.',
+  },
+  {
+    line_id: 't9-l7',
+    speaker: 'Traveler',
+    text: 'I will go with standard class. Can I also book a seat reservation?',
+  },
+  {
+    line_id: 't9-l8',
+    speaker: 'Agent',
+    text: 'Yes, seat reservation is included. Would you prefer a window or an aisle seat?',
+  },
+  {
+    line_id: 't9-l9',
+    speaker: 'Traveler',
+    text: 'A window seat please. I love watching the scenery.',
+  },
+  {
+    line_id: 't9-l10',
+    speaker: 'Agent',
+    text: 'Done! I have booked seat 12A. Your e-ticket will be sent to your email shortly.',
+  },
+];
+
+export const TRAVEL_PROBLEMS_SCRIPT: ScriptLine[] = [
+  {
+    line_id: 't10-l1',
+    speaker: 'Traveler',
+    text: 'Excuse me, my flight has been delayed for three hours. Can you tell me what is happening?',
+  },
+  {
+    line_id: 't10-l2',
+    speaker: 'Staff',
+    text: 'I am very sorry for the inconvenience. There is a technical issue with the aircraft.',
+  },
+  {
+    line_id: 't10-l3',
+    speaker: 'Traveler',
+    text: 'I have a connecting flight in two hours. Will I miss it?',
+  },
+  {
+    line_id: 't10-l4',
+    speaker: 'Staff',
+    text: 'Let me check your booking. Unfortunately, you will miss that connection. I will rebook you.',
+  },
+  {
+    line_id: 't10-l5',
+    speaker: 'Traveler',
+    text: 'Also, my checked luggage did not arrive on the carousel. I cannot find my bag.',
+  },
+  {
+    line_id: 't10-l6',
+    speaker: 'Staff',
+    text: 'I apologize. Please fill out a lost luggage report at our service desk and we will trace it.',
+  },
+  {
+    line_id: 't10-l7',
+    speaker: 'Traveler',
+    text: 'How long will it take to locate the bag?',
+  },
+  {
+    line_id: 't10-l8',
+    speaker: 'Staff',
+    text: 'Usually within 24 to 48 hours. We will have it delivered directly to your hotel.',
+  },
+  {
+    line_id: 't10-l9',
+    speaker: 'Traveler',
+    text: 'Are we entitled to any compensation for the delay?',
+  },
+  {
+    line_id: 't10-l10',
+    speaker: 'Staff',
+    text: 'Yes, you are entitled to meal vouchers and an accommodation allowance. I will process that now.',
+  },
+];
+
 export const LESSON_SCRIPTS: Record<
   string,
   { script: ScriptLine[]; title: string; categoryTitle?: string; xp: number }
 > = {
+  'travel-10': {
+    script: TRAVEL_PROBLEMS_SCRIPT,
+    title: 'Lesson 10: Solving Problems',
+    categoryTitle: 'Travel Conversation',
+    xp: 50,
+  },
+  'solving-problems': {
+    script: TRAVEL_PROBLEMS_SCRIPT,
+    title: 'Lesson 10: Solving Problems',
+    categoryTitle: 'Travel Conversation',
+    xp: 50,
+  },
+  'problems': {
+    script: TRAVEL_PROBLEMS_SCRIPT,
+    title: 'Lesson 10: Solving Problems',
+    categoryTitle: 'Travel Conversation',
+    xp: 50,
+  },
+  'travel-problems': {
+    script: TRAVEL_PROBLEMS_SCRIPT,
+    title: 'Lesson 10: Solving Problems',
+    categoryTitle: 'Travel Conversation',
+    xp: 50,
+  },
+  'travel-9': {
+    script: TRAVEL_PLANNING_SCRIPT,
+    title: 'Lesson 9: Trip Planning',
+    categoryTitle: 'Travel Conversation',
+    xp: 45,
+  },
+  'trip-planning': {
+    script: TRAVEL_PLANNING_SCRIPT,
+    title: 'Lesson 9: Trip Planning',
+    categoryTitle: 'Travel Conversation',
+    xp: 45,
+  },
+  'planning': {
+    script: TRAVEL_PLANNING_SCRIPT,
+    title: 'Lesson 9: Trip Planning',
+    categoryTitle: 'Travel Conversation',
+    xp: 45,
+  },
+  'travel-planning': {
+    script: TRAVEL_PLANNING_SCRIPT,
+    title: 'Lesson 9: Trip Planning',
+    categoryTitle: 'Travel Conversation',
+    xp: 45,
+  },
+  'travel-8': {
+    script: TRAVEL_ETIQUETTE_SCRIPT,
+    title: 'Lesson 8: Local Etiquette',
+    categoryTitle: 'Travel Conversation',
+    xp: 35,
+  },
+  'etiquette': {
+    script: TRAVEL_ETIQUETTE_SCRIPT,
+    title: 'Lesson 8: Local Etiquette',
+    categoryTitle: 'Travel Conversation',
+    xp: 35,
+  },
+  'local-etiquette': {
+    script: TRAVEL_ETIQUETTE_SCRIPT,
+    title: 'Lesson 8: Local Etiquette',
+    categoryTitle: 'Travel Conversation',
+    xp: 35,
+  },
+  'travel-etiquette': {
+    script: TRAVEL_ETIQUETTE_SCRIPT,
+    title: 'Lesson 8: Local Etiquette',
+    categoryTitle: 'Travel Conversation',
+    xp: 35,
+  },
+  'travel-7': {
+    script: TRAVEL_EMERGENCY_SCRIPT,
+    title: 'Lesson 7: Emergencies',
+    categoryTitle: 'Travel Conversation',
+    xp: 40,
+  },
+  'emergencies': {
+    script: TRAVEL_EMERGENCY_SCRIPT,
+    title: 'Lesson 7: Emergencies',
+    categoryTitle: 'Travel Conversation',
+    xp: 40,
+  },
+  'travel-emergencies': {
+    script: TRAVEL_EMERGENCY_SCRIPT,
+    title: 'Lesson 7: Emergencies',
+    categoryTitle: 'Travel Conversation',
+    xp: 40,
+  },
+  'travel-6': {
+    script: TRAVEL_SHOPPING_SCRIPT,
+    title: 'Lesson 6: Shopping',
+    categoryTitle: 'Travel Conversation',
+    xp: 25,
+  },
+  'shopping': {
+    script: TRAVEL_SHOPPING_SCRIPT,
+    title: 'Lesson 6: Shopping',
+    categoryTitle: 'Travel Conversation',
+    xp: 25,
+  },
+  'travel-shopping': {
+    script: TRAVEL_SHOPPING_SCRIPT,
+    title: 'Lesson 6: Shopping',
+    categoryTitle: 'Travel Conversation',
+    xp: 25,
+  },
   'travel-5': {
     script: TRAVEL_DIRECTIONS_SCRIPT,
     title: 'Lesson 5: Directions',
@@ -1759,10 +2132,10 @@ export const LESSON_SCRIPTS: Record<
 
 export function getLessonData(lessonId: string) {
   return LESSON_SCRIPTS[lessonId] || {
-    script: TRAVEL_DIRECTIONS_SCRIPT,
-    title: 'Lesson 5: Directions',
+    script: TRAVEL_PROBLEMS_SCRIPT,
+    title: 'Lesson 10: Solving Problems',
     categoryTitle: 'Travel Conversation',
-    xp: 30,
+    xp: 50,
   };
 }
 
