@@ -170,7 +170,16 @@
 - Synced audio assets to `public/assets/audio/interview_english/Strength/` and `public/assets/audio/interview_english/strengths/`.
 - Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Weakness/` to dialogue lines `i5-l1` through `i5-l10` for "Interview English > Lesson 5: Weaknesses" (`INTERVIEW_WEAKNESSES_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Synced audio assets to `public/assets/audio/interview_english/Weakness/` and `public/assets/audio/interview_english/weaknesses/`.
-- Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Technical/` to dialogue lines `i6-l1` through `i6-l10` for "Interview English > Lesson 6: Technical Questions" (`INTERVIEW_TECHNICAL_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Technical/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Salary/` to dialogue lines `i7-l1` through `i7-l10` for "Interview English > Lesson 7: Salary Discussion" (`INTERVIEW_SALARY_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Salary/` and `public/assets/audio/interview_english/salary/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Question/` to dialogue lines `i8-l1` through `i8-l10` for "Interview English > Lesson 8: Asking Questions" (`INTERVIEW_QUESTIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Question/` and `public/assets/audio/interview_english/questions/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Difficulties/` to dialogue lines `i9-l1` through `i9-l10` for "Interview English > Lesson 9: Difficult Questions" (`INTERVIEW_DIFFICULT_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Difficulties/` and `public/assets/audio/interview_english/difficulties/`.
+- Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+
 
 
 
