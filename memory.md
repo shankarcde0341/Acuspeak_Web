@@ -152,6 +152,14 @@
 - Synced audio assets to `public/assets/audio/daily_english/asking_for_directions/`.
 - Mapped audio files (`Waiter_L1.mp3`..`L5.mp3` and `Customer_L1.mp3`..`L4.mp3`) in `src/assets/audio/daily_english/at_the_resturant/` to dialogue lines `d6-l1` through `d6-l9` for "Daily English > Lesson 6: At a Restaurant" (`RESTAURANT_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Synced audio assets to `public/assets/audio/daily_english/at_the_resturant/` and created `at_the_restaurant` alias folder.
+- Mapped audio files (`Pritam_L1.mp3`..`L5.mp3` and `Priya_L1.mp3`..`L5.mp3`) in `src/assets/audio/daily_english/talking_about_weekends/` to dialogue lines `d7-l1` through `d7-l10` for "Daily English > Lesson 7: Talking About Weekends" (`WEEKENDS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/talking_about_weekends/`.
+- Mapped audio files (`Doctor_L1.mp3`..`L6.mp3` and `Patient_L1.mp3`..`L6.mp3`) in `src/assets/audio/daily_english/doctor_visit/` to dialogue lines `d8-l1` through `d8-l12` for "Daily English > Lesson 8: At the Doctor" (`DOCTOR_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/doctor_visit/` and created `at_the_doctor` alias folder.
+- Mapped audio files (`Rohan_L1.mp3`..`L5.mp3` and `Amit_L1.mp3`..`L5.mp3`) in `src/assets/audio/daily_english/phone_conversation/` to dialogue lines `d9-l1` through `d9-l10` for "Daily English > Lesson 9: Phone Calls" (`PHONE_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/phone_conversation/` and created `phone_calls` alias folder.
+- Mapped audio files (`Priya_L1.mp3`..`L5.mp3` and `Rohit_L1.mp3`..`L5.mp3`) in `src/assets/audio/daily_english/opinions_script/` to dialogue lines `d10-l1` through `d10-l10` for "Daily English > Lesson 10: Sharing Opinions" (`OPINIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/opinions_script/` and `public/assets/audio/daily_english/opinions_on_a_new movie/`.
 - Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
 
 
