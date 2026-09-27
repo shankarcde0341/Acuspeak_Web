@@ -160,7 +160,18 @@
 - Synced audio assets to `public/assets/audio/daily_english/phone_conversation/` and created `phone_calls` alias folder.
 - Mapped audio files (`Priya_L1.mp3`..`L5.mp3` and `Rohit_L1.mp3`..`L5.mp3`) in `src/assets/audio/daily_english/opinions_script/` to dialogue lines `d10-l1` through `d10-l10` for "Daily English > Lesson 10: Sharing Opinions" (`OPINIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Synced audio assets to `public/assets/audio/daily_english/opinions_script/` and `public/assets/audio/daily_english/opinions_on_a_new movie/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L4.mp3` and `Candidate_L1.mp3`..`L6.mp3`) in `src/assets/audio/interview_english/Intro_script/` to dialogue lines `i1-l1` through `i1-l10` for "Interview English > Lesson 1: Self Introduction" (`INTERVIEW_INTRO_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Intro/` and `public/assets/audio/interview_english/Intro_script/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L4.mp3` and `Candidate_L1.mp3`..`L6.mp3`) in `src/assets/audio/interview_english/Behavioural/` to dialogue lines `i2-l1` through `i2-l10` for "Interview English > Lesson 2: Behavioral Questions" (`INTERVIEW_BEHAVIORAL_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Behavioural/` and `public/assets/audio/interview_english/behavioral/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Motivation/` to dialogue lines `i3-l1` through `i3-l10` for "Interview English > Lesson 3: Motivation" (`INTERVIEW_MOTIVATION_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Motivation/` and `public/assets/audio/interview_english/motivation/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Strength/` to dialogue lines `i4-l1` through `i4-l10` for "Interview English > Lesson 4: Strengths" (`INTERVIEW_STRENGTHS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Strength/` and `public/assets/audio/interview_english/strengths/`.
+- Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Weakness/` to dialogue lines `i5-l1` through `i5-l10` for "Interview English > Lesson 5: Weaknesses" (`INTERVIEW_WEAKNESSES_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/interview_english/Weakness/` and `public/assets/audio/interview_english/weaknesses/`.
 - Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+
 
 
 
