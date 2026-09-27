@@ -176,12 +176,15 @@
 - Synced audio assets to `public/assets/audio/interview_english/Salary/` and `public/assets/audio/interview_english/salary/`.
 - Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Question/` to dialogue lines `i8-l1` through `i8-l10` for "Interview English > Lesson 8: Asking Questions" (`INTERVIEW_QUESTIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Synced audio assets to `public/assets/audio/interview_english/Question/` and `public/assets/audio/interview_english/questions/`.
-- Mapped audio files (`Traveler_L1.mp3`..`L5.mp3` and `Local_L1.mp3`..`L5.mp3`) in `src/assets/audio/travel_english/Directions/` to dialogue lines `t5-l1` through `t5-l10` for "Travel English > Lesson 5: Directions" (`TRAVEL_DIRECTIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
-- Synced audio assets to `public/assets/audio/travel_english/Directions/`, `public/assets/audio/interview_english/Directions/`, and `public/assets/audio/travel_english/directions/`.
+- Mapped audio files (`Traveler_L1.mp3`..`L5.mp3` and `Bystander_L1.mp3`..`L5.mp3`) in `src/assets/audio/travel_english/Emergency/` to dialogue lines `t7-l1` through `t7-l10` for "Travel English > Lesson 7: Emergencies" (`TRAVEL_EMERGENCY_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/travel_english/Emergency/`, `public/assets/audio/interview_english/Emergency/`, `public/assets/audio/travel_english/emergency/`, and `public/assets/audio/travel_english/emergencies/`.
+- Mapped audio files (`Guide_L1.mp3`..`L5.mp3` and `Traveler_L1.mp3`..`L5.mp3`) in `src/assets/audio/travel_english/Etiquette/` to dialogue lines `t8-l1` through `t8-l10` for "Travel English > Lesson 8: Local Etiquette" (`TRAVEL_ETIQUETTE_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/travel_english/Etiquette/`, `public/assets/audio/interview_english/Etiquette/`, `public/assets/audio/travel_english/etiquette/`, and `public/assets/audio/travel_english/local_etiquette/`.
+- Mapped audio files (`Traveler_L1.mp3`..`L5.mp3` and `Agent_L1.mp3`..`L5.mp3`) in `src/assets/audio/travel_english/Planing/` to dialogue lines `t9-l1` through `t9-l10` for "Travel English > Lesson 9: Trip Planning" (`TRAVEL_PLANNING_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/travel_english/Planing/`, `public/assets/audio/travel_english/Planning/`, `public/assets/audio/interview_english/Planning/`, `public/assets/audio/travel_english/planning/`, and `public/assets/audio/travel_english/trip_planning/`.
+- Mapped audio files (`Traveler_L1.mp3`..`L5.mp3` and `Staff_L1.mp3`..`L5.mp3`) in `src/assets/audio/travel_english/Problems/` to dialogue lines `t10-l1` through `t10-l10` for "Travel English > Lesson 10: Solving Problems" (`TRAVEL_PROBLEMS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/travel_english/Problems/`, `public/assets/audio/interview_english/Problems/`, `public/assets/audio/travel_english/problems/`, and `public/assets/audio/travel_english/solving_problems/`.
 - Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
-
-
-
 
 
 
