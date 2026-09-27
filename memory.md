@@ -176,9 +176,14 @@
 - Synced audio assets to `public/assets/audio/interview_english/Salary/` and `public/assets/audio/interview_english/salary/`.
 - Mapped audio files (`Interviewer_L1.mp3`..`L5.mp3` and `Candidate_L1.mp3`..`L5.mp3`) in `src/assets/audio/interview_english/Question/` to dialogue lines `i8-l1` through `i8-l10` for "Interview English > Lesson 8: Asking Questions" (`INTERVIEW_QUESTIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Synced audio assets to `public/assets/audio/interview_english/Question/` and `public/assets/audio/interview_english/questions/`.
-- Mapped audio files (`Meera_L1.mp3`..`L5.mp3` and `Arjun_L1.mp3`..`L5.mp3`) in `src/assets/audio/business_english/networking/` to dialogue lines `b5-l1` through `b5-l10` for "Business English > Lesson 5: Networking" (`NETWORKING_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
-- Synced audio assets to `public/assets/audio/business_english/networking/` and `public/assets/audio/interview_english/networking/`.
+- Mapped audio files (`Leader_L1.mp3`..`L5.mp3`, `Pooja_L1.mp3`..`L3.mp3`, and `Suresh_L1.mp3`..`L2.mp3`) in `src/assets/audio/business_english/Leadership/` to dialogue lines `b10-l1` through `b10-l10` for "Business English > Lesson 10: Leadership" (`LEADERSHIP_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/business_english/Leadership/`, `public/assets/audio/interview_english/Leadership/`, and `public/assets/audio/business_english/leadership/`.
 - Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+
+
+
+
+
 
 
 
