@@ -66,10 +66,12 @@
     transform: scale(0.95);
     opacity: 0.8;
   }
+
   50% {
     transform: scale(1.15);
     opacity: 1;
   }
+
   100% {
     transform: scale(0.95);
     opacity: 0.8;
@@ -632,6 +634,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -643,7 +646,8 @@
   border-radius: var(--radius-xl);
   padding: 22px 24px;
   width: 100%;
-  max-width: 360px; /* 50% compact popup size */
+  max-width: 360px;
+  /* 50% compact popup size */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -659,6 +663,7 @@
     opacity: 0;
     transform: scale(0.88) translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);

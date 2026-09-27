@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${manrope.variable} ${outfit.variable} font-sans bg-[#F5F8FF] text-[#0F172A] antialiased`}>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className={`${manrope.variable} ${outfit.variable} font-sans bg-[#F5F8FF] text-[#0F172A] antialiased`} suppressHydrationWarning>
         {children}
       </body>
     </html>

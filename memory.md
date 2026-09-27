@@ -142,6 +142,18 @@
 - Resolved Turbopack module evaluation `ReferenceError: a is not defined` by cleaning up `ORDERING_AT_CAFE_SCRIPT` formatting and replacing curly apostrophes with standard straight apostrophes in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
 
+### [2026-09-27]
+- Resolved Next.js root layout hydration mismatch warning caused by browser extensions by adding `suppressHydrationWarning` to `<html>` and `<body>` in [`src/app/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/layout.tsx).
+- Mapped all 10 audio files (`Aman_L1.mp3` through `Aman_L5.mp3` and `Stranger_L1.mp3` through `Stranger_L5.mp3`) in `src/assets/audio/daily_english/casul_conversation` to dialogue lines `d3-l1` through `d3-l10` for "Daily English > Lesson 3: Casual Conversation" (`CASUAL_CONVERSATION_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/casul_conversation` and created `casual_conversation` folder alias to ensure static asset resolution across routes.
+- Mapped all 10 audio files (`Assistant_L1.mp3` through `Assistant_L5.mp3` and `Customer_L1.mp3` through `Customer_L5.mp3`) in `src/assets/audio/daily_english/shopping_conversation/` to dialogue lines `d4-l1` through `d4-l10` for "Daily English > Lesson 4: Shopping Conversation" (`SHOPPING_CONVERSATION_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/shopping_conversation/`.
+- Mapped audio files (`Traveller_L1.mp3`..`L5.mp3` and `Resident_L1.mp3`..`L4.mp3`) in `src/assets/audio/daily_english/asking_for_directions/` to dialogue lines `d5-l1` through `d5-l9` for "Daily English > Lesson 5: Asking Directions" (`DIRECTIONS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/asking_for_directions/`.
+- Mapped audio files (`Waiter_L1.mp3`..`L5.mp3` and `Customer_L1.mp3`..`L4.mp3`) in `src/assets/audio/daily_english/at_the_resturant/` to dialogue lines `d6-l1` through `d6-l9` for "Daily English > Lesson 6: At a Restaurant" (`RESTAURANT_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
+- Synced audio assets to `public/assets/audio/daily_english/at_the_resturant/` and created `at_the_restaurant` alias folder.
+- Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+
 
 
 
