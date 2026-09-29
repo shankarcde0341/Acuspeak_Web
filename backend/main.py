@@ -114,6 +114,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from zego_routes import router as zego_router
+app.include_router(zego_router)
+
+
 
 
 # Function: read_root

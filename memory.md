@@ -184,7 +184,13 @@
 - Synced audio assets to `public/assets/audio/travel_english/Planing/`, `public/assets/audio/travel_english/Planning/`, `public/assets/audio/interview_english/Planning/`, `public/assets/audio/travel_english/planning/`, and `public/assets/audio/travel_english/trip_planning/`.
 - Mapped audio files (`Traveler_L1.mp3`..`L5.mp3` and `Staff_L1.mp3`..`L5.mp3`) in `src/assets/audio/travel_english/Problems/` to dialogue lines `t10-l1` through `t10-l10` for "Travel English > Lesson 10: Solving Problems" (`TRAVEL_PROBLEMS_SCRIPT`) in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts).
 - Synced audio assets to `public/assets/audio/travel_english/Problems/`, `public/assets/audio/interview_english/Problems/`, `public/assets/audio/travel_english/problems/`, and `public/assets/audio/travel_english/solving_problems/`.
-- Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+### [2026-09-28]
+- Pinned `pycryptodome==3.23.0` in [`backend/requirements.txt`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/requirements.txt).
+- Updated [`backend/zego_service.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/zego_service.py) with AES-GCM Zego Token04 generation function (`generate_zego_token`) accepting optional `room_id` and helper `get_app_id()`.
+- Enhanced [`backend/auth.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/auth.py) with `verify_session_token` to validate server-signed HMAC session tokens and expiry.
+- Created router [`backend/zego_routes.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/zego_routes.py) with `POST /api/zego/token` endpoint validating Pydantic models, Bearer session token authorization, post-auth rate limiting, SHA-256 hashed user ID (`u_<hash16>`), and safe 500 error responses without exposing secret parameters.
+- Mounted `/api/zego` router in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py) and verified unit tests with FastAPI TestClient.
+
 
 
 

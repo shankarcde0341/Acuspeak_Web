@@ -10,6 +10,7 @@ import time
 import httpx
 from urllib.parse import urlencode
 from passlib.context import CryptContext
+from typing import Optional
 from dotenv import load_dotenv
 
 # .env variables load karein
@@ -117,5 +118,20 @@ def create_session_token(email: str) -> str:
     raw_str = f"{email}:{timestamp}"
     signature = hmac.new(JWT_SECRET.encode(), raw_str.encode(), hashlib.sha256).hexdigest()
     return f"{raw_str}:{signature}"
+
+def verify_session_token(token: str, max_age_seconds: int = 7 * 24 * 3600) -> Optional[str]:
+    """Return the email if the session token is valid and unexpired, else None."""
+    try:
+        email, timestamp, signature = token.rsplit(":", 2)
+        raw_str = f"{email}:{timestamp}"
+        expected = hmac.new(JWT_SECRET.encode(), raw_str.encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(signature, expected):
+            return None
+        if int(time.time()) - int(timestamp) > max_age_seconds:
+            return None
+        return email
+    except (ValueError, TypeError):
+        return None
+
 
 
