@@ -25,7 +25,7 @@ def _apply_zego_rate_limit(user_identifier: str, max_requests: int = 10, window_
 
 
 class ZegoTokenRequest(BaseModel):
-    room_id: Optional[str] = Field(default=None, pattern=r"^[A-Za-z0-9_-]{1,64}$")
+    room_id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,64}$")
 
 
 class ZegoTokenResponse(BaseModel):

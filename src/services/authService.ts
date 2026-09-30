@@ -132,6 +132,15 @@ export function setAuthSession(user: { email: string; name: string }, token?: st
 }
 
 /**
+ * Retrieves session token from localStorage if available.
+ */
+export function getAuthToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('session_token');
+}
+
+
+/**
  * Checks whether user has an active session in client storage or cookies.
  */
 export function isLoggedIn(): boolean {

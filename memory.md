@@ -191,6 +191,48 @@
 - Created router [`backend/zego_routes.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/zego_routes.py) with `POST /api/zego/token` endpoint validating Pydantic models, Bearer session token authorization, post-auth rate limiting, SHA-256 hashed user ID (`u_<hash16>`), and safe 500 error responses without exposing secret parameters.
 - Mounted `/api/zego` router in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py) and verified unit tests with FastAPI TestClient.
 
+### [2026-09-29]
+- **Security Fix:** Removed hardcoded default fallback from `JWT_SECRET` in [`backend/auth.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/auth.py). Added fail-fast `RuntimeError` at module load if `JWT_SECRET` is not set in environment variables — server will not start without a real secret.
+- **Security Fix:** Set a cryptographically secure random `JWT_SECRET` (generated via `secrets.token_hex(32)`) in `backend/.env`. **Note:** All previously issued session tokens are invalidated by this change; users must re-login.
+- **Security Fix:** Replaced `print(f"Google OAuth Callback Exception: {exc}")` with `logger.error("Google OAuth callback failed", exc_info=True)` in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py) Google OAuth callback. Added `import logging` and `logger = logging.getLogger(__name__)` to `main.py`. No callback flow logic was changed.
+- **CORS Verified:** `allow_origins` in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py) uses a specific URL list (localhost:3000, 127.0.0.1:3000, localhost:8000, 127.0.0.1:8000, and `FRONTEND_URL`) — not wildcard `*`. Combined with `allow_credentials=True`, this is the correct and secure configuration. No changes needed.
+- Verified `python -m compileall backend` with 0 errors, fail-fast startup crash test, session token creation/verification, and `/api/zego/token` endpoint (200/401/401/200/429).
+- **Security Fix:** Reverted `ZegoTokenRequest.room_id` from `Optional[str]` back to required `str` in [`backend/zego_routes.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/zego_routes.py). Empty body now returns 422 as expected.
+- Created Match screen UI at [`src/components/match/MatchScreen.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/match/MatchScreen.tsx) (`"use client"`) with 3 states (idle/searching/found), mock partner pool, pulsing search animation, and partner card with "Start voice call" + "Next" buttons. CSS Module [`Match.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/match/Match.module.css) uses strictly `design.md` tokens.
+- Created route page [`src/app/(call)/practice/match/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28call%29/practice/match/page.tsx) under the `(call)` layout group with AuthGuard protection.
+- Updated "Start call" link in [`src/app/(dashboard)/practice/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/practice/page.tsx) to navigate to `/practice/match` instead of directly to `/practice/call`.
+- Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+- Implemented Instant Random Matchmaking backend in [`backend/match_routes.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/match_routes.py) with `POST /api/match/join`, `GET /api/match/status`, and `POST /api/match/cancel` router endpoints mounted on FastAPI app in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py).
+- Added schema reference comments for `matchmaking_status` ("idle" | "searching" | "in_call"), `matchmaking_room_id` (str | None), and `matchmaking_started_at` (datetime | None) in [`backend/database.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/database.py).
+- Applied atomic `find_one_and_update` on MongoDB `users` collection to prevent race conditions and double-matching, using `$setOnInsert` for safe user creation.
+- Applied rate limiting (1 req / 3s on `/join`, 10 req / 60s on `/status` & `/cancel`) and SHA-256 partner ID hashing (`u_<hash16>`) to isolate raw user emails.
+- Verified test suite (8 cases: User A searching -> User B matched -> User A status matched -> room_id match -> User C searching -> User A cancel resets User B to idle -> 429 rate limit -> 401 unauthorized).
+- **Known Limitation:** Stale searching entries 130 seconds ke baad queries dwara naturally ignore hoti hain (`matchmaking_started_at >= cutoff_time`), lekin database se explicitly clear nahi hoti — periodic background cleanup job is a planned future improvement.
+- Exported `getAuthToken()` in [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts) for reading `localStorage.getItem('session_token')`.
+- Created frontend matchmaking service [`src/services/matchService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/matchService.ts) with typed functions (`joinMatch`, `getMatchStatus`, `cancelMatch`, `getZegoToken`) connecting to `/api/match/*` and `/api/zego/token`.
+- Refactored [`MatchScreen.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/match/MatchScreen.tsx) from mock data to real backend-wired state machine:
+  - 2-second `getMatchStatus()` polling interval during searching state.
+  - 120-second timeout timer showing modal popup ("No users free right now") with "Try again" CTA.
+  - Cancel button clearing active timers and notifying `/api/match/cancel`.
+  - "Start voice call" button generating Zego token and passing parameters to `/practice/call`.
+  - Component unmount cleanup for interval/timer refs.
+- Enhanced [`Match.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/match/Match.module.css) with error banner and modal popup styles.
+- Verified TypeScript type check (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+- Installed official Zego WebRTC SDK package `zego-express-engine-webrtc` (`^3.12.0`).
+- Integrated real Zego Cloud voice WebRTC engine in [`src/components/call/CallScreen.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/call/CallScreen.tsx):
+  - Extracted query params (`room_id`, `token`, `target_user_id`) on mount and executed immediate URL cleanup (`window.history.replaceState`) to remove sensitive query tokens from the browser address bar.
+  - Dynamically fetched backend token & `app_id` via `getZegoToken(roomId)` (backend is source of truth, no hardcoded app credentials or `.env` `NEXT_PUBLIC_ZEGO_APP_ID`).
+  - Integrated local mic stream publishing, remote voice stream subscription with auto-created `<audio id="remote-voice-player">` element, and browser autoplay handling.
+  - Handled Zego room events (`roomStateUpdate`, `roomUserUpdate`, `roomStreamUpdate`) for disconnect detection and partner departure.
+  - Implemented guaranteed teardown function (`teardownZego`) cleaning up published streams, local media tracks, room logins, and event listeners on component unmount and call termination.
+  - Added microphone mute toggle (`mutePublishStreamAudio` & track `enabled`) and speaker mute toggle.
+  - Enhanced [`CallScreen.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/call/CallScreen.module.css) with error state card UI.
+- Updated [`src/app/(call)/practice/call/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28call%29/practice/call/page.tsx) to pass `token` prop to `CallScreen`.
+- **Known Limitations:** Scope covers 1-on-1 live voice WebRTC calling; video calling and group live rooms (`RoomScreen.tsx`) are separate planned features.
+
+
+
+
 
 
 

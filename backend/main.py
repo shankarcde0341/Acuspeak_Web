@@ -5,6 +5,8 @@
 import os
 import secrets
 import time
+import logging
+logger = logging.getLogger(__name__)
 from typing import Optional, Dict
 from datetime import datetime
 from urllib.parse import quote
@@ -116,6 +118,10 @@ app.add_middleware(
 
 from zego_routes import router as zego_router
 app.include_router(zego_router)
+
+from match_routes import router as match_router
+app.include_router(match_router)
+
 
 
 
@@ -246,7 +252,7 @@ async def google_callback(code: Optional[str] = None, state: Optional[str] = Non
         return RedirectResponse(url=redirect_url)
 
     except Exception as exc:
-        print(f"Google OAuth Callback Exception: {exc}")
+        logger.error("Google OAuth callback failed", exc_info=True)
         # Rules.md Section 4: Safe, structured error response without exposing raw stack trace
         return RedirectResponse(url=f"{FRONTEND_URL}/login?error={quote('Google authentication failed. Please try again.')}")
 

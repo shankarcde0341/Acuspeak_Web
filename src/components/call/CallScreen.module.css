@@ -158,6 +158,7 @@
   from {
     transform: scaleY(0.5);
   }
+
   to {
     transform: scaleY(1.5);
   }
@@ -252,7 +253,34 @@
     height: 140px;
     font-size: 56px;
   }
+
   .partnerName {
     font-size: 26px;
   }
+}
+
+/* Error state card */
+.errorCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-m);
+  padding: var(--space-xl);
+  text-align: center;
+  margin: auto 0;
+}
+
+.errorTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.errorSub {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 14px;
+  color: var(--on-dark-text);
+  max-width: 320px;
 }

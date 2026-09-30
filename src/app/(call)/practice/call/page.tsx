@@ -47,6 +47,8 @@ export default async function PracticeCallPage({ searchParams }: CallPageProps) 
   const roomId = rawRoomId && idRegex.test(rawRoomId) ? rawRoomId : undefined;
   const targetUserId =
     rawTargetUserId && idRegex.test(rawTargetUserId) ? rawTargetUserId : undefined;
+  const rawToken = getSingleParam(params.token)?.trim();
+  const token = rawToken && rawToken.length > 10 ? rawToken : undefined;
 
   return (
     <CallScreen
@@ -55,6 +57,8 @@ export default async function PracticeCallPage({ searchParams }: CallPageProps) 
       gender={gender}
       roomId={roomId}
       targetUserId={targetUserId}
+      token={token}
     />
   );
+
 }

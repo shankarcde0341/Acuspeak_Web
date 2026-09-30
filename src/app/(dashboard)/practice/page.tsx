@@ -12,15 +12,6 @@ export default async function PracticePage() {
 
   const initial = partner.name.charAt(0).toUpperCase();
 
-  const query = new URLSearchParams({
-    name: partner.name,
-    country: partner.country,
-    gender: partner.gender,
-    room_id: partner.room_id,
-    target_user_id: partner.user_id,
-  }).toString();
-
-  const callUrl = `/practice/call?${query}`;
 
   return (
     <div className={styles.container}>
@@ -45,7 +36,7 @@ export default async function PracticePage() {
           </div>
         </div>
 
-        <Link href={callUrl} className={styles.startBtn}>
+        <Link href="/practice/match" className={styles.startBtn}>
           Start call
         </Link>
       </div>
