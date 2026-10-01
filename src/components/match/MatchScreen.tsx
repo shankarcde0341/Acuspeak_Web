@@ -16,7 +16,7 @@ import {
    Types
    ────────────────────────────────────────── */
 
-type MatchState = "idle" | "searching" | "found";
+type MatchState = "idle" | "searching" | "connecting";
 
 const WAVEFORM_HEIGHTS = [10, 18, 26, 14, 30, 20, 12, 24, 16, 22, 10, 18, 28, 14, 20];
 
@@ -27,10 +27,10 @@ export default function MatchScreen() {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isTimeoutOpen, setIsTimeoutOpen] = useState<boolean>(false);
-  const [isConnectingCall, setIsConnectingCall] = useState<boolean>(false);
 
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* Helper to clear all active timers */
   const clearTimers = useCallback(() => {
@@ -42,6 +42,10 @@ export default function MatchScreen() {
       clearTimeout(timeoutTimerRef.current);
       timeoutTimerRef.current = null;
     }
+    if (navTimerRef.current) {
+      clearTimeout(navTimerRef.current);
+      navTimerRef.current = null;
+    }
   }, []);
 
   /* Cleanup timers on component unmount */
@@ -50,6 +54,40 @@ export default function MatchScreen() {
       clearTimers();
     };
   }, [clearTimers]);
+
+  /* Automatically handle match connection and navigation */
+  const handleConnectAndNavigate = useCallback(
+    async (matchedRoomId: string, matchedPartner: PartnerInfo) => {
+      clearTimers();
+      setRoomId(matchedRoomId);
+      setPartner(matchedPartner);
+      setState("connecting");
+      setErrorMsg(null);
+
+      const zegoRes = await getZegoToken(matchedRoomId);
+
+      if (zegoRes.error || !zegoRes.token) {
+        setErrorMsg(zegoRes.error || "Failed to generate call token. Please try again.");
+        setState("idle");
+        setPartner(null);
+        setRoomId(null);
+        return;
+      }
+
+      const params = new URLSearchParams({
+        name: matchedPartner.name,
+        room_id: matchedRoomId,
+        target_user_id: matchedPartner.id,
+        token: zegoRes.token,
+      });
+
+      // 1-second transition UX before auto-navigating to the voice call
+      navTimerRef.current = setTimeout(() => {
+        router.push(`/practice/call?${params.toString()}`);
+      }, 1000);
+    },
+    [clearTimers, router]
+  );
 
   /* Start matchmaking flow */
   const startSearching = useCallback(async () => {
@@ -66,9 +104,7 @@ export default function MatchScreen() {
     }
 
     if (res.status === "matched" && res.room_id && res.partner) {
-      setRoomId(res.room_id);
-      setPartner(res.partner);
-      setState("found");
+      await handleConnectAndNavigate(res.room_id, res.partner);
       return;
     }
 
@@ -96,13 +132,11 @@ export default function MatchScreen() {
 
         if (statusRes.status === "matched" && statusRes.room_id && statusRes.partner) {
           clearTimers();
-          setRoomId(statusRes.room_id);
-          setPartner(statusRes.partner);
-          setState("found");
+          await handleConnectAndNavigate(statusRes.room_id, statusRes.partner);
         }
       }, 2000);
     }
-  }, [clearTimers]);
+  }, [clearTimers, handleConnectAndNavigate]);
 
   /* Cancel active searching */
   const handleCancelSearch = useCallback(async () => {
@@ -112,39 +146,6 @@ export default function MatchScreen() {
     setPartner(null);
     setRoomId(null);
   }, [clearTimers]);
-
-  /* Skip to next partner */
-  const handleNextPartner = useCallback(async () => {
-    clearTimers();
-    await cancelMatch();
-    setPartner(null);
-    setRoomId(null);
-    await startSearching();
-  }, [clearTimers, startSearching]);
-
-  /* Start voice call — fetch Zego token and navigate */
-  const handleStartVoiceCall = useCallback(async () => {
-    if (!roomId || !partner) return;
-    setIsConnectingCall(true);
-    setErrorMsg(null);
-
-    const zegoRes = await getZegoToken(roomId);
-
-    if (zegoRes.error || !zegoRes.token) {
-      setErrorMsg(zegoRes.error || "Failed to generate call token. Please try again.");
-      setIsConnectingCall(false);
-      return;
-    }
-
-    const params = new URLSearchParams({
-      name: partner.name,
-      room_id: roomId,
-      target_user_id: partner.id,
-      token: zegoRes.token,
-    });
-
-    router.push(`/practice/call?${params.toString()}`);
-  }, [partner, roomId, router]);
 
   /* Timeout try again click handler */
   const handleTimeoutTryAgain = useCallback(() => {
@@ -213,7 +214,7 @@ export default function MatchScreen() {
                 </svg>
               </div>
             </div>
-            <span className={styles.searchingLabel}>Finding a partner&hellip;</span>
+            <span className={styles.searchingLabel}>Finding a match&hellip;</span>
             <p className={styles.searchingSub}>
               Matching with online users in real-time
             </p>
@@ -236,8 +237,8 @@ export default function MatchScreen() {
           </>
         )}
 
-        {/* ─── Found State ─── */}
-        {state === "found" && partner && (
+        {/* ─── Connecting State (Match Found -> Auto-Connecting UX) ─── */}
+        {state === "connecting" && partner && (
           <>
             <div className={styles.partnerSection}>
               <div className={`${styles.avatarLarge} ${styles.avatarBlue}`}>
@@ -247,28 +248,24 @@ export default function MatchScreen() {
               <div className={styles.partnerMeta}>
                 <span className={styles.onlineBadge}>
                   <span className={styles.onlineDot} />
-                  Matched &amp; Ready
+                  Matched &amp; Connecting
                 </span>
               </div>
             </div>
-
-            <div className={styles.btnRow}>
-              <button
-                type="button"
-                className={styles.btnPrimary}
-                onClick={handleStartVoiceCall}
-                disabled={isConnectingCall}
-              >
-                {isConnectingCall ? "Connecting..." : "Start voice call"}
-              </button>
-              <button
-                type="button"
-                className={styles.btnSecondary}
-                onClick={handleNextPartner}
-                disabled={isConnectingCall}
-              >
-                Next
-              </button>
+            <span className={styles.searchingLabel}>
+              Connecting you with {partner.name}&hellip;
+            </span>
+            <p className={styles.searchingSub}>
+              Setting up secure voice room
+            </p>
+            <div className={styles.waveform} aria-hidden="true">
+              {WAVEFORM_HEIGHTS.map((h, i) => (
+                <span
+                  key={i}
+                  className={styles.waveBar}
+                  style={{ height: h, animationDelay: `${i * 0.08}s` }}
+                />
+              ))}
             </div>
           </>
         )}
@@ -293,9 +290,10 @@ export default function MatchScreen() {
         </div>
       )}
 
-      <Link href="/practice" className={styles.backLink}>
-        &larr; Back to Practice
+      <Link href="/dashboard" className={styles.backLink}>
+        &larr; Back to Dashboard
       </Link>
     </div>
   );
 }
+

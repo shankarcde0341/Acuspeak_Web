@@ -1,49 +1,5 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { getMatchedPartner } from '@/lib/call';
-import styles from './Practice.module.css';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Practice — Acuspeak',
-};
-
-export default async function PracticePage() {
-  const partner = await getMatchedPartner();
-
-  const initial = partner.name.charAt(0).toUpperCase();
-
-
-  return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Practice</h1>
-        <p className={styles.subtitle}>
-          Talk with a real partner and build speaking confidence.
-        </p>
-      </header>
-
-      <div className={styles.partnerCard}>
-        <div className={styles.leftSection}>
-          <div className={styles.avatarCircle}>{initial}</div>
-          <div className={styles.infoColumn}>
-            <div className={styles.nameRow}>
-              <h3 className={styles.partnerName}>{partner.name}</h3>
-              <span className={styles.onlineBadge}>
-                <span className={styles.onlineDot} /> Online
-              </span>
-            </div>
-            <span className={styles.countryText}>{partner.country}</span>
-          </div>
-        </div>
-
-        <Link href="/practice/match" className={styles.startBtn}>
-          Start call
-        </Link>
-      </div>
-
-      <p className={styles.helperText}>
-        You&apos;ll join a live voice call. Rate your partner when it ends.
-      </p>
-    </div>
-  );
+export default function PracticePage() {
+  redirect('/practice/match');
 }

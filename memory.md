@@ -228,7 +228,14 @@
   - Added microphone mute toggle (`mutePublishStreamAudio` & track `enabled`) and speaker mute toggle.
   - Enhanced [`CallScreen.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/call/CallScreen.module.css) with error state card UI.
 - Updated [`src/app/(call)/practice/call/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28call%29/practice/call/page.tsx) to pass `token` prop to `CallScreen`.
-- **Known Limitations:** Scope covers 1-on-1 live voice WebRTC calling; video calling and group live rooms (`RoomScreen.tsx`) are separate planned features.
+### [2026-09-30]
+- Refactored [`MatchScreen.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/match/MatchScreen.tsx) state machine from `"idle" | "searching" | "found"` to `"idle" | "searching" | "connecting"`.
+- Removed intermediate static "Found" partner card along with manual "Start voice call" and "Next" buttons.
+- Implemented automatic Zego token retrieval (`getZegoToken(room_id)`) and auto-navigation (`router.push('/practice/call?...')`) immediately upon matching a free partner.
+- Added a 1-second visual transition UX state ("Connecting you with <partner_name>...") with partner initial avatar, online badge, subtext, and animated waveform.
+- Maintained strict timer cleanup (`clearTimers()` handling polling, timeout, and navigation timers on component unmount and state cancellation).
+- Verified TypeScript compilation (`npx tsc --noEmit`) and Next.js production build (`npm run build`) with 0 errors.
+
 
 
 

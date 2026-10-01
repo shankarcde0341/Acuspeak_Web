@@ -37,7 +37,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
           </li>
           <li>
             <Link
-              href="/practice"
+              href="/practice/match"
               className={`${styles.pill} ${isPracticeActive ? styles.pillActive : ''}`}
               aria-current={isPracticeActive ? 'page' : undefined}
             >
