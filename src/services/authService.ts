@@ -46,6 +46,8 @@ export async function loginUser(credentials: LoginCredentials): Promise<LoginRes
 export interface SendOtpResponse {
   message?: string;
   debug_code?: string;
+  is_registered?: boolean;
+  is_new_user?: boolean;
   error?: string;
 }
 
@@ -61,6 +63,9 @@ export interface VerifyPhoneResponse {
   session_token?: string;
   name?: string;
   email?: string;
+  user_id?: string;
+  is_registered?: boolean;
+  is_new_user?: boolean;
   error?: string;
 }
 

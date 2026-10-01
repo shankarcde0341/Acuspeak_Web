@@ -5,6 +5,7 @@
 import os
 import secrets
 import time
+import uuid
 import logging
 logger = logging.getLogger(__name__)
 from typing import Optional, Dict
@@ -104,7 +105,7 @@ origins = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://sorry-eminem-net-sun.trycloudflare.com",
+    "https://genres-genes-diagnosis-occurs.trycloudflare.com",
 ]
 if FRONTEND_URL and FRONTEND_URL not in origins:
     origins.append(FRONTEND_URL)
@@ -226,17 +227,21 @@ async def google_callback(code: Optional[str] = None, state: Optional[str] = Non
         now_iso = datetime.utcnow().isoformat()
 
         if existing_user:
+            update_data = {
+                "name": payload.name,
+                "picture": payload.picture,
+                "google_id": payload.google_id,
+                "updated_at": now_iso
+            }
+            if not existing_user.get("user_id"):
+                update_data["user_id"] = f"usr_{uuid.uuid4().hex[:16]}"
             await db.users.update_one(
                 {"email": payload.email},
-                {"$set": {
-                    "name": payload.name,
-                    "picture": payload.picture,
-                    "google_id": payload.google_id,
-                    "updated_at": now_iso
-                }}
+                {"$set": update_data}
             )
         else:
             new_user_doc = {
+                "user_id": f"usr_{uuid.uuid4().hex[:16]}",
                 "email": payload.email,
                 "name": payload.name,
                 "picture": payload.picture,
@@ -327,9 +332,15 @@ async def send_phone_otp(data: PhoneSendOTPRequest, request: Request):
     provider = get_otp_provider()
     await provider.send_otp(clean_phone, otp_code)
 
+    # Check if user phone is already registered in db.users
+    existing_user = await db.users.find_one({"phone": clean_phone})
+    is_registered = existing_user is not None
+
     response_payload = {
         "message": "OTP code sent successfully.",
-        "success": True
+        "success": True,
+        "is_registered": is_registered,
+        "is_new_user": not is_registered
     }
     # In Mock mode, provide debug code for testing
     if SMS_PROVIDER.lower() == "mock":
@@ -343,7 +354,7 @@ async def send_phone_otp(data: PhoneSendOTPRequest, request: Request):
 # Working:
 #   1. MongoDB 'otps' collection se record check karta hai (Expiry aur max 3 attempts validation).
 #   2. Hash comparison verify hone par OTP record delete karta hai aur MongoDB 'users' collection mein record upsert karta hai.
-#   3. Session token return karta hai.
+#   3. Returning user ke liye direct session return karta hai; New user ke liye name field enforce aur unique user_id generate karta hai.
 @app.post("/api/auth/phone/verify-otp")
 async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
     client_ip = request.client.host if request.client else "unknown"
@@ -378,38 +389,58 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
     # OTP is valid! Delete record to prevent replay
     await db.otps.delete_one({"phone": clean_phone})
 
-    # MongoDB User Upsert
+    # MongoDB User Lookup
     existing_user = await db.users.find_one({"phone": clean_phone})
     now_iso = datetime.utcnow().isoformat()
-    user_name = data.name or (existing_user.get("name") if existing_user else "Phone User")
-    user_email = f"{clean_phone.replace('+', '')}@phone.acuspeak.com"
+    user_email = existing_user.get("email") if existing_user else f"{clean_phone.replace('+', '')}@phone.acuspeak.com"
 
     if existing_user:
-        await db.users.update_one(
-            {"phone": clean_phone},
-            {"$set": {
-                "name": user_name,
-                "updated_at": now_iso
-            }}
-        )
+        # Returning User Flow
+        user_name = existing_user.get("name") or "Phone User"
+        user_id = existing_user.get("user_id") or f"usr_{uuid.uuid4().hex[:16]}"
+        update_data = {
+            "user_id": user_id,
+            "name": user_name,
+            "updated_at": now_iso
+        }
+        await db.users.update_one({"phone": clean_phone}, {"$set": update_data})
+        session_token = create_session_token(user_email)
+        return {
+            "message": "Phone verification successful",
+            "session_token": session_token,
+            "name": user_name,
+            "email": user_email,
+            "user_id": user_id,
+            "is_registered": True,
+            "is_new_user": False
+        }
     else:
+        # New User Onboarding Flow
+        if not data.name or not data.name.strip():
+            return {"error": "Name is required for new user registration."}
+
+        user_name = data.name.strip()
+        user_id = f"usr_{uuid.uuid4().hex[:16]}"
         new_user = {
+            "user_id": user_id,
             "phone": clean_phone,
             "email": user_email,
             "name": user_name,
-            "referral": data.referral or None,
+            "referral": data.referral.strip() if data.referral else None,
             "provider": "phone",
             "created_at": now_iso,
             "updated_at": now_iso
         }
         await db.users.insert_one(new_user)
-
-    session_token = create_session_token(user_email)
-    return {
-        "message": "Phone verification successful",
-        "session_token": session_token,
-        "name": user_name,
-        "email": user_email
-    }
+        session_token = create_session_token(user_email)
+        return {
+            "message": "Phone registration successful",
+            "session_token": session_token,
+            "name": user_name,
+            "email": user_email,
+            "user_id": user_id,
+            "is_registered": False,
+            "is_new_user": True
+        }
 
     

@@ -22,6 +22,7 @@ export default function LoginPage() {
   const [otp, setOtp] = useState('');
   const [name, setName] = useState('');
   const [referral, setReferral] = useState('');
+  const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
 
   // Status & Debug States
   const [busy, setBusy] = useState(false);
@@ -107,6 +108,7 @@ export default function LoginPage() {
         setError(data.error);
       } else {
         if (data.debug_code) setDebugCode(data.debug_code);
+        setIsRegistered(data.is_registered ?? false);
         setMode('phone-otp');
       }
     } catch {
@@ -123,6 +125,13 @@ export default function LoginPage() {
       setError('Enter the 6-digit code');
       return;
     }
+
+    // For new users, enforce name input
+    if (isRegistered === false && !name.trim()) {
+      setError('Please enter your name.');
+      return;
+    }
+
     setBusy(true);
     try {
       const clean = phone.replace(/\D/g, '');
@@ -131,8 +140,8 @@ export default function LoginPage() {
       const data = await verifyPhoneOtp({
         phone: fullPhone,
         otp,
-        name: name || undefined,
-        referral: referral || undefined,
+        name: isRegistered ? undefined : name.trim(),
+        referral: isRegistered ? undefined : (referral.trim() || undefined),
       });
 
       if (data.error) {
@@ -141,7 +150,7 @@ export default function LoginPage() {
         setAuthSession(
           {
             email: data.email || `${clean}@phone.user`,
-            name: data.name || name || 'Phone User',
+            name: data.name || (isRegistered ? 'Phone User' : name.trim()),
           },
           data.session_token
         );
@@ -398,10 +407,12 @@ export default function LoginPage() {
                 ← Change number
               </button>
               <h2 className="text-2xl font-bold font-outfit text-slate-900 mb-1 leading-snug">
-                Verify code
+                {isRegistered ? 'Verify code' : 'Create profile'}
               </h2>
               <p className="text-slate-600 text-sm mb-4 font-medium leading-normal">
-                Sent to {countryCode} {phone}
+                {isRegistered
+                  ? `Sent to ${countryCode} ${phone}`
+                  : `Enter verification code and details for ${countryCode} ${phone}`}
               </p>
 
               {debugCode && (
@@ -417,38 +428,63 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <input
-                type="text"
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                placeholder="------"
-                className="w-full h-14 rounded-xl bg-slate-100 font-bold text-2xl tracking-[10px] text-center text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-              />
+              <div className="mb-3">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  6-Digit OTP Code <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                  placeholder="------"
+                  className="w-full h-14 rounded-xl bg-slate-100 font-bold text-2xl tracking-[10px] text-center text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name (new users)"
-                className="w-full h-12 rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-              />
+              {/* Render Name & Referral fields ONLY for New Users */}
+              {isRegistered === false && (
+                <>
+                  <div className="mb-3">
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Full Name <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your full name"
+                      className="w-full h-12 rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
 
-              <input
-                type="text"
-                value={referral}
-                onChange={(e) => setReferral(e.target.value.toUpperCase())}
-                placeholder="Referral code (optional)"
-                className="w-full h-12 rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-800 uppercase focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-              />
+                  <div className="mb-4">
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Referral Code <span className="text-slate-400 font-normal">(optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={referral}
+                      onChange={(e) => setReferral(e.target.value.toUpperCase())}
+                      placeholder="Enter referral code"
+                      className="w-full h-12 rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-800 uppercase focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                </>
+              )}
 
               <button
                 type="button"
                 onClick={verifyOtp}
                 disabled={busy}
-                className="w-full flex items-center justify-center gap-2 h-[52px] rounded-full bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-semibold text-[15px] shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity cursor-pointer leading-none"
+                className="w-full flex items-center justify-center gap-2 h-[52px] rounded-full bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-semibold text-[15px] shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity cursor-pointer leading-none mt-2"
               >
-                {busy ? 'Verifying...' : 'Verify & continue'}
+                {busy
+                  ? 'Verifying...'
+                  : isRegistered
+                    ? 'Verify & Sign in'
+                    : 'Verify & Create account'}
               </button>
 
               <button

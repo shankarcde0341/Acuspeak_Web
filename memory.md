@@ -2,6 +2,13 @@
 
 ## Change Log
 
+### [2026-10-01]
+- Implemented seamless Phone OTP returning user flow in FastAPI backend (`backend/main.py`) and Next.js frontend (`src/app/login/page.tsx`, `src/services/authService.ts`).
+- Added `is_registered` and `is_new_user` boolean flags to `/api/auth/phone/send-otp` and `/api/auth/phone/verify-otp` responses.
+- Fixed MongoDB `DuplicateKeyError` on `user_id` index by ensuring unique `user_id` (`usr_<uuid>`) generation during user registration and upsert across Google callback and Phone OTP verification.
+- Enforced Name input as compulsory for new user registration while completely bypassing Name and Referral collection for returning users during Phone OTP login.
+- Created `walkthrough.md` to document changes and verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+
 ### [2026-09-20]
 - Added 5 approved call screen tokens (`--on-dark-fill`, `--on-dark-border`, `--on-dark-text`, `--on-dark-accent`, `--backdrop`) to [`src/app/globals.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/globals.css) and [`design.md`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/design.md).
 - Created call data helper [`src/lib/call.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/call.ts) with typed stubs (`getMatchedPartner`, `endCallSession`, `submitCallFeedback`, `logCall`, `reportUser`, `blockUser`, `sendFriendRequest`).
