@@ -351,10 +351,18 @@
   border: 1px solid var(--divider);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .wordHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.wordTitleGroup {
   display: flex;
   align-items: baseline;
   gap: 12px;
@@ -366,6 +374,36 @@
   font-size: 26px;
   font-weight: 700;
   color: var(--primary);
+}
+
+.speakerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg, rgba(59, 130, 246, 0.12));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: var(--primary);
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.speakerBtn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.speakerBtnPlaying {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
+  animation: pulseGlow 1.2s infinite ease-in-out;
 }
 
 .wordMeta {
@@ -383,6 +421,12 @@
   line-height: 1.5;
 }
 
+.wordExampleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .wordExample {
   font-family: var(--font-manrope), sans-serif;
   font-size: 14px;
@@ -392,6 +436,36 @@
   padding: 14px 18px;
   border-radius: var(--radius-md);
   border-left: 3px solid var(--primary-light);
+  margin: 0;
+}
+
+.exampleSpeakerBtn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--divider);
+  color: var(--text-secondary);
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exampleSpeakerBtn:hover {
+  background: var(--chip-bg);
+  color: var(--primary);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 }
 
 /* Live Rooms Grid */

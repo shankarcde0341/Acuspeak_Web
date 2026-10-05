@@ -13,7 +13,14 @@ export function proxy(request: NextRequest) {
     pathname.startsWith('/live') ||
     pathname.startsWith('/practice') ||
     pathname.startsWith('/profile') ||
-    pathname.startsWith('/settings');
+    pathname.startsWith('/premium') ||
+    pathname.startsWith('/membership') ||
+    pathname.startsWith('/referral') ||
+    pathname.startsWith('/leaderboard') ||
+    pathname.startsWith('/settings') ||
+    pathname.startsWith('/call-history') ||
+    pathname.startsWith('/privacy') ||
+    pathname.startsWith('/terms');
 
   // Redirect unauthenticated visitors attempting direct URL access to /login
   if (isProtectedRoute && !isLoggedIn) {
@@ -40,7 +47,14 @@ export const config = {
     '/live/:path*',
     '/practice/:path*',
     '/profile/:path*',
+    '/premium/:path*',
+    '/membership/:path*',
+    '/referral/:path*',
+    '/leaderboard/:path*',
     '/settings/:path*',
+    '/call-history/:path*',
+    '/privacy/:path*',
+    '/terms/:path*',
     '/login',
   ],
 };

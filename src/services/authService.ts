@@ -136,6 +136,84 @@ export function setAuthSession(user: { email: string; name: string }, token?: st
   document.cookie = `session_token=${encodeURIComponent(sessionToken)}; path=/; max-age=${maxAge}; SameSite=Lax`;
 }
 
+export interface UserProfile {
+  user_id: string;
+  email: string;
+  name: string;
+  picture?: string;
+  is_premium?: boolean;
+  english_level?: string;
+  day_streak?: number;
+  total_xp?: number;
+  daily_goal_minutes?: number;
+  daily_goal_completed_minutes?: number;
+}
+
+export interface AchievementItem {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  is_unlocked: boolean;
+  progress_percent: number;
+  category: string;
+}
+
+export interface AchievementsData {
+  total_count: number;
+  unlocked_count: number;
+  achievements: AchievementItem[];
+}
+
+/**
+ * Fetches current authenticated user profile from FastAPI backend /api/auth/me endpoint.
+ */
+export async function fetchCurrentUser(token?: string): Promise<UserProfile | null> {
+  try {
+    const sessionToken = token || getAuthToken();
+    if (!sessionToken) return null;
+
+    const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${sessionToken}`,
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) return null;
+
+    const data: UserProfile = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch user profile:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetches user achievements from FastAPI backend /api/achievements endpoint.
+ */
+export async function fetchAchievements(token?: string): Promise<AchievementsData | null> {
+  try {
+    const sessionToken = token || getAuthToken();
+
+    const response = await fetch(`${API_BASE_URL}/api/achievements`, {
+      method: 'GET',
+      headers: sessionToken ? { 'Authorization': `Bearer ${sessionToken}` } : {},
+      cache: 'no-store',
+    });
+
+    if (!response.ok) return null;
+
+    const data: AchievementsData = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch achievements:', error);
+    return null;
+  }
+}
+
 /**
  * Retrieves session token from localStorage if available.
  */
@@ -187,6 +265,100 @@ export function logoutUser(): void {
     document.cookie = 'session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
     window.location.href = '/login';
+  }
+}
+
+export interface UpdateSettingsPayload {
+  name?: string;
+  english_level?: string;
+  daily_goal_minutes?: number;
+  noise_suppression?: boolean;
+  auto_mute?: boolean;
+  email_reminders?: boolean;
+  streak_protection?: boolean;
+  public_profile?: boolean;
+}
+
+/**
+ * Updates user profile and preferences on FastAPI backend and syncs local storage.
+ */
+export async function updateUserSettings(payload: UpdateSettingsPayload): Promise<UserProfile | null> {
+  try {
+    const sessionToken = getAuthToken();
+
+    // Sync localStorage user object immediately if name changed
+    if (payload.name && typeof window !== 'undefined') {
+      const stored = getStoredUser() || { email: '', name: '' };
+      stored.name = payload.name;
+      localStorage.setItem('acuspeak_user', JSON.stringify(stored));
+    }
+
+    if (!sessionToken) {
+      return null;
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/settings`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      console.warn('Backend update failed, local storage updated.');
+      return null;
+    }
+
+    const updatedUser: UserProfile = await response.json();
+    return updatedUser;
+  } catch (error) {
+    console.error('Failed to update settings:', error);
+    return null;
+  }
+}
+
+export interface CallHistoryItem {
+  call_id: string;
+  partner_name: string;
+  partner_avatar?: string | null;
+  is_partner_pro: boolean;
+  partner_english_level: string;
+  started_at: string;
+  duration_seconds: number;
+  call_type: string;
+  topic: string;
+  status: string;
+}
+
+export interface CallHistoryResponse {
+  total_calls: number;
+  total_duration_minutes: number;
+  average_duration_seconds: number;
+  history: CallHistoryItem[];
+}
+
+/**
+ * Fetches user's authoritative call history records from FastAPI backend /api/calls/history endpoint.
+ */
+export async function fetchCallHistory(token?: string): Promise<CallHistoryResponse | null> {
+  try {
+    const sessionToken = token || getAuthToken();
+
+    const response = await fetch(`${API_BASE_URL}/api/calls/history`, {
+      method: 'GET',
+      headers: sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {},
+      cache: 'no-store',
+    });
+
+    if (!response.ok) return null;
+
+    const data: CallHistoryResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch call history:', error);
+    return null;
   }
 }
 

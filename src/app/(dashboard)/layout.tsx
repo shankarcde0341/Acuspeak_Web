@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getCurrentUser } from '@/lib/user';
+import { getCurrentUserServer } from '@/lib/userServer';
 import DashboardNav from '@/components/DashboardNav';
 import AuthGuard from '@/components/auth/AuthGuard';
 
@@ -15,7 +15,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
+  const user = await getCurrentUserServer();
 
   return (
     <AuthGuard>

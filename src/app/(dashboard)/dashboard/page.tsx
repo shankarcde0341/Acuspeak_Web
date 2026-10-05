@@ -1,13 +1,14 @@
 import Link from 'next/link';
-import { getCurrentUser } from '@/lib/user';
+import { getCurrentUserServer } from '@/lib/userServer';
 import { getDashboardData } from '@/lib/dashboard';
+import WelcomeHeader from '@/components/dashboard/WelcomeHeader';
+import WordOfTheDayCard from '@/components/dashboard/WordOfTheDayCard';
 import styles from './Dashboard.module.css';
 
 export default async function DashboardPage() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUserServer();
   const data = await getDashboardData();
 
-  const firstName = user.name.split(' ')[0] || user.name;
   const { stats, continueLesson, wordOfTheDay } = data;
 
   // Circular progress ring calculations for Daily Goal
@@ -18,13 +19,12 @@ export default async function DashboardPage() {
 
   return (
     <div className={styles.container}>
-      {/* 1. Greeting */}
-      <section className={styles.greetingHeader}>
-        <h1 className={styles.title}>Welcome back, {firstName}</h1>
-        <p className={styles.subtitle}>
-          You&apos;re {stats.dailyGoal.targetMinutes - stats.dailyGoal.minutesDone} minutes away from hitting your daily {stats.dailyGoal.targetMinutes}-minute speaking goal.
-        </p>
-      </section>
+      {/* 1. Dynamic Greeting */}
+      <WelcomeHeader
+        initialName={user.name}
+        targetMinutes={stats.dailyGoal.targetMinutes}
+        minutesDone={stats.dailyGoal.minutesDone}
+      />
 
       {/* 2. Stats Row */}
       <section className={styles.statsGrid}>
@@ -105,16 +105,7 @@ export default async function DashboardPage() {
       {/* 4. Word of the Day */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Word of the Day</h2>
-        <div className={styles.wordCard}>
-          <div className={styles.wordHeader}>
-            <h3 className={styles.wordTitle}>{wordOfTheDay.word}</h3>
-            <span className={styles.wordMeta}>
-              {wordOfTheDay.phonetic} • {wordOfTheDay.partOfSpeech}
-            </span>
-          </div>
-          <p className={styles.wordMeaning}>{wordOfTheDay.meaning}</p>
-          <blockquote className={styles.wordExample}>&ldquo;{wordOfTheDay.example}&rdquo;</blockquote>
-        </div>
+        <WordOfTheDayCard wordData={wordOfTheDay} />
       </section>
     </div>
   );

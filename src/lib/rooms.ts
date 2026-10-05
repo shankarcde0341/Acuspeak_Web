@@ -1,4 +1,4 @@
-import { getCurrentUser } from './user';
+import { getFallbackUser } from './user';
 
 export interface RoomParticipant {
   user_id: string;
@@ -20,7 +20,7 @@ export interface RoomDetail extends Room {
 }
 
 export async function getRooms(): Promise<Room[]> {
-  const currentUser = await getCurrentUser();
+  const currentUser = getFallbackUser();
 
   const rooms: RoomDetail[] = [
     {
@@ -96,7 +96,7 @@ export async function getRooms(): Promise<Room[]> {
 }
 
 export async function getRoom(roomId: string): Promise<RoomDetail | null> {
-  const currentUser = await getCurrentUser();
+  const currentUser = getFallbackUser();
 
   const allRooms: RoomDetail[] = [
     {

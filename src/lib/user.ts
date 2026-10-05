@@ -5,11 +5,13 @@ export interface User {
   avatarInitial: string;
 }
 
-export async function getCurrentUser(): Promise<User> {
-  return {
-    id: 'usr_acuspeak_101',
-    name: 'Shankar Choudhary',
-    email: 'shankar@example.com',
-    avatarInitial: 'S',
-  };
+export const DEFAULT_USER: User = {
+  id: 'usr_acuspeak_101',
+  name: 'Learner',
+  email: 'learner@acuspeak.com',
+  avatarInitial: 'L',
+};
+
+export function getFallbackUser(): User {
+  return DEFAULT_USER;
 }
