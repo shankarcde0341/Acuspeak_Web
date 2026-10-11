@@ -30,6 +30,7 @@ from database import client, db
 # Authentication helpers: password verification, Google auth URLs, token exchange, user info fetching aur session tokens.
 from auth import (
     verify_password,
+    get_password_hash,
     generate_google_auth_url,
     exchange_code_for_google_token,
     fetch_google_user_info,
@@ -64,6 +65,17 @@ def apply_rate_limit(ip: str, max_requests: int = 10, window_seconds: int = 60):
 class LoginRequest(BaseModel):
     email: str
     password: str
+
+
+# Model: SignupRequest
+# Reason: /api/signup endpoint par name (mandatory), gender (male default), email/number (validations), referral_code data ko validate karne ke liye.
+class SignupRequest(BaseModel):
+    name: str
+    gender: str = "Male"
+    email: Optional[str] = None
+    number: Optional[str] = None
+    referral_code: Optional[str] = None
+    password: Optional[str] = None
 
 
 # Model: GoogleUserPayload
@@ -221,6 +233,9 @@ app.include_router(match_router)
 from payment_routes import router as payment_router
 app.include_router(payment_router)
 
+from support_routes import router as support_router
+app.include_router(support_router)
+
 
 
 
@@ -260,6 +275,90 @@ async def login(data: LoginRequest, request: Request):
         "message": "Login successful",
         "email": user["email"],
         "name": user.get("name", "User"),
+        "session_token": session_token
+    }
+
+
+# Function: signup
+# Reason: Naye user account register karne ke liye with Name (Mandatory), Gender (Radio default male), Email/Phone (Validation & anyone mandatory), aur Referral Code.
+@app.post("/api/signup")
+@app.post("/api/auth/signup")
+async def signup(data: SignupRequest, request: Request):
+    import re
+    client_ip = request.client.host if request.client else "unknown"
+    apply_rate_limit(client_ip)
+
+    name = data.name.strip() if data.name else ""
+    if not name:
+        return {"error": "Name is mandatory"}
+
+    gender = data.gender.strip() if data.gender else "Male"
+    email = data.email.strip().lower() if data.email else None
+    if not email:
+        return {"error": "Email address is mandatory"}
+
+    email_regex = r"^[^\s@]+@[^\s@]+\.[^\s@]+$"
+    if not re.match(email_regex, email):
+        return {"error": "Please enter a valid email address."}
+
+    password = data.password or ""
+    if not password:
+        return {"error": "Password is mandatory"}
+    if len(password) < 6:
+        return {"error": "Password must be at least 6 characters."}
+
+    number = data.number.strip() if data.number else None
+    referral_code = data.referral_code.strip() if data.referral_code else None
+
+    # Number validation if provided
+    if number:
+        clean_num = re.sub(r"\D", "", number)
+        if len(clean_num) < 10 or len(clean_num) > 15:
+            return {"error": "Please enter a valid phone number (10 to 15 digits)."}
+
+    # Duplicate check in db.users
+    or_filters = []
+    if email:
+        or_filters.append({"email": email})
+    if number:
+        or_filters.append({"phone": number})
+
+    if or_filters:
+        existing = await db.users.find_one({"$or": or_filters})
+        if existing:
+            return {"error": "An account with this email or phone number already exists."}
+
+    clean_phone_digits = re.sub(r"\D", "", number or "")
+    user_email = email or f"{clean_phone_digits}@phone.user"
+
+    user_id = f"usr_{uuid.uuid4().hex[:16]}"
+    user_doc = {
+        "user_id": user_id,
+        "name": name,
+        "gender": gender,
+        "email": user_email,
+        "phone": number,
+        "referral_code": referral_code,
+        "created_at": datetime.utcnow().isoformat(),
+        "is_premium": False,
+        "english_level": "Intermediate Speaker",
+        "day_streak": 1,
+        "total_xp": 100,
+        "daily_goal_minutes": 20,
+        "daily_goal_completed_minutes": 0,
+    }
+    if data.password:
+        user_doc["password"] = get_password_hash(data.password)
+
+    await db.users.insert_one(user_doc)
+
+    session_token = create_session_token(user_doc["email"])
+    return {
+        "message": "Signup successful",
+        "user_id": user_id,
+        "email": user_doc["email"],
+        "name": name,
+        "gender": gender,
         "session_token": session_token
     }
 

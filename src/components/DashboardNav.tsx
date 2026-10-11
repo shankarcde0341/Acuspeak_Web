@@ -16,7 +16,6 @@ export default function DashboardNav({ user }: DashboardNavProps) {
   const isLessonsActive = pathname.startsWith('/lessons');
   const isPracticeActive = pathname.startsWith('/practice');
   const isLiveActive = pathname.startsWith('/live');
-  const isSettingsActive = pathname.startsWith('/settings');
 
   return (
     <header className={styles.header}>
@@ -52,15 +51,6 @@ export default function DashboardNav({ user }: DashboardNavProps) {
               aria-current={isLiveActive ? 'page' : undefined}
             >
               Live
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/settings"
-              className={`${styles.pill} ${isSettingsActive ? styles.pillActive : ''}`}
-              aria-current={isSettingsActive ? 'page' : undefined}
-            >
-              Settings
             </Link>
           </li>
         </ul>

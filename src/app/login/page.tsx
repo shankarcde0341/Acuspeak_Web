@@ -207,12 +207,14 @@ export default function LoginPage() {
           {/* Mode 1: Picker (Email Form + Google + Phone) */}
           {mode === 'picker' && (
             <div>
-              <h2 className="text-2xl font-bold font-outfit text-slate-900 mb-1 leading-snug">
-                Welcome
-              </h2>
-              <p className="text-slate-600 text-sm mb-5 font-medium leading-normal">
-                Sign in to start your speaking journey.
-              </p>
+              <div className="mb-5 pb-4 border-b border-slate-100">
+                <h2 className="text-2xl font-bold font-outfit text-slate-900 leading-snug">
+                  Welcome Back
+                </h2>
+                <p className="text-slate-500 text-xs font-medium mt-0.5">
+                  Sign in to start your speaking journey.
+                </p>
+              </div>
 
               {/* Email & Password Form */}
               <form onSubmit={handleEmailLogin} className="space-y-3.5 mb-5">
@@ -316,7 +318,14 @@ export default function LoginPage() {
                 </p>
               )}
 
-              <p className="text-xs text-slate-500 text-center mt-6 leading-relaxed font-medium">
+              <p className="text-xs text-slate-600 text-center mt-5 font-medium">
+                Don&apos;t have an account?{' '}
+                <Link href="/signup" className="text-blue-600 font-bold hover:underline">
+                  Sign Up Here
+                </Link>
+              </p>
+
+              <p className="text-xs text-slate-400 text-center mt-4 leading-relaxed font-medium">
                 By continuing you agree to our{' '}
                 <a
                   href="#"

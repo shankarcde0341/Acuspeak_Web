@@ -83,14 +83,6 @@ export default function UserMenu({ user }: UserMenuProps) {
           >
             Update Profile
           </Link>
-          <Link
-            href="/settings"
-            className={styles.dropdownItem}
-            role="menuitem"
-            onClick={() => setIsOpen(false)}
-          >
-            Settings
-          </Link>
           <div className={styles.dropdownDivider} />
           <Link
             href="/"

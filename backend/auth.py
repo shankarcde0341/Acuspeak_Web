@@ -38,6 +38,11 @@ def is_google_oauth_configured() -> bool:
 # ==========================================
 
 # CryptContext initialize karein: 'bcrypt' hashing algorithm configuration ke saath setup kiya gaya hai.
+import bcrypt
+import logging
+logger = logging.getLogger(__name__)
+
+# CryptContext initialize karein (fallback)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -47,16 +52,32 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Function: verify_password
 # Reason: Login ke waqt user dwara diye gaye password ko database mein saved hashed password se verify karne ke liye.
-# Working: User ka input (plain_password) aur database ka stored hash (hashed_password) ko compare karta hai. Match hone par True, warna False return karta hai.
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    if not plain_password or not hashed_password:
+        return False
+    try:
+        if isinstance(hashed_password, str) and hashed_password.startswith(("$2a$", "$2b$", "$2y$")):
+            pw_bytes = plain_password.encode('utf-8')[:72]
+            hash_bytes = hashed_password.encode('utf-8')
+            return bcrypt.checkpw(pw_bytes, hash_bytes)
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception as e:
+        logger.error(f"Password verification error: {e}")
+        return False
 
 
 # Function: get_password_hash
 # Reason: User registration ya signup ke waqt plain password ko database mein securely store karne se pehle hash karne ke liye.
-# Working: Plain-text password leta hai aur bcrypt algorithm ka use karke secure hashed string return karta hai.
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def get_password_hash(password: str) -> str:
+    if not password:
+        password = ""
+    try:
+        pw_bytes = password.encode('utf-8')[:72]
+        salt = bcrypt.gensalt()
+        return bcrypt.hashpw(pw_bytes, salt).decode('utf-8')
+    except Exception as e:
+        logger.error(f"Bcrypt hash error: {e}")
+        return pwd_context.hash(password[:72])
 
 
 # Function: generate_google_auth_url

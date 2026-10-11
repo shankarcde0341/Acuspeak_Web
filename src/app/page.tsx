@@ -1,30 +1,9 @@
-'use client';
-
-import { useEffect } from 'react';
 import Link from 'next/link';
+import GetInTouch from '@/components/support/GetInTouch';
+import SignupModalTrigger from '@/components/auth/SignupModalTrigger';
 
 // Ye main Landing Page component hai jo home route (/) ka pura UI render karta hai.
 export default function LandingPage() {
-  // Page load hone par waveform animation initialize karne ke liye side effect function.
-  useEffect(() => {
-    // Hero section ke voice simulation card mein waveform bars inject karne ka logic.
-    const wave = document.getElementById('wave');
-    if (wave && wave.children.length === 0) {
-      const heights = [10, 18, 26, 14, 30, 20, 12, 24, 16, 22, 10, 18, 28, 14, 20];
-      
-      // Heights array par loop chalakar har bar ka visual element span DOM me add kar rahe hain.
-      heights.forEach((h) => {
-        const bar = document.createElement('span');
-        bar.style.height = h + 'px';
-        bar.style.width = '3px';
-        bar.style.borderRadius = '2px';
-        bar.style.backgroundColor = '#3B82F6';
-        bar.style.display = 'inline-block';
-        wave.appendChild(bar);
-      });
-    }
-  }, []);
-
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)] font-sans selection:bg-blue-500 selection:text-white">
       {/* Header / Nav */}
@@ -32,8 +11,6 @@ export default function LandingPage() {
         <nav className="max-w-[1080px] mx-auto px-6 py-4 flex items-center justify-between">
           <Link
             href="/"
-            // Brand name par click karne se page ke top par smooth scroll karwane ka handler function.
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="inline-flex items-center gap-2.5 font-bold text-xl font-outfit text-[var(--text-primary)] hover:opacity-90 transition-opacity"
           >
             <div className="w-[34px] h-[34px] rounded-[10px] bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] inline-flex items-center justify-center text-white font-bold text-[16px] shrink-0 font-outfit shadow-sm">
@@ -60,12 +37,14 @@ export default function LandingPage() {
             </li>
           </ul>
 
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center bg-white text-[var(--text-primary)] font-outfit font-semibold text-[14px] px-5 py-2.5 rounded-full border border-[var(--divider)] shadow-sm hover:bg-gray-50 transition-all leading-none"
-          >
-            Get Started
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-outfit font-semibold text-[14px] px-5 py-2.5 rounded-full shadow-md shadow-blue-900/20 hover:opacity-95 transition-opacity leading-none cursor-pointer"
+            >
+              Get Started
+            </Link>
+          </div>
         </nav>
       </header>
 
@@ -93,11 +72,15 @@ export default function LandingPage() {
               </p>
 
               <div className="flex items-center gap-3.5 flex-wrap">
+                <SignupModalTrigger
+                  buttonText="Sign Up Free"
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity leading-none cursor-pointer"
+                />
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity leading-none"
+                  className="inline-flex items-center justify-center bg-white text-[var(--text-primary)] font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full border border-[var(--divider)] shadow-sm hover:bg-gray-50 transition-colors leading-none"
                 >
-                  Get started
+                  Log In
                 </Link>
                 <a
                   href="#how-it-works"
@@ -138,7 +121,24 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div id="wave" className="flex items-center gap-[3px] mt-5 p-3.5 bg-[var(--bg)] rounded-2xl justify-between" />
+                <div
+                  id="wave"
+                  className="flex items-center gap-[3px] mt-5 p-3.5 bg-[var(--bg)] rounded-2xl justify-between"
+                  aria-hidden="true"
+                >
+                  {[10, 18, 26, 14, 30, 20, 12, 24, 16, 22, 10, 18, 28, 14, 20].map((h, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        height: `${h}px`,
+                        width: '3px',
+                        borderRadius: '2px',
+                        backgroundColor: '#3B82F6',
+                        display: 'inline-block',
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -167,9 +167,7 @@ export default function LandingPage() {
               { icon: '🎤', title: 'Speaking tests', desc: 'Scored speaking assessments give you an honest read on where you stand — and what to work on next.', bg: 'bg-rose-500/10', color: 'text-[var(--flame)]' },
               { icon: '🤝', title: 'Friends & leaderboards', desc: 'Add friends, compare progress, and stay motivated with a leaderboard that rewards consistency.', bg: 'bg-blue-500/10', color: 'text-[var(--primary)]' },
               { icon: '✈️', title: 'Real-world scenarios', desc: 'Practice English for interviews, business meetings, travel, and everyday situations — not just textbook drills.', bg: 'bg-teal-500/10', color: 'text-[var(--accent)]' },
-            ]
-            // Features list ke har element ko Map karke feature cards generate karne wala render function.
-            .map((feature, idx) => (
+            ].map((feature, idx) => (
               <div
                 key={idx}
                 className="bg-white rounded-[22px] p-6 sm:p-[26px] shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-start"
@@ -206,9 +204,7 @@ export default function LandingPage() {
               { num: '3', title: 'Practice the words', desc: 'Work through short interactive lessons and vocabulary before you speak out loud.' },
               { num: '4', title: 'Speak with real people', desc: 'Connect for real, interactive conversations with fellow learners to build fluency.' },
               { num: '5', title: 'Join a live room', desc: 'Put it into practice in a live voice room or a matched conversation room.' },
-            ]
-            // Onboarding step objects par map chalakar numbered step list item return karne wala function.
-            .map((step, idx) => (
+            ].map((step, idx) => (
               <div
                 key={idx}
                 className="grid grid-cols-[48px_1fr] sm:grid-cols-[56px_1fr] gap-4 sm:gap-5 py-6 border-t border-[var(--divider)] last:border-b items-start"
@@ -281,12 +277,7 @@ export default function LandingPage() {
             <p className="text-[var(--text-secondary)] text-[15px] mb-6 leading-relaxed">
               Reach out and we&apos;ll get back to you — whether you&apos;re a learner, a partner, or just curious.
             </p>
-            <a
-              href="mailto:hello@acuspeak.app"
-              className="inline-flex items-center justify-center bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-outfit font-semibold text-[15px] px-8 py-3.5 rounded-full shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity leading-none"
-            >
-              hello@acuspeak.app
-            </a>
+            <GetInTouch />
           </div>
         </section>
 
@@ -298,8 +289,6 @@ export default function LandingPage() {
             <div className="lg:col-span-2">
               <Link
                 href="/"
-                // Footer ke logo par click karke top of page par smooth scroll karne ka event function.
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="inline-flex items-center gap-2.5 font-bold text-xl font-outfit text-[var(--text-primary)] hover:opacity-90 transition-opacity mb-4"
               >
                 <div className="w-[32px] h-[32px] rounded-[10px] bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] inline-flex items-center justify-center text-white font-bold text-[15px] shrink-0 font-outfit shadow-sm">
@@ -325,14 +314,14 @@ export default function LandingPage() {
               </h4>
               <ul className="space-y-2.5 text-[14px] text-[var(--text-secondary)] font-medium list-none m-0 p-0">
                 <li>
-                  <a href="#" className="hover:text-[var(--primary)] transition-colors">
+                  <Link href="/privacy" className="hover:text-[var(--primary)] transition-colors">
                     Privacy Policy
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[var(--primary)] transition-colors">
+                  <Link href="/terms" className="hover:text-[var(--primary)] transition-colors">
                     Terms of Service
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href="#" className="hover:text-[var(--primary)] transition-colors">
@@ -348,6 +337,12 @@ export default function LandingPage() {
                 Contact & Support
               </h4>
               <ul className="space-y-3 text-[13.5px] text-[var(--text-secondary)] list-none m-0 p-0">
+                <li className="flex items-start gap-2">
+                  <span className="text-[15px]">💬</span>
+                  <Link href="/#contact" className="hover:text-[var(--primary)] transition-colors font-medium">
+                    Support & Contact Form
+                  </Link>
+                </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[15px]">📧</span>
                   <a href="mailto:hello@acuspeak.app" className="hover:text-[var(--primary)] transition-colors font-medium">
@@ -374,8 +369,6 @@ export default function LandingPage() {
             <div className="flex items-center justify-center gap-2 flex-wrap">
               <Link
                 href="/"
-                // Footer copyright brand link scroll-to-top handler function.
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="inline-flex items-center gap-1.5 font-bold font-outfit text-[var(--text-primary)] hover:opacity-90"
               >
                 <div className="w-[20px] h-[20px] rounded-[6px] bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] inline-flex items-center justify-center text-white font-bold text-[10px]">

@@ -30,15 +30,60 @@ export async function loginUser(credentials: LoginCredentials): Promise<LoginRes
       body: JSON.stringify(credentials),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      return { error: data.detail || data.error || 'Authentication failed' };
+      return { error: (data && (data.detail || data.error)) || 'Authentication failed' };
     }
 
-    return data as LoginResponse;
+    return (data || {}) as LoginResponse;
   } catch (error) {
     console.error('Login network error:', error);
+    return { error: 'Unable to connect to the authentication server. Please check your connection.' };
+  }
+}
+
+export interface SignupPayload {
+  name: string;
+  gender: 'Male' | 'Female' | 'Other';
+  email?: string;
+  number?: string;
+  referral_code?: string;
+  password?: string;
+}
+
+export interface SignupResponse {
+  message?: string;
+  user_id?: string;
+  email?: string;
+  name?: string;
+  gender?: string;
+  session_token?: string;
+  error?: string;
+}
+
+/**
+ * Registers a new user with FastAPI backend /api/signup endpoint.
+ */
+export async function signupUser(payload: SignupPayload): Promise<SignupResponse> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      return { error: (data && (data.detail || data.error)) || 'Signup failed. Please try again.' };
+    }
+
+    return (data || {}) as SignupResponse;
+  } catch (error) {
+    console.error('Signup network error:', error);
     return { error: 'Unable to connect to the authentication server. Please check your connection.' };
   }
 }
