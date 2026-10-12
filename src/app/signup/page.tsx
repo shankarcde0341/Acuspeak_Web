@@ -182,9 +182,8 @@ export default function SignupPage() {
                   if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
                 }}
                 placeholder="e.g. John Doe"
-                className={`w-full h-12 rounded-xl bg-slate-100 border ${
-                  fieldErrors.name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
-                } px-4 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                className={`w-full h-12 rounded-xl bg-slate-100 border ${fieldErrors.name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
+                  } px-4 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
               />
               {fieldErrors.name && (
                 <span className="text-rose-600 text-xs font-semibold mt-1 block">
@@ -202,11 +201,10 @@ export default function SignupPage() {
                 {(['Male', 'Female', 'Other'] as const).map((option) => (
                   <label
                     key={option}
-                    className={`flex items-center justify-center gap-2 h-11 px-3 rounded-xl border text-sm font-semibold cursor-pointer transition-all ${
-                      gender === option
+                    className={`flex items-center justify-center gap-2 h-11 px-3 rounded-xl border text-sm font-semibold cursor-pointer transition-all ${gender === option
                         ? 'bg-blue-50 border-blue-600 text-blue-700 shadow-sm'
                         : 'bg-slate-100 border-transparent text-slate-600 hover:bg-slate-200/70'
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
@@ -239,9 +237,8 @@ export default function SignupPage() {
                     }
                   }}
                   placeholder="name@example.com"
-                  className={`w-full h-12 rounded-xl bg-slate-100 border ${
-                    fieldErrors.email ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
-                  } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                  className={`w-full h-12 rounded-xl bg-slate-100 border ${fieldErrors.email ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
+                    } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                 />
                 {fieldErrors.email && (
                   <span className="text-rose-600 text-xs font-semibold mt-1 block">
@@ -265,9 +262,8 @@ export default function SignupPage() {
                     }
                   }}
                   placeholder="e.g. +91 9876543210"
-                  className={`w-full h-12 rounded-xl bg-slate-100 border ${
-                    fieldErrors.number ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
-                  } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                  className={`w-full h-12 rounded-xl bg-slate-100 border ${fieldErrors.number ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
+                    } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                 />
                 {fieldErrors.number && (
                   <span className="text-rose-600 text-xs font-semibold mt-1 block">
@@ -293,9 +289,8 @@ export default function SignupPage() {
                     }
                   }}
                   placeholder="Set password (min. 6 characters)"
-                  className={`w-full h-12 rounded-xl bg-slate-100 border ${
-                    fieldErrors.password ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
-                  } pl-4 pr-11 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                  className={`w-full h-12 rounded-xl bg-slate-100 border ${fieldErrors.password ? 'border-rose-500 ring-1 ring-rose-500' : 'border-transparent'
+                    } pl-4 pr-11 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                 />
                 <button
                   type="button"
@@ -351,6 +346,24 @@ export default function SignupPage() {
             <Link href="/login" className="text-blue-600 font-bold hover:underline">
               Log In
             </Link>
+          </p>
+
+          <p className="text-xs text-slate-400 text-center mt-4 leading-relaxed font-medium">
+            By signing up you agree to our{' '}
+            <Link
+              href="/terms"
+              className="text-blue-600 underline font-semibold hover:opacity-90"
+            >
+              Terms &amp; Conditions
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="/privacy"
+              className="text-blue-600 underline font-semibold hover:opacity-90"
+            >
+              Privacy Policy
+            </Link>
+            .
           </p>
         </div>
       </div>

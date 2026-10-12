@@ -1,3 +1,5 @@
+import type { UserProfile } from '@/services/authService';
+
 export interface StatsData {
   dayStreak: number;
   totalXp: number;
@@ -49,14 +51,19 @@ export interface DashboardData {
   liveRooms: LiveRoomData[];
 }
 
-export async function getDashboardData(): Promise<DashboardData> {
+export async function getDashboardData(userProfile?: UserProfile | null): Promise<DashboardData> {
+  const dayStreak = typeof userProfile?.day_streak === 'number' ? userProfile.day_streak : 1;
+  const totalXp = typeof userProfile?.total_xp === 'number' ? userProfile.total_xp : 1240;
+  const targetMinutes = typeof userProfile?.daily_goal_minutes === 'number' ? userProfile.daily_goal_minutes : 20;
+  const minutesDone = typeof userProfile?.daily_goal_completed_minutes === 'number' ? userProfile.daily_goal_completed_minutes : 0;
+
   return {
     stats: {
-      dayStreak: 5,
-      totalXp: 1240,
+      dayStreak,
+      totalXp,
       dailyGoal: {
-        minutesDone: 12,
-        targetMinutes: 20,
+        minutesDone,
+        targetMinutes,
       },
     },
     continueLesson: {

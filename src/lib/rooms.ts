@@ -185,3 +185,26 @@ export async function endRoom(_roomId: string): Promise<void> {
 export async function removeParticipant(_roomId: string, _userId: string): Promise<void> {
   // No-op async stub for removing a participant
 }
+
+import { getAuthToken } from '@/services/authService';
+
+export async function recordRoomParticipation(roomId: string, title?: string): Promise<void> {
+  try {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const token = getAuthToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    await fetch(`${apiBase}/api/rooms/join`, {
+      method: 'POST',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify({ room_id: roomId, title }),
+    });
+  } catch (err) {
+    console.warn('Failed to record room participation:', err);
+  }
+}

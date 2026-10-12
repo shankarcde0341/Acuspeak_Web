@@ -14,7 +14,8 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    if (!isLoggedIn()) {
+    const isPublic = pathname === '/terms' || pathname === '/privacy';
+    if (!isLoggedIn() && !isPublic) {
       setAuthorized(false);
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
     } else {

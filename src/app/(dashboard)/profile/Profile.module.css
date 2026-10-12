@@ -518,6 +518,21 @@
   background: var(--text-muted);
 }
 
+.progressInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.progressPercentText {
+  color: var(--text-secondary);
+}
+
 /* Menu Links List */
 .menuList {
   display: flex;

@@ -9,6 +9,8 @@ export interface LoginSuccessResponse {
   message: string;
   email: string;
   name: string;
+  session_token?: string;
+  day_streak?: number;
 }
 
 export interface LoginErrorResponse {
@@ -210,6 +212,8 @@ export interface UserProfile {
   total_xp?: number;
   daily_goal_minutes?: number;
   daily_goal_completed_minutes?: number;
+  streak_protection?: boolean;
+  last_active_date?: string;
 }
 
 export interface AchievementItem {
@@ -220,6 +224,9 @@ export interface AchievementItem {
   is_unlocked: boolean;
   progress_percent: number;
   category: string;
+  current_value?: number;
+  target_value?: number;
+  unit?: string;
 }
 
 export interface AchievementsData {
@@ -278,11 +285,14 @@ export async function fetchAchievements(token?: string): Promise<AchievementsDat
 }
 
 /**
- * Retrieves session token from localStorage if available.
+ * Retrieves session token from localStorage or document cookies if available.
  */
 export function getAuthToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('session_token');
+  const local = localStorage.getItem('session_token');
+  if (local) return local;
+  const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
 }
 
 

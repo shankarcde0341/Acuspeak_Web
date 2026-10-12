@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RoomDetail, RoomParticipant } from '@/lib/rooms';
-import { leaveRoom, endRoom, removeParticipant } from '@/lib/rooms';
+import { leaveRoom, endRoom, removeParticipant, recordRoomParticipation } from '@/lib/rooms';
 import { Avatar } from './Avatar';
 import { RoomDialog } from './RoomDialog';
 import {
@@ -36,6 +36,10 @@ export function RoomScreen({ room }: RoomScreenProps) {
   const [isCamOn, setIsCamOn] = useState(false);
   const [pendingRemoveUser, setPendingRemoveUser] = useState<RoomParticipant | null>(null);
   const [notice, setNotice] = useState<'ended' | 'removed' | null>(null);
+
+  useEffect(() => {
+    recordRoomParticipation(room.room_id, room.title);
+  }, [room.room_id, room.title]);
 
   const handleLeaveOrEnd = async () => {
     if (leavingRef.current) return;

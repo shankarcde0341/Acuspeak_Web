@@ -68,11 +68,11 @@ export const TERMS_SECTIONS: TermsSection[] = [
       'Subscription fees and digital membership access payments are non-refundable, except where required by mandatory applicable consumer protection laws.',
   },
   {
-    id: 'certificates',
+    id: 'Accomplishments',
     icon: '📜',
-    title: '7. Certificates & Accomplishments',
+    title: '7.Accomplishments',
     content:
-      'Certificates issued upon completing speaking tracks represent practice validation and module progress within Acuspeak. They do not constitute official academic degrees or accredited English language certifications (e.g. IELTS/TOEFL).',
+      'Accomplishments earned upon completing speaking tracks and represent practice validation and module progress within Acuspeak. They do not constitute official academic degrees or accredited English language certifications (e.g. IELTS/TOEFL).',
   },
   {
     id: 'changes',

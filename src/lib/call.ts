@@ -37,8 +37,27 @@ export async function submitCallFeedback(payload: FeedbackPayload): Promise<void
   void payload;
 }
 
+import { getAuthToken } from '@/services/authService';
+
 export async function logCall(payload: CallLogPayload): Promise<void> {
-  void payload;
+  try {
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const token = getAuthToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    await fetch(`${apiBase}/api/calls/log`, {
+      method: 'POST',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.warn('Call log failed:', err);
+  }
 }
 
 export async function reportUser(name: string, reason?: string): Promise<void> {

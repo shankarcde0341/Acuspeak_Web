@@ -1,3 +1,5 @@
+import { getAuthToken } from './authService';
+
 export interface ScriptLine {
   line_id: string;
   speaker: string;
@@ -3169,11 +3171,18 @@ export async function reportLessonProgress(
 ): Promise<{ success: boolean; xpEarned: number }> {
   try {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const token = getAuthToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${apiBase}/api/lessons/progress`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
+      credentials: 'include',
       body: JSON.stringify(payload),
     });
 

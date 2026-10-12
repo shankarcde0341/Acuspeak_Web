@@ -17,11 +17,23 @@ export default function DashboardNav({ user }: DashboardNavProps) {
   const isPracticeActive = pathname.startsWith('/practice');
   const isLiveActive = pathname.startsWith('/live');
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Link href="/dashboard" className={styles.logoLink}>
-          <div className={styles.logoMark}>A</div>
+        <Link
+          href="/"
+          onClick={handleLogoClick}
+          className={styles.logoLink}
+          aria-label="Acuspeak - Home"
+        >
+          <div className={styles.logoMark} aria-hidden="true">A</div>
           <span>Acuspeak</span>
         </Link>
 

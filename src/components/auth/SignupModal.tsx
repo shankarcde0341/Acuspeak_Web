@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { signupUser, setAuthSession } from '@/services/authService';
 
 interface SignupModalProps {
@@ -136,7 +137,7 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-fadeIn">
-      <div 
+      <div
         className="relative w-full max-w-lg bg-white rounded-[28px] shadow-2xl border border-slate-100 p-6 sm:p-8 overflow-hidden font-sans"
         onClick={(e) => e.stopPropagation()}
       >
@@ -191,9 +192,8 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
                 if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
               }}
               placeholder="e.g. Alex Morgan"
-              className={`w-full h-11 rounded-xl bg-slate-50 border ${
-                fieldErrors.name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
-              } px-4 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+              className={`w-full h-11 rounded-xl bg-slate-50 border ${fieldErrors.name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
+                } px-4 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
             />
             {fieldErrors.name && (
               <span className="text-rose-600 text-xs font-semibold mt-1 block">
@@ -211,11 +211,10 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
               {(['Male', 'Female', 'Other'] as const).map((option) => (
                 <label
                   key={option}
-                  className={`flex items-center justify-center gap-2 h-11 px-3 rounded-xl border text-sm font-semibold cursor-pointer transition-all ${
-                    gender === option
-                      ? 'bg-blue-50 border-blue-600 text-blue-700 shadow-sm'
-                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
-                  }`}
+                  className={`flex items-center justify-center gap-2 h-11 px-3 rounded-xl border text-sm font-semibold cursor-pointer transition-all ${gender === option
+                    ? 'bg-blue-50 border-blue-600 text-blue-700 shadow-sm'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                    }`}
                 >
                   <input
                     type="radio"
@@ -248,9 +247,8 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
                   }
                 }}
                 placeholder="name@example.com"
-                className={`w-full h-11 rounded-xl bg-slate-50 border ${
-                  fieldErrors.email ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
-                } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                className={`w-full h-11 rounded-xl bg-slate-50 border ${fieldErrors.email ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
+                  } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
               />
               {fieldErrors.email && (
                 <span className="text-rose-600 text-xs font-semibold mt-1 block">
@@ -274,9 +272,8 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
                   }
                 }}
                 placeholder="e.g. +91 9876543210"
-                className={`w-full h-11 rounded-xl bg-slate-50 border ${
-                  fieldErrors.number ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
-                } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                className={`w-full h-11 rounded-xl bg-slate-50 border ${fieldErrors.number ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
+                  } px-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
               />
               {fieldErrors.number && (
                 <span className="text-rose-600 text-xs font-semibold mt-1 block">
@@ -302,9 +299,8 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
                   }
                 }}
                 placeholder="Set password (min. 6 characters)"
-                className={`w-full h-11 rounded-xl bg-slate-50 border ${
-                  fieldErrors.password ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
-                } pl-4 pr-11 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                className={`w-full h-11 rounded-xl bg-slate-50 border ${fieldErrors.password ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'
+                  } pl-4 pr-11 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
               />
               <button
                 type="button"
@@ -377,6 +373,26 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
               </button>
             </p>
           )}
+
+          <p className="text-center text-[11px] text-slate-400 mt-3 leading-relaxed font-medium">
+            By signing up you agree to our{' '}
+            <Link
+              href="/terms"
+              onClick={onClose}
+              className="text-blue-600 underline font-semibold hover:opacity-90"
+            >
+              Terms &amp; Conditions
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="/privacy"
+              onClick={onClose}
+              className="text-blue-600 underline font-semibold hover:opacity-90"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </form>
       </div>
     </div>

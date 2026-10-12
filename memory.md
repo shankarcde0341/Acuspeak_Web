@@ -1,5 +1,56 @@
 # Acuspeak — Memory & Change Log
 
+### [2026-10-12]
+- Implemented backend-authoritative, dynamic Day Streak calculation and persistence across FastAPI backend and Next.js frontend per `rules.md`:
+  - Created `compute_updated_streak` and asynchronous `touch_user_streak` in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py):
+    - **Initialization**: Automatically sets `last_active_date` to today's UTC date, preserving existing streaks for legacy users and starting at day 1 for new signups.
+    - **Intra-Day Idempotence**: Activities on the same calendar day keep the streak active without duplicate increments or unnecessary database writes.
+    - **Consecutive Progression**: Visiting or practicing on consecutive calendar days increments `day_streak` by 1.
+    - **Streak Protection (Freeze)**: If `streak_protection` is enabled, a single missed day is shielded, keeping the streak alive.
+    - **Streak Reset**: Missing days beyond protection resets streak to 1 starting on the current active day.
+    - **Authoritative Persistence**: Persists `day_streak`, `streak`, `last_active_date`, and `streak_updated_at` into MongoDB `users` collection.
+  - Connected streak evaluation across all backend entrypoints and user activities:
+    - `GET /api/auth/me`: Heartbeat on app access evaluates and syncs streak to client.
+    - `POST /api/login`: Updates streak and returns dynamic `day_streak` on credential login.
+    - `POST /api/signup`: Initializes `day_streak: 1`, `last_active_date`, and `streak_updated_at`.
+    - `POST /api/auth/phone/verify-otp`: Touches streak for returning phone users and initializes for new phone users.
+    - `GET /api/auth/google/callback`: Touches streak for returning Google OAuth users and initializes for new users.
+    - `POST /api/lessons/progress`: Touches streak on lesson activity.
+    - `POST /api/calls/log`: Touches streak on completed speaking calls.
+    - `POST /api/rooms/join`: Touches streak on voice room joins.
+    - `GET /api/achievements`: Evaluates streak before checking Achievement 2 ("On Fire").
+    - `GET /api/leaderboard/weekly`: Reflects authentic streak in weekly champion rankings.
+  - Connected frontend client services and components:
+    - Updated `UserProfile` and `LoginSuccessResponse` in [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts) with `streak_protection` and `last_active_date`.
+    - Updated `getDashboardData` in [`src/lib/dashboard.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/dashboard.ts) to accept authentic `userProfile` data and eliminate static hardcoded `dayStreak: 5`.
+    - Updated [`src/app/(dashboard)/dashboard/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/dashboard/page.tsx) to fetch `userProfile` server-side via session cookie and render dynamic day streak.
+    - Updated [`src/components/profile/ProfileView.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/profile/ProfileView.tsx) to use dynamic day streak with graceful fallback 1.
+    - Added Streak Freeze & Protection toggle to [`src/components/settings/SettingsView.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/settings/SettingsView.tsx) syncing with backend.
+  - Created unit test suite [`backend/test_streak.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/test_streak.py) passing all 9/9 test cases.
+  - Verified backend py_compile (0 errors), support tests (7/7 pass), streak tests (9/9 pass), TypeScript typecheck (`npx tsc --noEmit` 0 errors), and Next.js production build (`npm run build` 29/29 routes pass).
+
+- Made Achievements section dynamic based on authoritatively evaluated user criteria across FastAPI backend and Next.js frontend:
+  - Replaced hardcoded static state in `GET /api/achievements` ([`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py)) with `compute_user_achievements` calculating exact criteria:
+    - **First Step** (`ach_1`): Complete your first English speaking lesson (Target: 1 lesson)
+    - **On Fire** (`ach_2`): Reach a 5-day speaking practice streak (Target: 5 days)
+    - **Chatterbox** (`ach_3`): Practice 30 minutes of live peer speaking (Target: 30 minutes)
+    - **XP Master** (`ach_4`): Earn 1,000 total experience points (Target: 1,000 XP)
+    - **Fluency Pro** (`ach_5`): Complete 10 Business English modules (Target: 10 modules)
+    - **Community Star** (`ach_6`): Participate in 5 Live Voice Rooms (Target: 5 rooms)
+  - Extended `Achievement` Pydantic model and `AchievementItem` interface with `current_value`, `target_value`, and `unit`.
+  - Added FastAPI progress reporting endpoints in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py):
+    - `POST /api/lessons/progress`: Persists completed lessons into MongoDB `completed_lessons`, increments `total_xp`/`xp`, and updates business lessons count.
+    - `POST /api/calls/log`: Inserts call records into `db.call_history` and increments user speaking duration in `db.users`.
+    - `POST /api/rooms/join`: Increments user's `live_rooms_joined` count.
+  - Connected frontend client services to backend endpoints:
+    - Updated `reportLessonProgress` in [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts) to send session token and include credentials.
+    - Updated `logCall` in [`src/lib/call.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/call.ts) to post call logs with session token.
+    - Added `recordRoomParticipation` in [`src/lib/rooms.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/rooms.ts) and mounted in [`src/components/live/RoomScreen.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/live/RoomScreen.tsx).
+  - Enhanced [`src/app/(dashboard)/profile/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/profile/page.tsx) to fetch authentic user profile and achievements server-side using session token.
+  - Updated [`src/components/profile/ProfileView.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/profile/ProfileView.tsx) to compute dynamic fallbacks from `user` state and display clear `current_value / target_value unit` along with percentage.
+  - Added `.progressInfo` and `.progressPercentText` styling to [`Profile.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/profile/Profile.module.css).
+  - Verified backend py_compile, full dynamic lifecycle script, backend unittest (7/7 pass), `npx tsc --noEmit` (0 errors), and Next.js production build (`npm run build` 29/29 routes pass).
+
 ### [2026-10-11]
 - Resolved MongoDB data persistence issue during user signup across FastAPI backend ([`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py), [`backend/database.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/database.py)) and frontend authentication service ([`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts), [`src/components/auth/SignupModal.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/auth/SignupModal.tsx)):
   - Fixed database configuration in [`backend/database.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/database.py) to dynamically fall back to `MONGO_URL` when `MONGO_URI` is unset and resolve `DB_NAME`.

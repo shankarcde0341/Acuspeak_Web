@@ -18,9 +18,7 @@ export function proxy(request: NextRequest) {
     pathname.startsWith('/referral') ||
     pathname.startsWith('/leaderboard') ||
     pathname.startsWith('/settings') ||
-    pathname.startsWith('/call-history') ||
-    pathname.startsWith('/privacy') ||
-    pathname.startsWith('/terms');
+    pathname.startsWith('/call-history');
 
   // Redirect unauthenticated visitors attempting direct URL access to /login
   if (isProtectedRoute && !isLoggedIn) {
@@ -53,8 +51,6 @@ export const config = {
     '/leaderboard/:path*',
     '/settings/:path*',
     '/call-history/:path*',
-    '/privacy/:path*',
-    '/terms/:path*',
     '/login',
   ],
 };

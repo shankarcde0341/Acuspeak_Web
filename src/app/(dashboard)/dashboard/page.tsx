@@ -1,13 +1,33 @@
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { getCurrentUserServer } from '@/lib/userServer';
 import { getDashboardData } from '@/lib/dashboard';
+import { fetchCurrentUser, UserProfile } from '@/services/authService';
 import WelcomeHeader from '@/components/dashboard/WelcomeHeader';
 import WordOfTheDayCard from '@/components/dashboard/WordOfTheDayCard';
 import styles from './Dashboard.module.css';
 
 export default async function DashboardPage() {
-  const user = await getCurrentUserServer();
-  const data = await getDashboardData();
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get('session_token')?.value;
+
+  let userProfile: UserProfile | null = null;
+  if (sessionToken) {
+    try {
+      userProfile = await fetchCurrentUser(sessionToken);
+    } catch (e) {
+      console.error('Error fetching dashboard user profile:', e);
+    }
+  }
+
+  const user = userProfile && userProfile.name ? {
+    id: userProfile.user_id || 'usr_acuspeak_101',
+    name: userProfile.name,
+    email: userProfile.email,
+    avatarInitial: userProfile.name.trim().charAt(0).toUpperCase() || 'U',
+  } : await getCurrentUserServer();
+
+  const data = await getDashboardData(userProfile);
 
   const { stats, continueLesson, wordOfTheDay } = data;
 
@@ -33,7 +53,9 @@ export default async function DashboardPage() {
           <div className={styles.statInfo}>
             <span className={styles.statLabel}>Day Streak</span>
             <span className={styles.statValue}>{stats.dayStreak} Days</span>
-            <span className={styles.statSubtitle}>Personal best: 12 days</span>
+            <span className={styles.statSubtitle}>
+              {stats.dayStreak >= 5 ? 'On fire! 🔥' : (stats.dayStreak > 1 ? `${stats.dayStreak} days active streak` : 'Start your daily streak')}
+            </span>
           </div>
           <div className={styles.statIconTile}>🔥</div>
         </div>

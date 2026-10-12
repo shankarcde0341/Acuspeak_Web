@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import GetInTouch from '@/components/support/GetInTouch';
-import SignupModalTrigger from '@/components/auth/SignupModalTrigger';
+import BrandLogo from '@/components/BrandLogo';
 
 // Ye main Landing Page component hai jo home route (/) ka pura UI render karta hai.
 export default function LandingPage() {
@@ -9,15 +9,7 @@ export default function LandingPage() {
       {/* Header / Nav */}
       <header className="sticky top-0 z-20 backdrop-blur-md bg-[var(--glass)] border-b border-[var(--glass-border)]">
         <nav className="max-w-[1080px] mx-auto px-6 py-4 flex items-center justify-between">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2.5 font-bold text-xl font-outfit text-[var(--text-primary)] hover:opacity-90 transition-opacity"
-          >
-            <div className="w-[34px] h-[34px] rounded-[10px] bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] inline-flex items-center justify-center text-white font-bold text-[16px] shrink-0 font-outfit shadow-sm">
-              A
-            </div>
-            <span>Acuspeak</span>
-          </Link>
+          <BrandLogo size="md" />
 
           <ul className="hidden md:flex items-center gap-8 text-[14px] font-semibold text-[var(--text-secondary)] list-none m-0 p-0">
             <li>
@@ -72,19 +64,9 @@ export default function LandingPage() {
               </p>
 
               <div className="flex items-center gap-3.5 flex-wrap">
-                <SignupModalTrigger
-                  buttonText="Sign Up Free"
-                  className="inline-flex items-center justify-center bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity leading-none cursor-pointer"
-                />
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center bg-white text-[var(--text-primary)] font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full border border-[var(--divider)] shadow-sm hover:bg-gray-50 transition-colors leading-none"
-                >
-                  Log In
-                </Link>
                 <a
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center bg-white text-[var(--text-primary)] font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full border border-[var(--divider)] shadow-sm hover:bg-gray-50 transition-colors leading-none"
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] text-white font-outfit font-semibold text-[15px] px-7 py-3.5 rounded-full shadow-lg shadow-blue-900/20 hover:opacity-95 transition-opacity leading-none cursor-pointer"
                 >
                   See how it works
                 </a>
@@ -299,12 +281,6 @@ export default function LandingPage() {
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed max-w-[340px] mb-6 font-normal">
                 Acuspeak is your personal English speaking coach — pairing structured interactive lessons with live 1-on-1 voice practice so you build real-world fluency and confidence.
               </p>
-
-              {/* System Status Pill */}
-              <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[12px] font-semibold px-3.5 py-1.5 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>All systems operational</span>
-              </div>
             </div>
 
             {/* Column 2: Legal & Policies */}
@@ -339,14 +315,16 @@ export default function LandingPage() {
               <ul className="space-y-3 text-[13.5px] text-[var(--text-secondary)] list-none m-0 p-0">
                 <li className="flex items-start gap-2">
                   <span className="text-[15px]">💬</span>
-                  <Link href="/#contact" className="hover:text-[var(--primary)] transition-colors font-medium">
-                    Support & Contact Form
-                  </Link>
+                  <GetInTouch
+                    buttonText="Support & Contact Form"
+                    variant="link"
+                    className="hover:text-[var(--primary)] transition-colors font-medium cursor-pointer text-left p-0 bg-transparent border-0 text-[13.5px] text-[var(--text-secondary)] inline-block"
+                  />
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[15px]">📧</span>
-                  <a href="mailto:hello@acuspeak.app" className="hover:text-[var(--primary)] transition-colors font-medium">
-                    hello@acuspeak.app
+                  <a href="mailto:support.acuspeak@gmail.com" className="hover:text-[var(--primary)] transition-colors font-medium">
+                    support.acuspeak@gmail.com
                   </a>
                 </li>
                 <li className="flex items-start gap-2">
@@ -358,7 +336,7 @@ export default function LandingPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[15px]">📍</span>
-                  <span>New Delhi, India</span>
+                  <span>Kolkata, India</span>
                 </li>
               </ul>
             </div>
@@ -367,15 +345,7 @@ export default function LandingPage() {
           {/* Bottom Bar: Centered Copyright */}
           <div className="pt-8 flex flex-col items-center justify-center gap-3 text-[13px] text-[var(--text-muted)] font-medium text-center">
             <div className="flex items-center justify-center gap-2 flex-wrap">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 font-bold font-outfit text-[var(--text-primary)] hover:opacity-90"
-              >
-                <div className="w-[20px] h-[20px] rounded-[6px] bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#38BDF8] inline-flex items-center justify-center text-white font-bold text-[10px]">
-                  A
-                </div>
-                <span>Acuspeak</span>
-              </Link>
+              <BrandLogo size="sm" />
               <span>© 2026 Acuspeak Inc. All rights reserved.</span>
             </div>
           </div>

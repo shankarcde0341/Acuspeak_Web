@@ -63,7 +63,7 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
 
   // Stats calculation
   const totalXp = user.total_xp ?? 1240;
-  const dayStreak = user.day_streak ?? 5;
+  const dayStreak = typeof user.day_streak === 'number' ? user.day_streak : 1;
   const targetMinutes = user.daily_goal_minutes ?? 20;
   const completedMinutes = user.daily_goal_completed_minutes ?? 12;
   const minutesLeft = Math.max(0, targetMinutes - completedMinutes);
@@ -85,12 +85,12 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
       href: '/membership',
       tag: user.is_premium ? 'PREMIUM ACTIVE' : 'UPGRADE',
     },
-    {
-      id: 'certificates',
-      title: 'Certificates',
-      icon: '📜',
-      href: '/certificates',
-    },
+    // {
+    //   id: 'certificates',
+    //   title: 'Certificates',
+    //   icon: '📜',
+    //   href: '/certificates',
+    // },
     {
       id: 'referral',
       title: 'Invite & Earn 20% Off',
@@ -142,36 +142,48 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
       title: 'First Step',
       description: 'Complete your first English speaking lesson',
       icon: '🎯',
-      is_unlocked: true,
-      progress_percent: 100,
+      is_unlocked: false,
+      progress_percent: 0,
       category: 'Lessons',
+      current_value: 0,
+      target_value: 1,
+      unit: 'lesson',
     },
     {
       id: 'ach_2',
       title: 'On Fire',
       description: 'Reach a 5-day speaking practice streak',
       icon: '🔥',
-      is_unlocked: true,
-      progress_percent: 100,
+      is_unlocked: dayStreak >= 5,
+      progress_percent: Math.min(100, Math.round((dayStreak / 5) * 100)),
       category: 'Streaks',
+      current_value: dayStreak,
+      target_value: 5,
+      unit: 'days',
     },
     {
       id: 'ach_3',
       title: 'Chatterbox',
       description: 'Practice 30 minutes of live peer speaking',
       icon: '🗣️',
-      is_unlocked: true,
-      progress_percent: 100,
+      is_unlocked: completedMinutes >= 30,
+      progress_percent: Math.min(100, Math.round((completedMinutes / 30) * 100)),
       category: 'Practice',
+      current_value: completedMinutes,
+      target_value: 30,
+      unit: 'mins',
     },
     {
       id: 'ach_4',
       title: 'XP Master',
       description: 'Earn 1,000 total experience points',
       icon: '🏆',
-      is_unlocked: true,
-      progress_percent: 100,
+      is_unlocked: totalXp >= 1000,
+      progress_percent: Math.min(100, Math.round((totalXp / 1000) * 100)),
       category: 'Experience',
+      current_value: totalXp,
+      target_value: 1000,
+      unit: 'XP',
     },
     {
       id: 'ach_5',
@@ -179,8 +191,11 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
       description: 'Complete 10 Business English modules',
       icon: '💎',
       is_unlocked: false,
-      progress_percent: 60,
+      progress_percent: 0,
       category: 'Mastery',
+      current_value: 0,
+      target_value: 10,
+      unit: 'modules',
     },
     {
       id: 'ach_6',
@@ -188,8 +203,11 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
       description: 'Participate in 5 Live Voice Rooms',
       icon: '🌟',
       is_unlocked: false,
-      progress_percent: 40,
+      progress_percent: 0,
       category: 'Live Rooms',
+      current_value: 0,
+      target_value: 5,
+      unit: 'rooms',
     },
   ];
 
@@ -287,7 +305,9 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
           <div className={styles.statInfo}>
             <span className={styles.statLabel}>Day Streak</span>
             <span className={styles.statValue}>{dayStreak} Days</span>
-            <span className={styles.statSubtitle}>Personal best: 12 days</span>
+            <span className={styles.statSubtitle}>
+              {dayStreak >= 5 ? 'On fire! 🔥' : (dayStreak > 1 ? `${dayStreak} days active streak` : 'Start your daily streak')}
+            </span>
           </div>
           <div className={styles.statIconTile}>🔥</div>
         </div>
@@ -365,8 +385,16 @@ export default function ProfileView({ initialUser, initialAchievements }: Profil
               <div className={styles.progressTrack}>
                 <div
                   className={`${styles.progressFill} ${!item.is_unlocked ? styles.progressFillLocked : ''}`}
-                  style={{ width: `${item.progress_percent}%` }}
+                  style={{ width: `${Math.min(100, Math.max(0, item.progress_percent))}%` }}
                 />
+              </div>
+              <div className={styles.progressInfo}>
+                <span>
+                  {item.current_value !== undefined && item.target_value !== undefined
+                    ? `${item.current_value.toLocaleString()} / ${item.target_value.toLocaleString()} ${item.unit || ''}`.trim()
+                    : `${item.progress_percent}%`}
+                </span>
+                <span className={styles.progressPercentText}>{item.progress_percent}%</span>
               </div>
             </div>
           ))}

@@ -1,5 +1,5 @@
 # ==========================================
-# IMPORTS AND REASONS 
+# IMPORTS
 # ==========================================
 
 import os
@@ -10,7 +10,7 @@ import hashlib
 import logging
 logger = logging.getLogger(__name__)
 from typing import Optional, Dict
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from urllib.parse import quote
 
 # FastAPI: Python mein modern, fast aur async web APIs banane ke liye main framework hai.
@@ -156,10 +156,12 @@ class UserProfileResponse(BaseModel):
     picture: Optional[str] = None
     is_premium: bool = False
     english_level: str = "Intermediate Speaker"
-    day_streak: int = 5
-    total_xp: int = 1240
+    day_streak: int = 1
+    total_xp: int = 100
     daily_goal_minutes: int = 20
-    daily_goal_completed_minutes: int = 12
+    daily_goal_completed_minutes: int = 0
+    streak_protection: bool = False
+    last_active_date: Optional[str] = None
 
 
 class UpdateSettingsRequest(BaseModel):
@@ -181,6 +183,30 @@ class Achievement(BaseModel):
     is_unlocked: bool
     progress_percent: int
     category: str
+    current_value: Optional[int] = None
+    target_value: Optional[int] = None
+    unit: Optional[str] = None
+
+
+class LessonProgressRequest(BaseModel):
+    lessonId: str
+    completedLineIds: list[str] = []
+    currentLineId: Optional[str] = None
+    isCompleted: bool = False
+    xpEarned: int = 0
+
+
+class CallLogRequest(BaseModel):
+    partner_name: str
+    duration_seconds: int
+    partner_gender: Optional[str] = "other"
+    topic: Optional[str] = "General Speaking Practice"
+    call_type: Optional[str] = "1-on-1 Practice"
+
+
+class JoinRoomRequest(BaseModel):
+    room_id: str
+    title: Optional[str] = None
 
 
 class AchievementsResponse(BaseModel):
@@ -300,6 +326,118 @@ app.include_router(support_router)
 
 
 
+# ==========================================
+# STREAK DYNAMICS & AUTHORITATIVE LOGIC
+# ==========================================
+
+def compute_updated_streak(
+    current_streak: Optional[int],
+    last_active_date_str: Optional[str],
+    streak_protection: bool = False,
+    now: Optional[datetime] = None,
+) -> tuple[int, str, bool]:
+    """
+    Authoritatively calculates user's day streak based on daily login and activity.
+    Returns: (new_streak, today_str, needs_db_update)
+
+    Rules:
+    1. First recorded activity: sets last_active_date to today, preserves current streak (min 1).
+    2. Activity on same calendar day: streak remains unchanged.
+    3. Activity on consecutive calendar day (diff == 1): increments streak by 1.
+    4. Missed 1 day with streak_protection active (diff == 2): streak protected & increments by 1.
+    5. Missed days without protection (diff > 1): streak broken, resets to 1 starting today.
+    """
+    if now is None:
+        now = datetime.utcnow()
+
+    today_date = now.date()
+    today_str = today_date.isoformat()
+
+    try:
+        streak_val = int(current_streak) if current_streak is not None and int(current_streak) > 0 else 1
+    except (ValueError, TypeError):
+        streak_val = 1
+
+    if not last_active_date_str:
+        return (streak_val, today_str, True)
+
+    clean_date_str = str(last_active_date_str).split("T")[0].strip()
+    try:
+        last_date = datetime.strptime(clean_date_str, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return (streak_val, today_str, True)
+
+    diff_days = (today_date - last_date).days
+
+    if diff_days <= 0:
+        # User already recorded activity today (or clock skew); streak remains active for today
+        return (streak_val, today_str, False)
+    elif diff_days == 1:
+        # Consecutive day: increment streak
+        return (streak_val + 1, today_str, True)
+    elif diff_days == 2 and streak_protection:
+        # Missed 1 day, saved by streak protection
+        return (streak_val + 1, today_str, True)
+    else:
+        # Missed 1 or more days without protection: reset to day 1 starting today
+        return (1, today_str, True)
+
+
+async def touch_user_streak(user_doc: dict) -> int:
+    """
+    Authoritatively evaluates and persists user's day streak into MongoDB.
+    Returns the dynamic day_streak integer.
+    """
+    if not user_doc or not isinstance(user_doc, dict):
+        return 1
+
+    email = user_doc.get("email")
+    user_id = user_doc.get("user_id")
+    if not email and not user_id:
+        return int(user_doc.get("day_streak") or user_doc.get("streak") or 1)
+
+    current_streak = user_doc.get("day_streak")
+    if current_streak is None:
+        current_streak = user_doc.get("streak", 1)
+
+    last_active_date = user_doc.get("last_active_date")
+    streak_protection = bool(user_doc.get("streak_protection", False))
+
+    now = datetime.utcnow()
+    new_streak, today_str, needs_update = compute_updated_streak(
+        current_streak=current_streak,
+        last_active_date_str=last_active_date,
+        streak_protection=streak_protection,
+        now=now,
+    )
+
+    if needs_update or user_doc.get("day_streak") != new_streak or user_doc.get("last_active_date") != today_str:
+        now_iso = now.isoformat()
+        query = {"_id": user_doc["_id"]} if "_id" in user_doc else ({"email": email} if email else {"user_id": user_id})
+        try:
+            await db.users.update_one(
+                query,
+                {
+                    "$set": {
+                        "day_streak": new_streak,
+                        "streak": new_streak,
+                        "last_active_date": today_str,
+                        "streak_updated_at": now_iso,
+                        "updated_at": now_iso,
+                    }
+                }
+            )
+        except Exception as e:
+            logger.error("Failed to update streak in MongoDB: %s", e)
+
+        user_doc["day_streak"] = new_streak
+        user_doc["streak"] = new_streak
+        user_doc["last_active_date"] = today_str
+        user_doc["streak_updated_at"] = now_iso
+
+    return new_streak
+
+
 # Function: read_root
 # Reason: Root endpoint ("/") handle karne ke liye jo backend health check aur server status verify karta hai.
 # Working: Jab user '/' endpoint par HTTP GET request bhejta hai, toh yeh simple JSON response message return karta hai.
@@ -329,12 +467,14 @@ async def login(data: LoginRequest, request: Request):
     if not is_valid:
         return {"error": "Invalid email or password"}
         
+    day_streak_val = await touch_user_streak(user)
     session_token = create_session_token(user["email"])
     return {
         "message": "Login successful",
         "email": user["email"],
         "name": user.get("name", "User"),
-        "session_token": session_token
+        "session_token": session_token,
+        "day_streak": day_streak_val,
     }
 
 
@@ -401,6 +541,10 @@ async def signup(data: SignupRequest, request: Request):
             "is_premium": False,
             "english_level": "Intermediate Speaker",
             "day_streak": 1,
+            "streak": 1,
+            "last_active_date": datetime.utcnow().date().isoformat(),
+            "streak_updated_at": now_iso,
+            "streak_protection": False,
             "total_xp": 100,
             "daily_goal_minutes": 20,
             "daily_goal_completed_minutes": 0,
@@ -476,6 +620,11 @@ async def get_current_user_profile(
     if not user_doc:
         raise HTTPException(status_code=404, detail="User profile not found in database")
 
+    day_streak_val = await touch_user_streak(user_doc)
+    total_xp_val = user_doc.get("total_xp")
+    if total_xp_val is None:
+        total_xp_val = user_doc.get("xp", 100)
+
     return UserProfileResponse(
         user_id=user_doc.get("user_id") or f"usr_{hashlib.sha256(email.encode()).hexdigest()[:16]}",
         email=user_doc.get("email", email),
@@ -483,10 +632,12 @@ async def get_current_user_profile(
         picture=user_doc.get("picture"),
         is_premium=user_doc.get("is_premium", False),
         english_level=user_doc.get("english_level", "Intermediate Speaker"),
-        day_streak=user_doc.get("day_streak", 5),
-        total_xp=user_doc.get("total_xp", 1240),
+        day_streak=int(day_streak_val or 1),
+        total_xp=int(total_xp_val or 100),
         daily_goal_minutes=user_doc.get("daily_goal_minutes", 20),
-        daily_goal_completed_minutes=user_doc.get("daily_goal_completed_minutes", 12),
+        daily_goal_completed_minutes=user_doc.get("daily_goal_completed_minutes", 0),
+        streak_protection=bool(user_doc.get("streak_protection", False)),
+        last_active_date=user_doc.get("last_active_date"),
     )
 
 
@@ -535,6 +686,11 @@ async def update_user_settings(
     if not user_doc:
         raise HTTPException(status_code=404, detail="User profile not found in database")
 
+    day_streak_val = await touch_user_streak(user_doc)
+    total_xp_val = user_doc.get("total_xp")
+    if total_xp_val is None:
+        total_xp_val = user_doc.get("xp", 100)
+
     return UserProfileResponse(
         user_id=user_doc.get("user_id") or f"usr_{hashlib.sha256(email.encode()).hexdigest()[:16]}",
         email=user_doc.get("email", email),
@@ -542,18 +698,171 @@ async def update_user_settings(
         picture=user_doc.get("picture"),
         is_premium=user_doc.get("is_premium", False),
         english_level=user_doc.get("english_level", "Intermediate Speaker"),
-        day_streak=user_doc.get("day_streak", 5),
-        total_xp=user_doc.get("total_xp", 1240),
+        day_streak=int(day_streak_val or 1),
+        total_xp=int(total_xp_val or 100),
         daily_goal_minutes=user_doc.get("daily_goal_minutes", 20),
-        daily_goal_completed_minutes=user_doc.get("daily_goal_completed_minutes", 12),
+        daily_goal_completed_minutes=user_doc.get("daily_goal_completed_minutes", 0),
+        streak_protection=bool(user_doc.get("streak_protection", False)),
+        last_active_date=user_doc.get("last_active_date"),
+    )
+
+
+# Helper: compute_user_achievements
+async def compute_user_achievements(email: Optional[str]) -> AchievementsResponse:
+    user_doc = None
+    call_docs = []
+    if email:
+        user_doc = await db.users.find_one({"email": email})
+        call_docs = await db.call_history.find({"user_email": email}).to_list(100)
+
+    if not user_doc:
+        user_doc = {}
+        day_streak = 0
+    else:
+        day_streak = await touch_user_streak(user_doc)
+
+    # 1. First Step: Complete your first English speaking lesson (Target: 1)
+    completed_lessons = user_doc.get("completed_lessons", [])
+    if not isinstance(completed_lessons, list):
+        completed_lessons = []
+    has_legacy_first = "first-lesson" in user_doc.get("achievements", []) or "First Step" in user_doc.get("achievements", [])
+    lessons_completed_count = max(
+        len(completed_lessons),
+        int(user_doc.get("lessons_completed", 0)),
+        1 if has_legacy_first else 0
+    )
+    ach_1_unlocked = lessons_completed_count >= 1
+    ach_1_progress = 100 if ach_1_unlocked else 0
+
+    # 2. On Fire: Reach a 5-day speaking practice streak (Target: 5 days)
+    ach_2_unlocked = day_streak >= 5
+    ach_2_progress = min(100, round((day_streak / 5) * 100))
+
+    # 3. Chatterbox: Practice 30 minutes of live peer speaking (Target: 30 mins)
+    history_seconds = sum(c.get("duration_seconds", 0) for c in call_docs)
+    history_minutes = round(history_seconds / 60)
+    speaking_minutes_doc = int(user_doc.get("speaking_minutes", 0) or user_doc.get("call_duration_minutes", 0))
+    total_speaking_minutes = max(history_minutes, speaking_minutes_doc)
+    ach_3_unlocked = total_speaking_minutes >= 30
+    ach_3_progress = min(100, round((total_speaking_minutes / 30) * 100))
+
+    # 4. XP Master: Earn 1,000 total experience points (Target: 1,000 XP)
+    total_xp = user_doc.get("total_xp")
+    if total_xp is None:
+        total_xp = user_doc.get("xp", 0)
+    total_xp = int(total_xp or 0)
+    ach_4_unlocked = total_xp >= 1000
+    ach_4_progress = min(100, round((total_xp / 1000) * 100))
+
+    # 5. Fluency Pro: Complete 10 Business English modules (Target: 10 modules)
+    business_lessons_in_list = [
+        l for l in completed_lessons
+        if str(l).lower().startswith(("business", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10"))
+    ]
+    business_count = max(
+        len(business_lessons_in_list),
+        int(user_doc.get("business_lessons_completed", 0))
+    )
+    ach_5_unlocked = business_count >= 10
+    ach_5_progress = min(100, round((business_count / 10) * 100))
+
+    # 6. Community Star: Participate in 5 Live Voice Rooms (Target: 5 rooms)
+    live_rooms_joined = int(
+        user_doc.get("live_rooms_joined")
+        or user_doc.get("live_rooms_count")
+        or (len(user_doc.get("joined_room_ids", [])) if isinstance(user_doc.get("joined_room_ids"), list) else 0)
+        or (len(user_doc.get("live_rooms", [])) if isinstance(user_doc.get("live_rooms"), list) else 0)
+    )
+    live_calls_count = sum(1 for c in call_docs if c.get("call_type") == "Live Voice Room")
+    total_live_rooms = max(live_rooms_joined, live_calls_count)
+    ach_6_unlocked = total_live_rooms >= 5
+    ach_6_progress = min(100, round((total_live_rooms / 5) * 100))
+
+    items = [
+        Achievement(
+            id="ach_1",
+            title="First Step",
+            description="Complete your first English speaking lesson",
+            icon="🎯",
+            is_unlocked=ach_1_unlocked,
+            progress_percent=ach_1_progress,
+            category="Lessons",
+            current_value=lessons_completed_count,
+            target_value=1,
+            unit="lesson",
+        ),
+        Achievement(
+            id="ach_2",
+            title="On Fire",
+            description="Reach a 5-day speaking practice streak",
+            icon="🔥",
+            is_unlocked=ach_2_unlocked,
+            progress_percent=ach_2_progress,
+            category="Streaks",
+            current_value=day_streak,
+            target_value=5,
+            unit="days",
+        ),
+        Achievement(
+            id="ach_3",
+            title="Chatterbox",
+            description="Practice 30 minutes of live peer speaking",
+            icon="🗣️",
+            is_unlocked=ach_3_unlocked,
+            progress_percent=ach_3_progress,
+            category="Practice",
+            current_value=total_speaking_minutes,
+            target_value=30,
+            unit="mins",
+        ),
+        Achievement(
+            id="ach_4",
+            title="XP Master",
+            description="Earn 1,000 total experience points",
+            icon="🏆",
+            is_unlocked=ach_4_unlocked,
+            progress_percent=ach_4_progress,
+            category="Experience",
+            current_value=total_xp,
+            target_value=1000,
+            unit="XP",
+        ),
+        Achievement(
+            id="ach_5",
+            title="Fluency Pro",
+            description="Complete 10 Business English modules",
+            icon="💎",
+            is_unlocked=ach_5_unlocked,
+            progress_percent=ach_5_progress,
+            category="Mastery",
+            current_value=business_count,
+            target_value=10,
+            unit="modules",
+        ),
+        Achievement(
+            id="ach_6",
+            title="Community Star",
+            description="Participate in 5 Live Voice Rooms",
+            icon="🌟",
+            is_unlocked=ach_6_unlocked,
+            progress_percent=ach_6_progress,
+            category="Live Rooms",
+            current_value=total_live_rooms,
+            target_value=5,
+            unit="rooms",
+        ),
+    ]
+
+    unlocked_count = sum(1 for a in items if a.is_unlocked)
+    return AchievementsResponse(
+        total_count=len(items),
+        unlocked_count=unlocked_count,
+        achievements=items
     )
 
 
 # Function: get_achievements
-# Reason: User ke gamification achievements aur badges fetch karne ke liye.
-# Working:
-#   1. Header ya cookie se auth verification karta hai.
-#   2. Structured list of unlocked and locked achievements metadata return karta hai.
+# Reason: User ke gamification achievements aur badges dynamic criteria ke basis par fetch karne ke liye.
 @app.get("/api/achievements", response_model=AchievementsResponse)
 async def get_achievements(
     request: Request,
@@ -565,69 +874,137 @@ async def get_achievements(
     if not token:
         token = request.cookies.get("session_token")
 
-    items = [
-        Achievement(
-            id="ach_1",
-            title="First Step",
-            description="Complete your first English speaking lesson",
-            icon="🎯",
-            is_unlocked=True,
-            progress_percent=100,
-            category="Lessons"
-        ),
-        Achievement(
-            id="ach_2",
-            title="On Fire",
-            description="Reach a 5-day speaking practice streak",
-            icon="🔥",
-            is_unlocked=True,
-            progress_percent=100,
-            category="Streaks"
-        ),
-        Achievement(
-            id="ach_3",
-            title="Chatterbox",
-            description="Practice 30 minutes of live peer speaking",
-            icon="🗣️",
-            is_unlocked=True,
-            progress_percent=100,
-            category="Practice"
-        ),
-        Achievement(
-            id="ach_4",
-            title="XP Master",
-            description="Earn 1,000 total experience points",
-            icon="🏆",
-            is_unlocked=True,
-            progress_percent=100,
-            category="Experience"
-        ),
-        Achievement(
-            id="ach_5",
-            title="Fluency Pro",
-            description="Complete 10 Business English modules",
-            icon="💎",
-            is_unlocked=False,
-            progress_percent=60,
-            category="Mastery"
-        ),
-        Achievement(
-            id="ach_6",
-            title="Community Star",
-            description="Participate in 5 Live Voice Rooms",
-            icon="🌟",
-            is_unlocked=False,
-            progress_percent=40,
-            category="Live Rooms"
-        ),
-    ]
+    email = verify_session_token(token) if token else None
+    return await compute_user_achievements(email)
 
-    unlocked_count = sum(1 for a in items if a.is_unlocked)
-    return AchievementsResponse(
-        total_count=len(items),
-        unlocked_count=unlocked_count,
-        achievements=items
+
+# Function: report_lesson_progress
+# Reason: Lesson complete hone par user progress, XP aur achievements dynamically update karne ke liye.
+@app.post("/api/lessons/progress")
+async def report_lesson_progress(
+    payload: LessonProgressRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None, alias="Authorization")
+):
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ", 1)[1].strip()
+    if not token:
+        token = request.cookies.get("session_token")
+
+    email = verify_session_token(token) if token else None
+    if not email:
+        return {"success": True, "xpEarned": payload.xpEarned if payload.isCompleted else 0}
+
+    user_doc = await db.users.find_one({"email": email})
+    if not user_doc:
+        return {"success": True, "xpEarned": payload.xpEarned if payload.isCompleted else 0}
+
+    await touch_user_streak(user_doc)
+
+    if payload.isCompleted:
+        update_ops = {
+            "$addToSet": {"completed_lessons": payload.lessonId},
+            "$inc": {
+                "total_xp": payload.xpEarned,
+                "xp": payload.xpEarned,
+                "daily_goal_completed_minutes": 5,
+            }
+        }
+        if payload.lessonId.lower().startswith(("business", "b")):
+            update_ops["$inc"]["business_lessons_completed"] = 1
+
+        await db.users.update_one({"email": email}, update_ops)
+
+    return {"success": True, "xpEarned": payload.xpEarned}
+
+
+# Function: log_call
+# Reason: Peer call complete hone par call history save karne aur speaking duration track karne ke liye.
+@app.post("/api/calls/log")
+async def log_call(
+    payload: CallLogRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None, alias="Authorization")
+):
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ", 1)[1].strip()
+    if not token:
+        token = request.cookies.get("session_token")
+
+    email = verify_session_token(token) if token else None
+    if not email:
+        return {"success": False, "message": "Unauthenticated"}
+
+    user_doc = await db.users.find_one({"email": email})
+    if user_doc:
+        await touch_user_streak(user_doc)
+
+    now_iso = datetime.utcnow().isoformat()
+    started_at_str = datetime.utcnow().strftime("%b %d, %Y at %I:%M %p")
+    call_doc = {
+        "call_id": f"call_{uuid.uuid4().hex[:12]}",
+        "user_email": email,
+        "partner_name": payload.partner_name,
+        "partner_avatar": None,
+        "is_partner_pro": False,
+        "partner_english_level": "Intermediate Speaker",
+        "started_at": started_at_str,
+        "duration_seconds": payload.duration_seconds,
+        "call_type": payload.call_type or "1-on-1 Practice",
+        "topic": payload.topic or "General Speaking Practice",
+        "status": "completed",
+        "timestamp": now_iso,
+    }
+    await db.call_history.insert_one(call_doc)
+
+    speaking_mins = round(payload.duration_seconds / 60)
+    await db.users.update_one(
+        {"email": email},
+        {
+            "$inc": {
+                "speaking_minutes": speaking_mins,
+                "call_duration_seconds": payload.duration_seconds,
+                "daily_goal_completed_minutes": speaking_mins,
+                "total_xp": 25,
+                "xp": 25,
+            }
+        }
     )
+    return {"success": True, "call_id": call_doc["call_id"]}
+
+
+# Function: join_room
+# Reason: Live room join karne par participation count track karne ke liye.
+@app.post("/api/rooms/join")
+async def join_room(
+    payload: JoinRoomRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None, alias="Authorization")
+):
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ", 1)[1].strip()
+    if not token:
+        token = request.cookies.get("session_token")
+
+    email = verify_session_token(token) if token else None
+    if not email:
+        return {"success": False}
+
+    user_doc = await db.users.find_one({"email": email})
+    if user_doc:
+        await touch_user_streak(user_doc)
+
+    await db.users.update_one(
+        {"email": email},
+        {
+            "$inc": {"live_rooms_joined": 1},
+            "$addToSet": {"joined_room_ids": payload.room_id}
+        }
+    )
+    return {"success": True}
 
 
 # Function: get_referral_data
@@ -873,7 +1250,7 @@ async def get_weekly_leaderboard(
     c_name = current_user_doc.get("name") if current_user_doc else "You"
     c_initial = c_name.strip()[0].upper() if c_name else "Y"
     c_xp = current_user_doc.get("total_xp", 1240) if current_user_doc else 1240
-    c_streak = current_user_doc.get("day_streak", 5) if current_user_doc else 5
+    c_streak = (await touch_user_streak(current_user_doc)) if current_user_doc else 1
     c_pro = bool(current_user_doc.get("is_premium")) if current_user_doc else False
     c_pic = current_user_doc.get("picture") if current_user_doc else None
     c_id = current_user_doc.get("user_id") if current_user_doc else "user_me"
@@ -981,6 +1358,7 @@ async def google_callback(code: Optional[str] = None, state: Optional[str] = Non
         now_iso = datetime.utcnow().isoformat()
 
         if existing_user:
+            await touch_user_streak(existing_user)
             update_data = {
                 "name": payload.name,
                 "picture": payload.picture,
@@ -994,6 +1372,7 @@ async def google_callback(code: Optional[str] = None, state: Optional[str] = Non
                 {"$set": update_data}
             )
         else:
+            today_str = datetime.utcnow().date().isoformat()
             new_user_doc = {
                 "user_id": f"usr_{uuid.uuid4().hex[:16]}",
                 "email": payload.email,
@@ -1001,6 +1380,14 @@ async def google_callback(code: Optional[str] = None, state: Optional[str] = Non
                 "picture": payload.picture,
                 "google_id": payload.google_id,
                 "provider": "google",
+                "day_streak": 1,
+                "streak": 1,
+                "last_active_date": today_str,
+                "streak_updated_at": now_iso,
+                "streak_protection": False,
+                "total_xp": 100,
+                "daily_goal_minutes": 20,
+                "daily_goal_completed_minutes": 0,
                 "created_at": now_iso,
                 "updated_at": now_iso
             }
@@ -1150,6 +1537,7 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
 
     if existing_user:
         # Returning User Flow
+        day_streak_val = await touch_user_streak(existing_user)
         user_name = existing_user.get("name") or "Phone User"
         user_id = existing_user.get("user_id") or f"usr_{uuid.uuid4().hex[:16]}"
         update_data = {
@@ -1166,7 +1554,8 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
             "email": user_email,
             "user_id": user_id,
             "is_registered": True,
-            "is_new_user": False
+            "is_new_user": False,
+            "day_streak": day_streak_val,
         }
     else:
         # New User Onboarding Flow
@@ -1175,6 +1564,7 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
 
         user_name = data.name.strip()
         user_id = f"usr_{uuid.uuid4().hex[:16]}"
+        today_str = datetime.utcnow().date().isoformat()
         new_user = {
             "user_id": user_id,
             "phone": clean_phone,
@@ -1182,6 +1572,14 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
             "name": user_name,
             "referral": data.referral.strip() if data.referral else None,
             "provider": "phone",
+            "day_streak": 1,
+            "streak": 1,
+            "last_active_date": today_str,
+            "streak_updated_at": now_iso,
+            "streak_protection": False,
+            "total_xp": 100,
+            "daily_goal_minutes": 20,
+            "daily_goal_completed_minutes": 0,
             "created_at": now_iso,
             "updated_at": now_iso
         }
@@ -1194,7 +1592,8 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
             "email": user_email,
             "user_id": user_id,
             "is_registered": False,
-            "is_new_user": True
+            "is_new_user": True,
+            "day_streak": 1,
         }
 
     

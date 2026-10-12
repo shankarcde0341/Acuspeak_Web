@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import SupportForm from '@/components/support/SupportForm';
+import BrandLogo from '@/components/BrandLogo';
 
 export const metadata: Metadata = {
   title: 'Support | Acuspeak',
@@ -32,37 +33,7 @@ export default function SupportPage() {
             justifyContent: 'space-between',
           }}
         >
-          <Link
-            href="/"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              fontFamily: 'var(--font-outfit), sans-serif',
-              fontWeight: 700,
-              fontSize: '20px',
-              color: 'var(--text-primary)',
-              textDecoration: 'none',
-            }}
-          >
-            <div
-              style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '10px',
-                background: 'var(--gradient-primary)',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 700,
-                fontSize: '16px',
-              }}
-            >
-              A
-            </div>
-            <span>Acuspeak</span>
-          </Link>
+          <BrandLogo size="md" />
 
           <Link
             href="/dashboard"

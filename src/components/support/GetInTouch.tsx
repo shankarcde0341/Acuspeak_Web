@@ -4,7 +4,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import SupportForm from './SupportForm';
 import styles from './GetInTouch.module.css';
 
-export default function GetInTouch() {
+interface GetInTouchProps {
+  buttonText?: string;
+  className?: string;
+  variant?: 'button' | 'link';
+}
+
+export default function GetInTouch({
+  buttonText = 'Get in touch',
+  className,
+  variant = 'button',
+}: GetInTouchProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -18,8 +28,15 @@ export default function GetInTouch() {
     setIsOpen(false);
   };
 
+  const isFirstRender = useRef(true);
+
   // Lock body scroll and set focus when modal opens/closes
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       // Set initial focus inside modal
@@ -84,10 +101,15 @@ export default function GetInTouch() {
       <button
         ref={triggerRef}
         type="button"
-        className={styles.triggerBtn}
+        className={
+          className ||
+          (variant === 'link'
+            ? 'hover:text-[var(--primary)] transition-colors font-medium cursor-pointer text-left p-0 bg-transparent border-0 text-[13.5px] text-[var(--text-secondary)] inline-block'
+            : styles.triggerBtn)
+        }
         onClick={handleOpen}
       >
-        Get in touch
+        {buttonText}
       </button>
 
       {isOpen && (

@@ -214,6 +214,14 @@ export default function LoginPage() {
                 <p className="text-slate-500 text-xs font-medium mt-0.5">
                   Sign in to start your speaking journey.
                 </p>
+                {error && (
+                  <div className="mt-3 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2.5">
+                    <svg className="w-4 h-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>{error}</span>
+                  </div>
+                )}
               </div>
 
               {/* Email & Password Form */}
@@ -223,7 +231,10 @@ export default function LoginPage() {
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (error) setError(null);
+                    }}
                     placeholder="Email address"
                     className="w-full h-12 rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
@@ -234,7 +245,10 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (error) setError(null);
+                    }}
                     placeholder="Password"
                     className="w-full h-12 rounded-xl bg-slate-100 pl-4 pr-11 text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
@@ -312,12 +326,6 @@ export default function LoginPage() {
                 <span>Continue with Phone</span>
               </button>
 
-              {error && (
-                <p className="text-rose-600 text-xs mt-3 text-center font-medium">
-                  {error}
-                </p>
-              )}
-
               <p className="text-xs text-slate-600 text-center mt-5 font-medium">
                 Don&apos;t have an account?{' '}
                 <Link href="/signup" className="text-blue-600 font-bold hover:underline">
@@ -327,19 +335,19 @@ export default function LoginPage() {
 
               <p className="text-xs text-slate-400 text-center mt-4 leading-relaxed font-medium">
                 By continuing you agree to our{' '}
-                <a
-                  href="#"
+                <Link
+                  href="/terms"
                   className="text-blue-600 underline font-semibold hover:opacity-90"
                 >
-                  Terms
-                </a>{' '}
+                  Terms &amp; Conditions
+                </Link>{' '}
                 and{' '}
-                <a
-                  href="#"
+                <Link
+                  href="/privacy"
                   className="text-blue-600 underline font-semibold hover:opacity-90"
                 >
                   Privacy Policy
-                </a>
+                </Link>
                 .
               </p>
             </div>
