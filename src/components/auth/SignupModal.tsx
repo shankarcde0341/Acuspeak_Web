@@ -112,7 +112,7 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
 
       if (response.error) {
         setError(response.error);
-      } else {
+      } else if (response.user_id && response.session_token) {
         // Successfully created account
         setAuthSession(
           {
@@ -124,6 +124,8 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }: Signup
 
         onClose();
         router.push('/dashboard');
+      } else {
+        setError('Account creation could not be completed. Please try again.');
       }
     } catch {
       setError('An unexpected error occurred during signup. Please try again.');

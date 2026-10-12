@@ -78,7 +78,25 @@ export async function signupUser(payload: SignupPayload): Promise<SignupResponse
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      return { error: (data && (data.detail || data.error)) || 'Signup failed. Please try again.' };
+      let errorMessage = 'Signup failed. Please try again.';
+      if (data) {
+        if (typeof data.detail === 'string') {
+          errorMessage = data.detail;
+        } else if (Array.isArray(data.detail) && data.detail.length > 0) {
+          errorMessage = data.detail.map((err: { msg?: string }) => err.msg || 'Invalid input').join(', ');
+        } else if (typeof data.error === 'string') {
+          errorMessage = data.error;
+        }
+      }
+      return { error: errorMessage };
+    }
+
+    if (data?.error && typeof data.error === 'string') {
+      return { error: data.error };
+    }
+
+    if (!data?.user_id && !data?.session_token) {
+      return { error: 'Account creation could not be verified. Please try again.' };
     }
 
     return (data || {}) as SignupResponse;

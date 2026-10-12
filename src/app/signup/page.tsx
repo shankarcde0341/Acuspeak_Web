@@ -99,7 +99,7 @@ export default function SignupPage() {
 
       if (response.error) {
         setError(response.error);
-      } else {
+      } else if (response.user_id && response.session_token) {
         setAuthSession(
           {
             email: response.email || email.trim(),
@@ -108,6 +108,8 @@ export default function SignupPage() {
           response.session_token
         );
         router.push('/dashboard');
+      } else {
+        setError('Account creation could not be completed. Please try again.');
       }
     } catch {
       setError('An error occurred during signup. Please try again.');

@@ -5,11 +5,12 @@ from dotenv import load_dotenv
 # .env file se variables load karein
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URI") or os.getenv("MONGO_URL", "mongodb://localhost:27017")
+DB_NAME = os.getenv("DB_NAME", "acuspeak")
 
 client = AsyncIOMotorClient(MONGO_URI)
-# Default database jo URI mein mention hai use access karein
-db = client["acuspeak"]
+# Access the configured database
+db = client[DB_NAME]
 
 """
 MongoDB Collections & Fields Reference:

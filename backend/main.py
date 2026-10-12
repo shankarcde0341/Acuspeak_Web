@@ -17,9 +17,11 @@ from urllib.parse import quote
 from fastapi import FastAPI, Request, HTTPException, Header
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+import re
+from pymongo.errors import DuplicateKeyError, PyMongoError
 
 # Pydantic BaseModel: Client se aane wale request data ko validate aur structure karne ke liye.
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 
 # asynccontextmanager: FastAPI application ke startup aur shutdown (lifespan) events ko manage karne ke liye context manager decorator hai.
 from contextlib import asynccontextmanager
@@ -76,6 +78,66 @@ class SignupRequest(BaseModel):
     number: Optional[str] = None
     referral_code: Optional[str] = None
     password: Optional[str] = None
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        trimmed = v.strip() if v else ""
+        if not trimmed:
+            raise ValueError("Full name is required.")
+        if len(trimmed) > 100:
+            raise ValueError("Full name cannot exceed 100 characters.")
+        return trimmed
+
+    @field_validator("gender")
+    @classmethod
+    def validate_gender(cls, v: str) -> str:
+        trimmed = (v or "Male").strip()
+        if trimmed not in ("Male", "Female", "Other"):
+            return "Male"
+        return trimmed
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        trimmed = v.strip().lower()
+        email_regex = r"^[^\s@]+@[^\s@]+\.[^\s@]+$"
+        if not re.match(email_regex, trimmed):
+            raise ValueError("Please enter a valid email address.")
+        return trimmed
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None:
+            if len(v) < 6:
+                raise ValueError("Password must be at least 6 characters.")
+            if len(v) > 128:
+                raise ValueError("Password cannot exceed 128 characters.")
+        return v
+
+    @field_validator("number")
+    @classmethod
+    def validate_number(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        trimmed = v.strip()
+        if not trimmed:
+            return None
+        clean_digits = re.sub(r"\D", "", trimmed)
+        if len(clean_digits) < 10 or len(clean_digits) > 15:
+            raise ValueError("Please enter a valid phone number (10 to 15 digits).")
+        return clean_digits
+
+    @field_validator("referral_code")
+    @classmethod
+    def validate_referral_code(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        trimmed = v.strip().upper()
+        return trimmed if trimmed else None
 
 
 # Model: GoogleUserPayload
@@ -238,15 +300,12 @@ app.include_router(support_router)
 
 
 
-
-
 # Function: read_root
 # Reason: Root endpoint ("/") handle karne ke liye jo backend health check aur server status verify karta hai.
 # Working: Jab user '/' endpoint par HTTP GET request bhejta hai, toh yeh simple JSON response message return karta hai.
 @app.get("/")
 def read_root(): 
     return {"message": "Acuspeak FastAPI Backend is running securely."}
-
 
 # Function: login
 # Reason: Users ko authenticate karne aur dashboard ke liye zaroori access/info dene ke liye.
@@ -284,73 +343,99 @@ async def login(data: LoginRequest, request: Request):
 @app.post("/api/signup")
 @app.post("/api/auth/signup")
 async def signup(data: SignupRequest, request: Request):
-    import re
     client_ip = request.client.host if request.client else "unknown"
     apply_rate_limit(client_ip)
 
-    name = data.name.strip() if data.name else ""
-    if not name:
-        return {"error": "Name is mandatory"}
+    name = data.name
+    gender = data.gender
+    email = data.email
+    password = data.password
+    number = data.number
+    referral_code = data.referral_code
 
-    gender = data.gender.strip() if data.gender else "Male"
-    email = data.email.strip().lower() if data.email else None
     if not email:
-        return {"error": "Email address is mandatory"}
+        raise HTTPException(status_code=400, detail="Email address is required.")
 
-    email_regex = r"^[^\s@]+@[^\s@]+\.[^\s@]+$"
-    if not re.match(email_regex, email):
-        return {"error": "Please enter a valid email address."}
-
-    password = data.password or ""
     if not password:
-        return {"error": "Password is mandatory"}
-    if len(password) < 6:
-        return {"error": "Password must be at least 6 characters."}
-
-    number = data.number.strip() if data.number else None
-    referral_code = data.referral_code.strip() if data.referral_code else None
-
-    # Number validation if provided
-    if number:
-        clean_num = re.sub(r"\D", "", number)
-        if len(clean_num) < 10 or len(clean_num) > 15:
-            return {"error": "Please enter a valid phone number (10 to 15 digits)."}
+        raise HTTPException(status_code=400, detail="Password is required.")
 
     # Duplicate check in db.users
-    or_filters = []
-    if email:
-        or_filters.append({"email": email})
+    or_filters = [{"email": email}]
     if number:
         or_filters.append({"phone": number})
 
-    if or_filters:
+    try:
         existing = await db.users.find_one({"$or": or_filters})
         if existing:
-            return {"error": "An account with this email or phone number already exists."}
+            if existing.get("email") == email:
+                raise HTTPException(
+                    status_code=409,
+                    detail="An account with this email address already exists."
+                )
+            else:
+                raise HTTPException(
+                    status_code=409,
+                    detail="An account with this phone number already exists."
+                )
 
-    clean_phone_digits = re.sub(r"\D", "", number or "")
-    user_email = email or f"{clean_phone_digits}@phone.user"
+        user_id = f"usr_{uuid.uuid4().hex[:16]}"
+        now_iso = datetime.utcnow().isoformat()
 
-    user_id = f"usr_{uuid.uuid4().hex[:16]}"
-    user_doc = {
-        "user_id": user_id,
-        "name": name,
-        "gender": gender,
-        "email": user_email,
-        "phone": number,
-        "referral_code": referral_code,
-        "created_at": datetime.utcnow().isoformat(),
-        "is_premium": False,
-        "english_level": "Intermediate Speaker",
-        "day_streak": 1,
-        "total_xp": 100,
-        "daily_goal_minutes": 20,
-        "daily_goal_completed_minutes": 0,
-    }
-    if data.password:
-        user_doc["password"] = get_password_hash(data.password)
+        # Authoritative unique referral code for this new user
+        email_hash = hashlib.sha256(email.encode("utf-8")).hexdigest()[:6].upper()
+        own_referral_code = f"ACU-{email_hash}"
 
-    await db.users.insert_one(user_doc)
+        user_doc = {
+            "user_id": user_id,
+            "name": name,
+            "gender": gender,
+            "email": email,
+            "phone": number,
+            "referral_code": own_referral_code,
+            "referred_by": referral_code,
+            "referral": referral_code,
+            "provider": "email",
+            "password": get_password_hash(password),
+            "created_at": now_iso,
+            "updated_at": now_iso,
+            "is_premium": False,
+            "english_level": "Intermediate Speaker",
+            "day_streak": 1,
+            "total_xp": 100,
+            "daily_goal_minutes": 20,
+            "daily_goal_completed_minutes": 0,
+            "matchmaking_status": "idle",
+            "matchmaking_room_id": None,
+            "matchmaking_started_at": None,
+        }
+
+        insert_result = await db.users.insert_one(user_doc)
+        if not insert_result.inserted_id:
+            logger.error("MongoDB insert_one failed to return inserted_id for email: %s", email)
+            raise HTTPException(status_code=500, detail="Failed to persist user in database.")
+
+        logger.info("Successfully persisted user %s with user_id %s to MongoDB", email, user_id)
+
+    except HTTPException:
+        raise
+    except DuplicateKeyError as e:
+        logger.error("MongoDB duplicate key error during signup for %s: %s", email, e)
+        raise HTTPException(
+            status_code=409,
+            detail="An account with this email, phone, or referral code already exists."
+        )
+    except PyMongoError as e:
+        logger.error("MongoDB database error during signup for %s: %s", email, e, exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail="Database persistence error during signup. Please try again later."
+        )
+    except Exception as e:
+        logger.error("Unexpected error during user persistence for %s: %s", email, e, exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred during signup. Please try again."
+        )
 
     session_token = create_session_token(user_doc["email"])
     return {
