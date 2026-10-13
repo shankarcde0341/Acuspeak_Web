@@ -324,6 +324,9 @@ app.include_router(payment_router)
 from support_routes import router as support_router
 app.include_router(support_router)
 
+from live_routes import router as live_router
+app.include_router(live_router)
+
 
 
 # ==========================================

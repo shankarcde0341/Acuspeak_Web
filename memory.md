@@ -1,5 +1,46 @@
 # Acuspeak — Memory & Change Log
 
+### [2026-10-13]
+- Implemented real-world, production-grade Live Room architecture (similar to Google Meet and Zoom) with audio/video streaming, participant management, broadcast chat, and host controls using ZegoCloud server, replacing previous mocked structured flow:
+  - **Backend Isolation & Security First (FastAPI + MongoDB)**:
+    - Created [`backend/live_routes.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/live_routes.py) mounted at `/api/live` in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py):
+      - `POST /api/live/rooms/create`: Authoritatively creates a live room in MongoDB `live_rooms` collection with unique `room_live_<hex>` IDs, assigns the authenticated user as host, records initial participant metadata, applies rate limiting, and increments user stats.
+      - `GET /api/live/rooms`: Queries active rooms with topic filters, text search, pagination, and participant counts; automatically seeds starter community rooms if the database is fresh.
+      - `GET /api/live/rooms/{room_id}`: Fetches real-time room metadata, full participant list, and caller's authoritative role.
+      - `POST /api/live/rooms/{room_id}/join`: Enforces server-side capacity limits, validates ban/kick lists, adds participants to `live_rooms`, and increments user streaks.
+      - `POST /api/live/zego/token`: Securely generates short-lived ZegoCloud Token04 using AES-GCM encryption with backend environment credentials (`ZEGO_APP_ID`, `ZEGO_SERVER_SECRET`), keeping secrets isolated from the client bundle.
+      - `POST /api/live/rooms/{room_id}/leave`: Updates MongoDB participant arrays and active counts upon exit.
+      - `POST /api/live/rooms/{room_id}/end`: Validates host identity server-side before terminating the room and updating status to "ended".
+      - `POST /api/live/rooms/{room_id}/kick`: Host-only endpoint that removes target participant and appends to `kicked_user_ids`.
+      - `POST /api/live/rooms/{room_id}/participant-state`: Synchronizes participant media states (mic, camera, role).
+    - Designed strict Pydantic models for request/response validation: `CreateLiveRoomRequest`, `LiveRoomParticipant`, `LiveRoomSummary`, `LiveRoomDetail`, `LiveRoomsResponse`, `JoinLiveRoomResponse`, `LiveZegoTokenRequest`, `LiveZegoTokenResponse`, `KickParticipantRequest`, and `ParticipantStateRequest`.
+  - **Dedicated Frontend Service Layer**:
+    - Created [`src/services/roomService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/roomService.ts) with strict TypeScript typing (zero `any`), handling authorization headers, network errors, and responses.
+    - Updated [`src/lib/rooms.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/rooms.ts) to delegate directly to `roomService`.
+  - **Live Rooms Dashboard (`/live`)**:
+    - Built [`src/components/live/LiveDashboardClient.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/live/LiveDashboardClient.tsx) and updated [`src/app/(dashboard)/live/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/live/page.tsx) and [`LivePage.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28dashboard%29/live/LivePage.module.css):
+      - Interactive category filter tabs (All, Daily English, Business English, Interview English, IELTS / TOEFL, Casual Chat, Debate & Discussions).
+      - Real-time search bar filtering by title, topic, or host name.
+      - Active rooms grid with live indicator badges, participant counts, topic chips, and host avatars.
+      - Interactive "Create Room" modal ([`src/components/live/CreateRoomModal.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/live/CreateRoomModal.tsx)) with topic selection, capacity options (4, 8, 12, 16), validation, and auto-navigation to the room.
+      - Loading skeleton states, empty states with CTA, and refresh triggers.
+  - **Live Room Screen (`/live/room/[id]`)**:
+    - Upgraded [`src/components/live/RoomScreen.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/live/RoomScreen.tsx), [`RoomScreen.module.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/live/RoomScreen.module.css), and [`src/app/(call)/live/room/[id]/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/%28call%29/live/room/%5Bid%5D/page.tsx):
+      - Initialized ZegoExpressEngine WebRTC client SDK (`zego-express-engine-webrtc`) with token acquired from backend.
+      - Real-time WebRTC audio and video publishing & subscribing with camera on/off and mic mute toggles.
+      - Responsive Google Meet / Zoom style video grid with dynamic layout classes (`gridSingle`, `gridTwo`, `gridFour`, `gridMulti`).
+      - In-tile video streams or avatar placeholders with animated speaking pulse halos powered by `capturedSoundLevelUpdate` and `soundLevelUpdate`.
+      - Real-time broadcast text chat drawer powered by `sendBroadcastMessage` and `IMRecvBroadcastMessage` with unread message badge.
+      - Slide-out Participants drawer displaying active roles, mic statuses, and host kick controls.
+      - Speaker / Listener role switching allowing participants to toggle audio/video publishing.
+      - Host controls: "End Room for Everyone" and "Remove Participant" with modal confirmation dialogs ([`src/components/live/RoomDialog.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/live/RoomDialog.tsx)).
+      - Comprehensive cleanup and teardown on unmount: stops publishing, destroys local media streams, unbinds remote streams, logs out of Zego room, and removes listeners.
+  - **Verification & Acceptance Criteria**:
+    - Zero credentials exposed to client bundle; backend generates short-lived Zego Token04 using environment secrets.
+    - Full TypeScript type checks (`npx tsc --noEmit`) pass with 0 errors.
+    - Production build (`npm run build`) succeeds with 0 errors across 29 routes.
+    - Dev server running on `http://localhost:3000` with both `/live` and `/live/room/[id]` responding with HTTP 200.
+
 ### [2026-10-12]
 - Implemented backend-authoritative, dynamic Day Streak calculation and persistence across FastAPI backend and Next.js frontend per `rules.md`:
   - Created `compute_updated_streak` and asynchronous `touch_user_streak` in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py):

@@ -5,7 +5,7 @@ import { AlertCircleIcon } from '../call/icons';
 import styles from './RoomDialog.module.css';
 
 export interface RoomDialogProps {
-  variant: 'confirm-remove' | 'notice-ended' | 'notice-removed';
+  variant: 'confirm-remove' | 'notice-ended' | 'notice-removed' | 'confirm-end';
   targetName?: string;
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -29,7 +29,7 @@ export function RoomDialog({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (variant === 'confirm-remove' && onCancel) {
+        if ((variant === 'confirm-remove' || variant === 'confirm-end') && onCancel) {
           onCancel();
         }
       }
@@ -62,15 +62,21 @@ export function RoomDialog({
     title = 'Remove participant';
     message = `Are you sure you want to remove ${targetName} from the room?`;
     iconClass = styles.iconFlame;
+  } else if (variant === 'confirm-end') {
+    title = 'End room for everyone?';
+    message = 'This will immediately disconnect all active participants and conclude the session.';
+    iconClass = styles.iconFlame;
   } else if (variant === 'notice-ended') {
     title = 'Room ended';
     message = 'The host has ended this live room.';
     iconClass = styles.iconPrimary;
   } else if (variant === 'notice-removed') {
-    title = 'You have been removed from the room';
-    message = null;
+    title = 'You were removed from the room';
+    message = 'The host has removed you from this live room session.';
     iconClass = styles.iconFlame;
   }
+
+  const isConfirmation = variant === 'confirm-remove' || variant === 'confirm-end';
 
   return (
     <div className={styles.backdrop} role="presentation">
@@ -96,7 +102,7 @@ export function RoomDialog({
           </p>
         )}
 
-        {variant === 'confirm-remove' ? (
+        {isConfirmation ? (
           <div className={styles.buttonRow}>
             <button
               ref={initialFocusRef}
@@ -111,7 +117,7 @@ export function RoomDialog({
               className={styles.removeButton}
               onClick={onConfirm}
             >
-              Remove
+              {variant === 'confirm-end' ? 'End Room' : 'Remove'}
             </button>
           </div>
         ) : (

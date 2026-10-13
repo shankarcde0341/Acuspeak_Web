@@ -13,13 +13,9 @@ export async function generateMetadata({ params }: RoomPageProps): Promise<Metad
     return { title: 'Room not found — Acuspeak' };
   }
 
-  const room = await getRoom(id);
-  if (!room) {
-    return { title: 'Room not found — Acuspeak' };
-  }
-
+  const room = await getRoom(id).catch(() => null);
   return {
-    title: `${room.title} — Acuspeak`,
+    title: room?.title ? `${room.title} — Acuspeak Live` : 'Live Room — Acuspeak',
     robots: { index: false, follow: false },
   };
 }
@@ -31,10 +27,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
     notFound();
   }
 
-  const room = await getRoom(id);
-  if (!room) {
-    notFound();
-  }
+  const room = await getRoom(id).catch(() => null);
 
-  return <RoomScreen room={room} />;
+  return <RoomScreen roomId={id} initialRoom={room} />;
 }

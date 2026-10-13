@@ -1,210 +1,69 @@
-import { getFallbackUser } from './user';
+import {
+  getLiveRooms,
+  getLiveRoomDetail,
+  getLiveZegoToken,
+  leaveLiveRoom,
+  endLiveRoom,
+  kickParticipant,
+  updateParticipantState,
+  type LiveRoomSummary,
+  type LiveRoomDetail,
+  type LiveRoomParticipant,
+} from '@/services/roomService';
 
-export interface RoomParticipant {
-  user_id: string;
-  name: string;
-}
+export type RoomParticipant = LiveRoomParticipant;
+export type Room = LiveRoomSummary;
+export type RoomDetail = LiveRoomDetail;
 
-export interface Room {
-  room_id: string;
-  title: string;
-  topic: string;
-  host_id: string;
-  host_name: string;
-  participant_count: number;
-  is_host: boolean;
-}
-
-export interface RoomDetail extends Room {
-  participants: RoomParticipant[];
-}
+export {
+  getLiveRooms,
+  getLiveRoomDetail,
+  getLiveZegoToken,
+  leaveLiveRoom,
+  endLiveRoom,
+  kickParticipant,
+  updateParticipantState,
+};
 
 export async function getRooms(): Promise<Room[]> {
-  const currentUser = getFallbackUser();
-
-  const rooms: RoomDetail[] = [
-    {
-      room_id: 'demo-room-1',
-      title: 'Morning small talk',
-      topic: 'Daily English',
-      host_id: 'host-1',
-      host_name: 'Aarav Mehta',
-      participant_count: 5,
-      is_host: false,
-      participants: [
-        { user_id: 'host-1', name: 'Aarav Mehta' },
-        { user_id: 'p-101', name: 'Ananya Sharma' },
-        { user_id: 'p-102', name: 'Priya Patel' },
-        { user_id: 'p-103', name: 'Vikram Singh' },
-        { user_id: 'p-104', name: 'Kabir Das' },
-      ],
-    },
-    {
-      room_id: 'demo-room-2',
-      title: 'Mock interview practice',
-      topic: 'Interview English',
-      host_id: 'host-2',
-      host_name: 'Neha Kapoor',
-      participant_count: 6,
-      is_host: false,
-      participants: [
-        { user_id: 'host-2', name: 'Neha Kapoor' },
-        { user_id: 'p-201', name: 'Rishabh Verma' },
-        { user_id: 'p-202', name: 'Divya Gupta' },
-        { user_id: 'p-203', name: 'Aditya Rao' },
-        { user_id: 'p-204', name: 'Meera Nair' },
-        { user_id: 'p-205', name: 'Siddharth Joshi' },
-      ],
-    },
-    {
-      room_id: 'demo-room-3',
-      title: 'Pitch your idea',
-      topic: 'Business English',
-      host_id: 'host-3',
-      host_name: 'Rohan Iyer',
-      participant_count: 4,
-      is_host: false,
-      participants: [
-        { user_id: 'host-3', name: 'Rohan Iyer' },
-        { user_id: 'p-301', name: 'Kavya Menon' },
-        { user_id: 'p-302', name: 'Tarun Deshmukh' },
-        { user_id: 'p-303', name: 'Ishita Banerjee' },
-      ],
-    },
-    {
-      room_id: 'demo-room-4',
-      title: 'Planning a trip',
-      topic: 'Travel English',
-      host_id: currentUser.id,
-      host_name: currentUser.name,
-      participant_count: 5,
-      is_host: true,
-      participants: [
-        { user_id: currentUser.id, name: currentUser.name },
-        { user_id: 'p-401', name: 'Arjun Reddy' },
-        { user_id: 'p-402', name: 'Sanjana Chawla' },
-        { user_id: 'p-403', name: 'Manish Pandey' },
-        { user_id: 'p-404', name: 'Nisha Agarwal' },
-      ],
-    },
-  ];
-
-  return rooms.map(({ participants, ...summary }) => ({
-    ...summary,
-    participant_count: participants.length,
-  }));
+  try {
+    const res = await getLiveRooms();
+    return res.rooms || [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getRoom(roomId: string): Promise<RoomDetail | null> {
-  const currentUser = getFallbackUser();
-
-  const allRooms: RoomDetail[] = [
-    {
-      room_id: 'demo-room-1',
-      title: 'Morning small talk',
-      topic: 'Daily English',
-      host_id: 'host-1',
-      host_name: 'Aarav Mehta',
-      participant_count: 5,
-      is_host: false,
-      participants: [
-        { user_id: 'host-1', name: 'Aarav Mehta' },
-        { user_id: 'p-101', name: 'Ananya Sharma' },
-        { user_id: 'p-102', name: 'Priya Patel' },
-        { user_id: 'p-103', name: 'Vikram Singh' },
-        { user_id: 'p-104', name: 'Kabir Das' },
-      ],
-    },
-    {
-      room_id: 'demo-room-2',
-      title: 'Mock interview practice',
-      topic: 'Interview English',
-      host_id: 'host-2',
-      host_name: 'Neha Kapoor',
-      participant_count: 6,
-      is_host: false,
-      participants: [
-        { user_id: 'host-2', name: 'Neha Kapoor' },
-        { user_id: 'p-201', name: 'Rishabh Verma' },
-        { user_id: 'p-202', name: 'Divya Gupta' },
-        { user_id: 'p-203', name: 'Aditya Rao' },
-        { user_id: 'p-204', name: 'Meera Nair' },
-        { user_id: 'p-205', name: 'Siddharth Joshi' },
-      ],
-    },
-    {
-      room_id: 'demo-room-3',
-      title: 'Pitch your idea',
-      topic: 'Business English',
-      host_id: 'host-3',
-      host_name: 'Rohan Iyer',
-      participant_count: 4,
-      is_host: false,
-      participants: [
-        { user_id: 'host-3', name: 'Rohan Iyer' },
-        { user_id: 'p-301', name: 'Kavya Menon' },
-        { user_id: 'p-302', name: 'Tarun Deshmukh' },
-        { user_id: 'p-303', name: 'Ishita Banerjee' },
-      ],
-    },
-    {
-      room_id: 'demo-room-4',
-      title: 'Planning a trip',
-      topic: 'Travel English',
-      host_id: currentUser.id,
-      host_name: currentUser.name,
-      participant_count: 5,
-      is_host: true,
-      participants: [
-        { user_id: currentUser.id, name: currentUser.name },
-        { user_id: 'p-401', name: 'Arjun Reddy' },
-        { user_id: 'p-402', name: 'Sanjana Chawla' },
-        { user_id: 'p-403', name: 'Manish Pandey' },
-        { user_id: 'p-404', name: 'Nisha Agarwal' },
-      ],
-    },
-  ];
-
-  const found = allRooms.find((r) => r.room_id === roomId);
-  if (!found) return null;
-
-  return {
-    ...found,
-    participant_count: found.participants.length,
-  };
+  try {
+    return await getLiveRoomDetail(roomId);
+  } catch {
+    return null;
+  }
 }
 
-export async function leaveRoom(_roomId: string): Promise<void> {
-  // No-op async stub for leaving a room
+export async function leaveRoom(roomId: string): Promise<void> {
+  await leaveLiveRoom(roomId);
 }
 
-export async function endRoom(_roomId: string): Promise<void> {
-  // No-op async stub for ending a room
+export async function endRoom(roomId: string): Promise<void> {
+  await endLiveRoom(roomId);
 }
 
-export async function removeParticipant(_roomId: string, _userId: string): Promise<void> {
-  // No-op async stub for removing a participant
+export async function removeParticipant(roomId: string, userId: string): Promise<void> {
+  await kickParticipant(roomId, userId);
 }
-
-import { getAuthToken } from '@/services/authService';
 
 export async function recordRoomParticipation(roomId: string, title?: string): Promise<void> {
   try {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const token = getAuthToken();
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
     await fetch(`${apiBase}/api/rooms/join`, {
       method: 'POST',
-      headers,
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({ room_id: roomId, title }),
     });
-  } catch (err) {
-    console.warn('Failed to record room participation:', err);
+  } catch {
+    // Non-blocking telemetry
   }
 }
