@@ -1,4 +1,5 @@
 import { getAuthToken } from './authService';
+import { API_BASE_URL } from './apiConfig';
 
 export interface ScriptLine {
   line_id: string;
@@ -3170,7 +3171,6 @@ export async function reportLessonProgress(
   payload: LessonProgressPayload
 ): Promise<{ success: boolean; xpEarned: number }> {
   try {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     const token = getAuthToken();
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -3179,7 +3179,7 @@ export async function reportLessonProgress(
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${apiBase}/api/lessons/progress`, {
+    const response = await fetch(`${API_BASE_URL}/api/lessons/progress`, {
       method: 'POST',
       headers,
       credentials: 'include',

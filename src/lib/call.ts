@@ -38,10 +38,10 @@ export async function submitCallFeedback(payload: FeedbackPayload): Promise<void
 }
 
 import { getAuthToken } from '@/services/authService';
+import { API_BASE_URL } from '@/services/apiConfig';
 
 export async function logCall(payload: CallLogPayload): Promise<void> {
   try {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     const token = getAuthToken();
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export async function logCall(payload: CallLogPayload): Promise<void> {
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
-    await fetch(`${apiBase}/api/calls/log`, {
+    await fetch(`${API_BASE_URL}/api/calls/log`, {
       method: 'POST',
       headers,
       credentials: 'include',

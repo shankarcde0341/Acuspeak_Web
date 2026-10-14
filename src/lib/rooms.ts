@@ -54,10 +54,11 @@ export async function removeParticipant(roomId: string, userId: string): Promise
   await kickParticipant(roomId, userId);
 }
 
+import { API_BASE_URL } from '@/services/apiConfig';
+
 export async function recordRoomParticipation(roomId: string, title?: string): Promise<void> {
   try {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    await fetch(`${apiBase}/api/rooms/join`, {
+    await fetch(`${API_BASE_URL}/api/rooms/join`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

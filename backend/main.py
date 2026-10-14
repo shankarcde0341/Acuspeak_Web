@@ -42,6 +42,8 @@ from auth import (
 )
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+HOST = os.getenv("HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", 8000))
 
 # In-memory rate limiting tracker (Rules.md Section 2 requirement: Rate limit authentication endpoints)
 rate_limit_tracker: Dict[str, list] = {}
@@ -307,6 +309,7 @@ if FRONTEND_URL and FRONTEND_URL not in origins:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.\d+\.\d+\.\d+|[\w\-]+\.local)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -1599,4 +1602,7 @@ async def verify_phone_otp(data: PhoneVerifyOTPRequest, request: Request):
             "day_streak": 1,
         }
 
-    
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)

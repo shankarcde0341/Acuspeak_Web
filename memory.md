@@ -1,6 +1,43 @@
 # Acuspeak — Memory & Change Log
 
-### [2026-10-13]
+### [2026-10-14]
+- Fixed Next.js 16 client-side route transition scroll behavior and eliminated the console warning regarding `scroll-behavior: smooth`:
+  - Added `data-scroll-behavior="smooth"` attribute to the `<html>` element in [`src/app/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/layout.tsx) alongside `className="scroll-smooth"` and `suppressHydrationWarning`.
+  - Allowed Next.js internal router (`disableSmoothScrollDuringRouteTransition`) to automatically manage `scroll-behavior` during SPA route transitions, ensuring instantaneous scroll resets to `(0, 0)` at the top of the page without scroll jumping or unexpected bottom scrolling, while cleanly preserving smooth scrolling for in-page anchors (`#hash`).
+  - Reviewed [`src/app/globals.css`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/globals.css) and layout containers, confirming standard flow and absence of any conflicting container overflow traps forcing initial mount scroll offsets.
+  - Verified with `npx tsc --noEmit` (0 errors) and full Next.js production build (`npm run build` with all 29 routes successfully compiled).
+
+- Permanently eliminated cross-device connection timeouts (`ERR_CONNECTION_TIMED_OUT`) and CORS preflight failures by implementing a robust Same-Origin Next.js API Proxy / Rewrite architecture and environment-driven backend binding per `rules.md`:
+  - **Next.js API Rewrites & Proxy Architecture**:
+    - Updated [`next.config.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/next.config.ts) with `async rewrites()` to proxy all `/api/:path*` requests directly to the FastAPI backend at `${BACKEND_INTERNAL_URL}/api/:path*` (defaulting to loopback `http://127.0.0.1:8000`).
+    - Eliminates CORS preflight (`OPTIONS`) round-trips from client browsers since all browser fetch requests hit the same origin (`/api/...`).
+  - **Dynamic Environment & Service Layer Refactoring**:
+    - Created centralized [`src/services/apiConfig.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/apiConfig.ts) to dynamically resolve `API_BASE_URL`:
+      - In browser runtime (`typeof window !== 'undefined'`): resolves to `""` (empty string) ensuring all requests use relative `/api/...` paths proxied by Next.js.
+      - In server runtime (SSR / Server Components in Node.js): resolves to `process.env.BACKEND_INTERNAL_URL || 'http://127.0.0.1:8000'` to prevent Node.js relative fetch URL parsing errors.
+    - Purged volatile local network IPv4 (`10.189.244.177`) from [`.env.local`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/.env.local) and replaced with `BACKEND_INTERNAL_URL=http://127.0.0.1:8000`.
+    - Refactored all client service and helper files to import and consume `API_BASE_URL`:
+      - [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts) (removed hardcoded IPv4)
+      - [`src/services/roomService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/roomService.ts)
+      - [`src/services/referralService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/referralService.ts)
+      - [`src/services/paymentService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/paymentService.ts)
+      - [`src/services/matchService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/matchService.ts)
+      - [`src/services/leaderboardService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/leaderboardService.ts)
+      - [`src/services/supportService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/supportService.ts)
+      - [`src/services/lessonService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/lessonService.ts)
+      - [`src/lib/rooms.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/rooms.ts)
+      - [`src/lib/call.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/lib/call.ts)
+  - **FastAPI Backend Binding & CORS Hardening**:
+    - Configured server-side environment variables `HOST` (default `0.0.0.0`) and `PORT` (default `8000`) in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py) and [`backend/.env`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/.env).
+    - Hardened `CORSMiddleware` with explicit `allow_origins=origins` combined with secure regex matching `allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.\d+\.\d+\.\d+|[\w\-]+\.local)(:\d+)?"` to securely authorize local subnets and tunnel hosts without wildcard security vulnerabilities.
+    - Added standard `if __name__ == "__main__":` block to run `uvicorn.run("main:app", host=HOST, port=PORT, reload=True)`.
+  - **Verification & Acceptance Criteria**:
+    - Backend syntax check (`py_compile main.py`) passed cleanly (exit code 0).
+    - Backend streak unit tests (`backend/test_streak.py`) passed 9/9 tests.
+    - Backend support unit tests (`backend/test_support.py`) passed 7/7 tests.
+    - TypeScript validation (`npx tsc --noEmit`) completed with 0 errors.
+    - Next.js production build (`npm run build`) succeeded across all 29 routes without errors.
+
 - Implemented real-world, production-grade Live Room architecture (similar to Google Meet and Zoom) with audio/video streaming, participant management, broadcast chat, and host controls using ZegoCloud server, replacing previous mocked structured flow:
   - **Backend Isolation & Security First (FastAPI + MongoDB)**:
     - Created [`backend/live_routes.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/live_routes.py) mounted at `/api/live` in [`backend/main.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/main.py):
