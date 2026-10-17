@@ -188,17 +188,22 @@ export function initiateGoogleLogin(): void {
 /**
  * Persists user session in both localStorage and HTTP cookies for client and server middleware validation.
  */
-export function setAuthSession(user: { email: string; name: string }, token?: string): void {
+export function setAuthSession(user: { email: string; name: string }, token: string): void {
   if (typeof window === 'undefined') return;
 
-  const sessionToken = token || `sess_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-  localStorage.setItem('session_token', sessionToken);
+  if (!token || typeof token !== 'string' || !token.trim()) {
+    console.error('setAuthSession: Cannot initialize session without a valid backend session token.');
+    return;
+  }
+
+  const cleanToken = token.trim();
+  localStorage.setItem('session_token', cleanToken);
   localStorage.setItem('acuspeak_user', JSON.stringify(user));
 
   // Set cookies for Next.js server middleware verification (30 days TTL)
   const maxAge = 30 * 24 * 60 * 60; // 30 days in seconds
   document.cookie = `acuspeak_logged_in=true; path=/; max-age=${maxAge}; SameSite=Lax`;
-  document.cookie = `session_token=${encodeURIComponent(sessionToken)}; path=/; max-age=${maxAge}; SameSite=Lax`;
+  document.cookie = `session_token=${encodeURIComponent(cleanToken)}; path=/; max-age=${maxAge}; SameSite=Lax`;
 }
 
 export interface UserProfile {
@@ -240,8 +245,15 @@ export interface AchievementsData {
  */
 export async function fetchCurrentUser(token?: string): Promise<UserProfile | null> {
   try {
-    const sessionToken = token || getAuthToken();
-    if (!sessionToken) return null;
+    const rawToken = token || getAuthToken();
+    if (!rawToken) return null;
+
+    let sessionToken = rawToken;
+    try {
+      sessionToken = decodeURIComponent(rawToken);
+    } catch {
+      // keep rawToken if decode fails
+    }
 
     const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
       method: 'GET',
@@ -266,7 +278,15 @@ export async function fetchCurrentUser(token?: string): Promise<UserProfile | nu
  */
 export async function fetchAchievements(token?: string): Promise<AchievementsData | null> {
   try {
-    const sessionToken = token || getAuthToken();
+    const rawToken = token || getAuthToken();
+    let sessionToken = rawToken;
+    if (rawToken) {
+      try {
+        sessionToken = decodeURIComponent(rawToken);
+      } catch {
+        // keep rawToken if decode fails
+      }
+    }
 
     const response = await fetch(`${API_BASE_URL}/api/achievements`, {
       method: 'GET',
@@ -292,7 +312,14 @@ export function getAuthToken(): string | null {
   const local = localStorage.getItem('session_token');
   if (local) return local;
   const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
+  if (match) {
+    try {
+      return decodeURIComponent(match[1]);
+    } catch {
+      return match[1];
+    }
+  }
+  return null;
 }
 
 

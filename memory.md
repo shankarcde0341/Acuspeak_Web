@@ -1,5 +1,62 @@
 # Acuspeak — Memory & Change Log
 
+### [2026-10-16]
+- Fixed session token rejection bug (HTTP 401 "Invalid or expired session token") across Next.js frontend and FastAPI backend per `rules.md` (Rules 2, 60, 64, 72–75):
+  - **Root Cause Identification**:
+    - On email/password login in [`src/app/login/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/login/page.tsx), `handleEmailLogin` invoked `setAuthSession({ email: response.email, name: response.name })` without passing `response.session_token`.
+    - In [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts), `setAuthSession` had an optional `token?: string` parameter with a fallback generating a mock client token (`sess_${Date.now()}_...`). This dummy string was saved to `localStorage` and `session_token` cookie.
+    - Subsequent authenticated calls (`GET /api/auth/me` and `POST /api/live/rooms/create`) transmitted this mock token in the `Authorization: Bearer` header.
+    - FastAPI's `verify_session_token` in [`backend/auth.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/auth.py) expects HMAC tokens formatted as `email:timestamp:signature`; parsing `token.rsplit(":", 2)` on the mock token threw `ValueError`, returning `None` and triggering 401 ("Invalid or expired session token").
+  - **Resolution & Hardening**:
+    - Updated [`src/app/login/page.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/login/page.tsx) to validate `response.session_token` and pass it to `setAuthSession`. Added identical defensive validation for Phone OTP verification.
+    - Hardened `setAuthSession` in [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts) to require a non-empty `token: string`, completely removing the mock token generation fallback to prevent invalid session token state.
+    - Updated `fetchCurrentUser`, `fetchAchievements`, and `getAuthToken` in [`src/services/authService.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/authService.ts) to safely run `decodeURIComponent()` on tokens retrieved from cookies before transmitting in `Authorization: Bearer` headers.
+    - Updated `verify_session_token` in [`backend/auth.py`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/backend/auth.py) with `unquote(token.strip())` to ensure backend compatibility with both raw and percent-encoded cookie tokens.
+  - **Verification & Acceptance**:
+    - Python compilation check (`py_compile auth.py main.py live_routes.py`) passed cleanly.
+    - Python unit assertion tests for raw, URL-encoded, empty, malformed, and mock tokens passed 100%.
+    - Backend test suite (`test_streak.py`, `test_support.py`) passed all 16/16 tests.
+    - TypeScript compilation (`npx tsc --noEmit`) passed with 0 errors.
+    - Next.js production build (`npm run build`) succeeded across all 29 routes without errors.
+
+
+- Resolved third-party browser extension runtime timeout crashes (`Window message "chrome: call method" timed out` from `chrome-extension://migomhggnppjdijnfkiimcpjgnhmnale/js/content/sandbox-content.js`) and established production-grade error handling per `rules.md` (Rules 37, 38, 43, 68–75):
+  - **Browser Extension Error Shield Architecture**:
+    - Identified root cause: CrossPilot extension (`migomhggnppjdijnfkiimcpjgnhmnale`) injects `sandbox-content.js` content script that passes `window.postMessage` calls with timeouts; on timeout or connection drop, it emits unhandled promise rejections on `window`, triggering Next.js 16 Turbopack's React Dev Overlay.
+    - Implemented synchronous inline `<script id="extension-error-shield">` in `<head>` of [`src/app/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/layout.tsx):
+      - Attaches capture-phase (`true`) event listeners for `error` and `unhandledrejection` BEFORE any Next.js runtime or Turbopack scripts execute.
+      - Intercepts external browser extension noise (`chrome-extension://`, `moz-extension://`, `safari-extension://`, `chrome: call method`, `migomhggnppjdijnfkiimcpjgnhmnale`, `sandbox-content.js`).
+      - Calls `event.preventDefault()` and `event.stopImmediatePropagation()` to immediately halt propagation to Next.js's dev overlay listener and suppress browser unhandled rejection reporting, while leaving legitimate application errors completely untouched.
+      - Patches `console.error` to filter matching extension signature logs before Next.js error tracking intercepts them.
+    - Added dedicated client-side [`src/components/ExtensionErrorShield.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/ExtensionErrorShield.tsx) in `RootLayout` body to maintain error event filtration across client-side SPA navigations and hydrations.
+  - **React Error Boundaries & Fallback States (`rules.md` Rules 37 & 38)**:
+    - Created reusable [`src/components/ErrorBoundary.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/components/ErrorBoundary.tsx) class component with strict TypeScript typing (zero `any`) and graceful fallback UI.
+    - Created Next.js App Router root error boundary [`src/app/error.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/error.tsx) with user-friendly retry button, safe messaging (no raw stack traces per Rule 33), and home navigation.
+    - Created Next.js App Router root layout boundary [`src/app/global-error.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/global-error.tsx) to catch unexpected top-level layout failures.
+  - **Verification & Acceptance**:
+    - TypeScript validation (`npx tsc --noEmit`) completed with 0 errors.
+    - Next.js production build (`npm run build`) succeeded across all 29 routes without errors.
+    - Backend unit test suite (`test_streak.py`, `test_support.py`) passed 16/16 tests cleanly.
+
+- Sanitized frontend environment configuration and completed dynamic service layer resolution per `rules.md` and `prd.md`:
+  - **Environment Sanitization (`.env.local` & `.env.example`)**:
+    - Purged hardcoded IPs and ports from client-facing environment config.
+    - Set `NEXT_PUBLIC_API_URL=` (empty string) in [`.env.local`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/.env.local) to delegate all browser client API calls to Next.js same-origin rewrites (`/api/...`).
+    - Added [`.env.example`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/.env.example) documenting `NEXT_PUBLIC_API_URL`, `BACKEND_INTERNAL_URL`, and `ALLOWED_DEV_ORIGINS` schemas without exposing sensitive secrets or volatile IPs.
+  - **Dynamic Base URL Resolution in Service Layer**:
+    - Refactored [`src/services/apiConfig.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/services/apiConfig.ts) to evaluate `process.env.NEXT_PUBLIC_API_URL` dynamically with clean fallback:
+      - Client-side (`typeof window !== 'undefined'`): resolves to `process.env.NEXT_PUBLIC_API_URL || ''` (empty string), enabling same-origin proxy rewrites and eliminating CORS preflights, cross-device timeouts, and IP exposure.
+      - Server-side (SSR / Server Actions / Server Components): resolves to `process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'` with trailing slash trimming.
+  - **Next.js Dev Origins & HMR WebSocket Authorization**:
+    - Resolved `net::ERR_INVALID_HTTP_RESPONSE` handshake failures on `/_next/hmr` for local network / mobile testing.
+    - Updated `allowedDevOrigins` in [`next.config.ts`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/next.config.ts) to explicitly authorize local network IP `10.40.93.177` (with and without port `:3000`), `192.0.0.2`, `*.trycloudflare.com` wildcard tunnels, and `process.env.ALLOWED_DEV_ORIGINS`.
+    - Preserved security boundaries and production rewrites without altering backend APIs or business logic.
+  - **Verification & Acceptance**:
+    - Cleared stale `.next/dev` cache.
+    - Validated with `npx tsc --noEmit` (0 errors).
+    - Validated with Next.js production build (`npm run build`, all 29 routes successfully compiled).
+    - Validated backend unit test suite (`test_streak.py`, `test_support.py` with 16/16 tests passing).
+
 ### [2026-10-14]
 - Fixed Next.js 16 client-side route transition scroll behavior and eliminated the console warning regarding `scroll-behavior: smooth`:
   - Added `data-scroll-behavior="smooth"` attribute to the `<html>` element in [`src/app/layout.tsx`](file:///c:/PRACTICE/Acuspeak/Acuspeak_web/src/app/layout.tsx) alongside `className="scroll-smooth"` and `suppressHydrationWarning`.

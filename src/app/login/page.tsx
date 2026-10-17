@@ -69,10 +69,18 @@ export default function LoginPage() {
       if ('error' in response) {
         setError(response.error);
       } else {
-        setAuthSession({
-          email: response.email,
-          name: response.name,
-        });
+        if (!response.session_token) {
+          setError('Authentication server did not return a session token. Please try again.');
+          return;
+        }
+
+        setAuthSession(
+          {
+            email: response.email,
+            name: response.name,
+          },
+          response.session_token
+        );
 
         const params = new URLSearchParams(window.location.search);
         const target = params.get('redirect') || '/dashboard';
@@ -147,6 +155,11 @@ export default function LoginPage() {
       if (data.error) {
         setError(data.error);
       } else {
+        if (!data.session_token) {
+          setError('OTP verified but server did not return a session token. Please try again.');
+          return;
+        }
+
         setAuthSession(
           {
             email: data.email || `${clean}@phone.user`,

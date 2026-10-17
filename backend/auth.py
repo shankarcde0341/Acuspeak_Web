@@ -8,7 +8,7 @@ import hmac
 import hashlib
 import time
 import httpx
-from urllib.parse import urlencode
+from urllib.parse import urlencode, unquote
 from passlib.context import CryptContext
 from typing import Optional
 from dotenv import load_dotenv
@@ -145,6 +145,9 @@ def create_session_token(email: str) -> str:
 def verify_session_token(token: str, max_age_seconds: int = 7 * 24 * 3600) -> Optional[str]:
     """Return the email if the session token is valid and unexpired, else None."""
     try:
+        if not token or not isinstance(token, str):
+            return None
+        token = unquote(token.strip())
         email, timestamp, signature = token.rsplit(":", 2)
         raw_str = f"{email}:{timestamp}"
         expected = hmac.new(JWT_SECRET.encode(), raw_str.encode(), hashlib.sha256).hexdigest()
